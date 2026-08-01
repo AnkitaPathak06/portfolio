@@ -7,24 +7,20 @@
     "name": "Ankita Pathak",
     "role": "Product & Data",
     "badge": {
-      "show": true,
+      "show": false,
       "text": "Open to opportunities"
     },
     "headline": "Turning messy data into decisions people trust.",
     "lede": "Replace this with two lines about your domain, how long you have worked in it, and the kind of problem you like being handed. Keep it specific — it is the only thing most visitors will read.",
     "photo": "profile.jpg",
     "photoAlt": "Portrait photograph",
-    "resumeUrl": "",
+    "resumeUrl": "files/p2622010-ankitapathak-1785578206815.pdf",
     "email": "pathak.ankita06@gmail.com",
     "location": "Delhi, India",
     "socials": [
       {
         "type": "linkedin",
-        "url": "https://linkedin.com/in/your-handle"
-      },
-      {
-        "type": "github",
-        "url": "https://github.com/AnkitaPathak06"
+        "url": "https://www.linkedin.com/in/ankita-pathak06/"
       }
     ]
   },
