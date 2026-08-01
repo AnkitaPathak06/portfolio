@@ -19,8 +19,11 @@
 
 <header class="nav" id="nav">
   <div class="shell nav__inner">
-    <a class="nav__brand" id="brand" href="index.html">Portfolio</a>
-    <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+        <a class="nav__brand" id="brand" href="index.html">Portfolio</a>
+    <div style="display:flex;align-items:center;gap:.6rem">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"></button>
+      <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+    </div>
     <nav class="nav__links" id="navLinks">
       <a href="#journey">Journey</a>
       <a href="#work">Work</a>
@@ -57,13 +60,12 @@
       </div>
     </div>
     <div class="shell">
-      <div class="roadmap__scroller">
-        <div class="roadmap__track" id="roadmapTrack">
-          <svg class="roadmap__ribbon" id="ribbon" aria-hidden="true"></svg>
-          <div class="roadmap__items" id="roadmapItems"></div>
-        </div>
+      <div class="snake" id="roadmapWrap">
+        <div class="snake__grid snake__row--top" id="snakeTop"></div>
+        <div class="snake__rail" id="snakeRail"></div>
+        <div class="snake__grid snake__row--bottom" id="snakeBottom"></div>
+        <div class="snake__vertical" id="snakeVertical"></div>
       </div>
-      <p class="roadmap__hint" id="roadmapHint"></p>
     </div>
   </section>
 
@@ -136,23 +138,29 @@
           <p class="lede" id="contactBlurb" style="margin-top:1rem"></p>
           <div class="contact__direct" id="contactDirect"></div>
         </div>
-        <form class="form reveal" id="contactForm" novalidate>
-          <div class="field">
-            <label for="cName">Your name</label>
-            <input type="text" id="cName" name="name" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="cEmail">Email</label>
-            <input type="email" id="cEmail" name="email" autocomplete="email" required>
-          </div>
-          <div class="field">
-            <label for="cMessage">Message</label>
-            <textarea id="cMessage" name="message" required></textarea>
-          </div>
-          <button class="btn btn--primary" id="formSubmit" type="submit">Send message</button>
-          <p class="form__note" id="formNote"></p>
-          <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
-        </form>
+        <div class="contact__card reveal">
+          <p style="font-size:1.0625rem;color:var(--ink);margin:0">Reach out via email or LinkedIn.</p>
+          <div class="contact__actions" id="contactActions"></div>
+          <p class="contact__fallback" id="contactFallback"></p>
+
+          <form class="form hide" id="contactForm" novalidate>
+            <div class="field">
+              <label for="cName">Your name</label>
+              <input type="text" id="cName" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="cEmail">Email</label>
+              <input type="email" id="cEmail" name="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="cMessage">Message</label>
+              <textarea id="cMessage" name="message" required></textarea>
+            </div>
+            <button class="btn btn--primary" id="formSubmit" type="submit">Send message</button>
+            <p class="form__note" id="formNote"></p>
+            <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
       </div>
     </div>
   </section>

@@ -160,6 +160,8 @@ input:focus, textarea:focus, select:focus {
   border: 1px solid var(--lav-100); background: var(--lav-50); flex: none;
 }
 .gallery-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.galrow { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+.galrow input { flex: 1; }
 .gallery-grid figure { margin: 0; position: relative; }
 .gallery-grid img { width: 68px; height: 68px; object-fit: cover; border-radius: 8px; border: 1px solid var(--lav-100); }
 

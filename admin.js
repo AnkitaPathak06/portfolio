@@ -9,7 +9,7 @@
 
   var API = 'https://api.github.com';
   var FILE = 'content.json';
-  var IMG_DIR = 'images';
+  var IMG_DIR = 'files';
 
   var cfg = { owner: '', repo: '', branch: 'main', token: '' };
   var data = null;        // working copy
@@ -153,7 +153,8 @@
         { k: 'lede', l: 'Intro paragraph', t: 'textarea' },
         { k: 'photo', l: 'Photo', t: 'image', hint: 'Leave empty to drop the photo and let the text run full width.' },
         { k: 'photoAlt', l: 'Photo description', t: 'text', hint: 'Read aloud by screen readers.' },
-        { k: 'resumeUrl', l: 'Résumé link', t: 'text', hint: 'Empty hides the Résumé button.' },
+        { k: 'resumeUrl', l: 'Résumé', t: 'file',
+          hint: 'Upload your PDF, or paste a link. Empty hides the Download résumé button.' },
         { k: 'email', l: 'Email', t: 'email' },
         { k: 'location', l: 'Location', t: 'text' },
         { k: 'socials', l: 'Social links', t: 'socials' }
@@ -200,7 +201,8 @@
       hint: 'Featured projects appear on the home page. Every project gets its own detail page.',
       blank: {
         slug: '', title: '', blurb: '', year: '', role: '', featured: false,
-        cover: '', tags: [], stack: [], links: { live: '', repo: '' }, gallery: [], content: ''
+        cover: '', tags: [], stack: [], links: { live: '', repo: '' },
+        gallery: [], attachments: [], content: ''
       },
       fields: [
         { k: 'title', l: 'Title', t: 'text' },
@@ -215,7 +217,10 @@
         { k: 'links.live', l: 'Live link', t: 'text' },
         { k: 'links.repo', l: 'Source code link', t: 'text' },
         { k: 'content', l: 'Detail page', t: 'md', tall: true, hint: 'Markdown. ## makes a heading, - makes a bullet, **bold**, [text](url).' },
-        { k: 'gallery', l: 'Gallery images', t: 'gallery' }
+        { k: 'gallery', l: 'Gallery images', t: 'gallery',
+          hint: 'Screenshots shown in a grid. Click Add image to upload from your computer.' },
+        { k: 'attachments', l: 'Files and links', t: 'attachments',
+          hint: 'PDFs, decks, certificates or any external link. Upload a file or paste a URL.' }
       ]
     },
     {
@@ -244,10 +249,14 @@
       fields: [
         { k: 'heading', l: 'Heading', t: 'text' },
         { k: 'blurb', l: 'Intro text', t: 'textarea' },
-        { k: 'showForm', l: 'Show the message form', t: 'check' },
+        { k: 'useGmail', l: 'Email button opens Gmail', t: 'check',
+          hint: 'Ticked: opens Gmail compose in a new tab. Unticked: opens whatever mail app the visitor uses.' },
+        { k: 'emailSubject', l: 'Pre-filled subject line', t: 'text' },
+        { k: 'showForm', l: 'Also show a message form', t: 'check',
+          hint: 'Off by default — the two buttons are usually enough.' },
         {
           k: 'formEndpoint', l: 'Form endpoint', t: 'text',
-          hint: 'Paste a Formspree endpoint to receive messages in your inbox. Leave it empty and the form opens the visitor\'s email app instead — that works with no setup.'
+          hint: 'Only needed if the form is on. A Formspree endpoint sends messages to your inbox.'
         }
       ]
     },
@@ -317,15 +326,41 @@
         esc(val || '') + '" placeholder="assets/img/…">' +
         '<button type="button" class="btn btn--icon" data-upload="' + esc(path) + '">Upload</button>' +
         '</div>';
+    } else if (f.t === 'file') {
+      h += '<div class="imgrow">' +
+        '<input type="text" id="' + id + '" data-path="' + esc(path) + '" data-t="text" value="' +
+        esc(val || '') + '" placeholder="resume.pdf or https://…">' +
+        '<button type="button" class="btn btn--icon" data-upload="' + esc(path) +
+        '" data-any="1">Upload</button>' +
+        (val ? '<a class="btn btn--icon" href="../' + esc(val) + '" target="_blank" rel="noopener">Open</a>' : '') +
+        '</div>';
     } else if (f.t === 'gallery') {
-      var imgs = (val || []).map(function (src, i) {
-        return '<figure><img src="' + esc(src) + '" alt="">' +
+      var imgs = (val || []).map(function (g, i) {
+        var src = typeof g === 'string' ? g : (g && g.src) || '';
+        var cap = (g && g.caption) || '';
+        return '<div class="galrow">' +
+          '<img class="thumb" src="' + esc(src) + '" alt="">' +
+          '<input type="text" data-path="' + esc(path) + '.' + i + '.caption" data-t="text" value="' +
+          esc(cap) + '" placeholder="Caption (optional)">' +
           '<button type="button" class="btn btn--icon btn--danger" data-galdel="' + esc(path) +
-          '" data-i="' + i + '" style="position:absolute;top:2px;right:2px;padding:1px 4px">&times;</button>' +
-          '</figure>';
+          '" data-i="' + i + '">&times;</button></div>';
       }).join('');
-      h += (imgs ? '<div class="gallery-grid">' + imgs + '</div>' : '') +
+      h += imgs +
         '<button type="button" class="btn btn--icon" data-galadd="' + esc(path) + '">Add image</button>';
+    } else if (f.t === 'attachments') {
+      h += (val || []).map(function (a, i) {
+        return '<div class="subitem">' +
+          '<input type="text" data-path="' + esc(path) + '.' + i + '.label" data-t="text" value="' +
+          esc(a.label || '') + '" placeholder="Label, e.g. Case study PDF" style="flex:0 0 40%">' +
+          '<input type="text" data-path="' + esc(path) + '.' + i + '.url" data-t="text" value="' +
+          esc(a.url || '') + '" placeholder="file or https://…">' +
+          '<button type="button" class="btn btn--icon" data-upload="' + esc(path) + '.' + i +
+          '.url" data-any="1">Upload</button>' +
+          '<button type="button" class="btn btn--icon btn--danger" data-subdel="' + esc(path) +
+          '" data-i="' + i + '">&times;</button></div>';
+      }).join('') +
+        '<button type="button" class="btn btn--icon" data-subadd="' + esc(path) +
+        '" data-kind="attach">Add file or link</button>';
     } else if (f.t === 'socials') {
       h += (val || []).map(function (s, i) {
         var opts = SOCIAL_TYPES.map(function (t) {
@@ -482,8 +517,10 @@
       if (b.hasAttribute('data-subadd')) {
         var p = b.getAttribute('data-subadd');
         var arr = get(data, p) || [];
-        arr.push(b.getAttribute('data-kind') === 'social'
-          ? { type: 'website', url: '' } : { name: '', core: false });
+        var kind = b.getAttribute('data-kind');
+        arr.push(kind === 'social' ? { type: 'website', url: '' }
+               : kind === 'attach' ? { label: '', url: '' }
+               : { name: '', core: false });
         set(data, p, arr);
         touch(); paintEditor(); return;
       }
@@ -500,10 +537,10 @@
         touch(); paintEditor(); return;
       }
       if (b.hasAttribute('data-galadd')) {
-        pickImage(b.getAttribute('data-galadd'), true); return;
+        pickImage(b.getAttribute('data-galadd'), true, false); return;
       }
       if (b.hasAttribute('data-upload')) {
-        pickImage(b.getAttribute('data-upload'), false); return;
+        pickImage(b.getAttribute('data-upload'), false, b.hasAttribute('data-any')); return;
       }
     });
   }
@@ -512,19 +549,20 @@
 
   var pendingTarget = null, pendingIsGallery = false;
 
-  function pickImage(path, isGallery) {
+  function pickImage(path, isGallery, anyType) {
     pendingTarget = path;
     pendingIsGallery = isGallery;
     var picker = el('filePicker');
     picker.value = '';
+    picker.setAttribute('accept', anyType ? '' : 'image/*');
     picker.click();
   }
 
   el('filePicker').addEventListener('change', function (e) {
     var file = e.target.files && e.target.files[0];
     if (!file || !pendingTarget) return;
-    if (file.size > 4 * 1024 * 1024) {
-      toast('That image is over 4 MB. Compress it first.', 4000);
+    if (file.size > 8 * 1024 * 1024) {
+      toast('That file is over 8 MB. GitHub will reject it — compress it first.', 5000);
       return;
     }
     var name = slugify(file.name.replace(/\.[^.]+$/, '')) + '-' + Date.now() +
@@ -539,14 +577,14 @@
       putFile(dest, b64, 'Add image ' + name, null).then(function () {
         if (pendingIsGallery) {
           var arr = get(data, pendingTarget) || [];
-          arr.push(dest);
+          arr.push({ src: dest, caption: '' });
           set(data, pendingTarget, arr);
         } else {
           set(data, pendingTarget, dest);
         }
         pendingTarget = null;
         touch(); paintEditor();
-        toast('Image added. Publish to show it on the site.');
+        toast('Uploaded. Click Publish to show it on the site.');
       }).catch(function (err) {
         toast('Upload failed: ' + err.message, 5000);
       });

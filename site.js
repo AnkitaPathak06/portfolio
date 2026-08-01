@@ -30,13 +30,65 @@
     pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
     download: '<path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/>',
     folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
-    chevron: '<path d="m9 6 6 6-6 6"/>'
+    chevron: '<path d="m9 6 6 6-6 6"/>',
+    sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    moon: '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>',
+    paperclip: '<path d="M21 11.5 12.5 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L10 17.9a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/>',
+    file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+    image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'
   };
 
   function icon(name, cls) {
     var d = ICONS[name] || ICONS.folder;
     return '<svg class="ic ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
       'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+  }
+
+
+  /* ---------- theme ---------- */
+
+  var THEME_KEY = 'pf_theme';
+
+  function applyTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    var btn = el('themeToggle');
+    if (btn) {
+      btn.innerHTML = icon(mode === 'dark' ? 'sun' : 'moon');
+      btn.setAttribute('aria-label', mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      btn.setAttribute('title', mode === 'dark' ? 'Light mode' : 'Dark mode');
+    }
+  }
+
+  function initTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) { /* private mode */ }
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+
+    var btn = el('themeToggle');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
+        if (el('roadmapWrap')) drawSnake();
+      });
+    }
+    // follow the system if the visitor has never chosen
+    if (!saved && window.matchMedia) {
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var onChange = function (e) { applyTheme(e.matches ? 'dark' : 'light'); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange);
+    }
+  }
+
+  /* ---------- monogram ---------- */
+
+  function initials(name) {
+    var parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return '—';
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
   /* ---------- helpers ---------- */
@@ -50,7 +102,15 @@
   function el(id) { return document.getElementById(id); }
   function safeUrl(u) {
     u = String(u || '').trim();
-    return /^(https?:|mailto:|\/|\.|#|assets\/)/i.test(u) ? u : '';
+    if (!u) return '';
+    // Block anything carrying a scheme other than http(s)/mailto — javascript:, data:, vbscript:.
+    // A colon appearing after the first slash is part of a path, not a scheme.
+    var colon = u.indexOf(':'), slash = u.indexOf('/');
+    var hasScheme = colon > -1 && (slash === -1 || colon < slash);
+    if (hasScheme) {
+      return /^(https?|mailto):/i.test(u) ? u : '';
+    }
+    return u; // relative path: profile.jpg, images/shot.png, ./x, #anchor
   }
 
   /* Minimal markdown: headings, lists, bold, italic, code, links, images, quotes. */
@@ -134,7 +194,11 @@
     if (descTag && c.meta && c.meta.description) descTag.setAttribute('content', c.meta.description);
 
     var brand = el('brand');
-    if (brand) { brand.textContent = p.name || 'Portfolio'; brand.href = root + 'index.html'; }
+    if (brand) {
+      brand.href = root + 'index.html';
+      brand.innerHTML = '<span class="mono-mark">' + esc(initials(p.name)) + '</span>' +
+        '<span class="nav__brandname">' + esc(p.name || 'Portfolio') + '</span>';
+    }
 
     var year = el('footYear');
     if (year) year.textContent = new Date().getFullYear();
@@ -159,6 +223,10 @@
 
   function initNav() {
     var nav = el('nav'), toggle = el('navToggle'), links = el('navLinks');
+    var themeBtn = el('themeToggle');
+    if (themeBtn && !themeBtn.innerHTML) {
+      applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+    }
     if (nav) {
       var onScroll = function () { nav.classList.toggle('is-stuck', window.scrollY > 12); };
       onScroll();
@@ -200,66 +268,86 @@
     Array.prototype.forEach.call(targets, function (t) { io.observe(t); });
   }
 
-  /* ---------- roadmap ribbon (signature element) ---------- */
+  /* ---------- roadmap: alternating snake ---------- */
 
-  function drawRibbon() {
-    var track = el('roadmapTrack');
-    var svg = el('ribbon');
-    if (!track || !svg) return;
+  var MIN_COL = 168; // below this a column is too cramped, so stack vertically
 
-    var items = track.querySelectorAll('.milestone');
-    if (!items.length) return;
+  function drawSnake() {
+    var wrap = el('roadmapWrap');
+    if (!wrap) return;
+    var rail = el('snakeRail');
+    var top = el('snakeTop'), bottom = el('snakeBottom');
+    if (!rail || !top) return;
 
-    var width = track.scrollWidth;
-    var height = 56, mid = 28, amp = 16;
-    var firstLeft = items[0].offsetLeft;
-    var itemTop = items[0].offsetTop;
-    var step = items.length > 1 ? (items[1].offsetLeft - firstLeft) : 240;
-    var wavelength = step * 2;
+    var items = window.__ROADMAP__ || [];
+    var n = items.length;
+    if (!n) return;
 
-    function waveY(x) {
-      return mid - amp * Math.cos((2 * Math.PI * (x - firstLeft - 6)) / wavelength);
+    // stack vertically when columns would be too narrow
+    var avail = wrap.clientWidth || 900;
+    var stacked = (avail / n) < MIN_COL;
+    wrap.classList.toggle('snake--stacked', stacked);
+    if (stacked) return;
+
+    var w = rail.clientWidth, h = rail.clientHeight;
+    var mid = h / 2, amp = h / 2 - 13;
+    var col = w / n;
+
+    // a point per milestone, alternating above and below the centre line
+    var pts = [];
+    for (var i = 0; i < n; i++) {
+      pts.push({ x: col * (i + 0.5), y: mid + (i % 2 === 0 ? -amp : amp) });
     }
 
-    var d = '';
-    for (var x = 0; x <= width; x += 6) {
-      d += (d ? ' L' : 'M') + x.toFixed(1) + ' ' + waveY(x).toFixed(2);
+    // smooth curve through the points with horizontal control handles
+    var d = 'M0 ' + pts[0].y.toFixed(1) + ' L' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+    for (var k = 1; k < pts.length; k++) {
+      var a = pts[k - 1], b = pts[k], cx = (a.x + b.x) / 2;
+      d += ' C' + cx.toFixed(1) + ' ' + a.y.toFixed(1) + ', ' +
+                  cx.toFixed(1) + ' ' + b.y.toFixed(1) + ', ' +
+                  b.x.toFixed(1) + ' ' + b.y.toFixed(1);
     }
+    d += ' L' + w.toFixed(1) + ' ' + pts[pts.length - 1].y.toFixed(1);
 
-    svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
-    svg.setAttribute('width', width);
-    svg.setAttribute('height', height);
-    svg.innerHTML = '<path class="ribbon-base" d="' + d + '"/><path class="ribbon-fill" d="' + d + '"/>';
+    var dots = items.map(function (m, i) {
+      var p = pts[i];
+      var stemTop = i % 2 === 0 ? p.y : 0;
+      var stemH = i % 2 === 0 ? (h - p.y) : p.y;
+      return '<span class="snake__stem" style="left:' + p.x.toFixed(1) + 'px;top:' +
+        (i % 2 === 0 ? p.y.toFixed(1) : '0') + 'px;height:' + Math.max(stemH, 0).toFixed(1) + 'px"></span>' +
+        '<span class="snake__dot' + (m.present ? ' is-present' : '') +
+        '" style="left:' + p.x.toFixed(1) + 'px;top:' + p.y.toFixed(1) + 'px"></span>';
+    }).join('');
 
-    Array.prototype.forEach.call(items, function (item) {
-      var node = item.querySelector('.milestone__node');
-      if (node) node.style.top = (waveY(item.offsetLeft + 6) - 6.5 - itemTop) + 'px';
+    rail.innerHTML =
+      '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path class="rail-base" d="' + d + '"/><path class="rail-line" d="' + d + '"/></svg>' + dots;
+
+    animateRail(rail);
+  }
+
+  function animateRail(rail) {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var paths = rail.querySelectorAll('path');
+    if (reduce || !paths.length) return;
+
+    Array.prototype.forEach.call(paths, function (p, i) {
+      var len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+      p.style.transition = 'stroke-dashoffset 1.7s cubic-bezier(0.22,0.61,0.36,1) ' + (i * 0.2) + 's';
     });
 
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) return;
-
-    var paths = svg.querySelectorAll('path');
-    Array.prototype.forEach.call(paths, function (path, i) {
-      var len = path.getTotalLength();
-      path.style.strokeDasharray = len;
-      path.style.strokeDashoffset = len;
-      path.style.transition = 'stroke-dashoffset 1.6s cubic-bezier(0.22,0.61,0.36,1) ' + (i * 0.25) + 's';
-    });
+    var run = function () {
+      Array.prototype.forEach.call(paths, function (p) { p.style.strokeDashoffset = 0; });
+    };
 
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            Array.prototype.forEach.call(paths, function (p) { p.style.strokeDashoffset = 0; });
-            io.disconnect();
-          }
-        });
-      }, { threshold: 0.2 });
-      io.observe(track);
-    } else {
-      Array.prototype.forEach.call(paths, function (p) { p.style.strokeDashoffset = 0; });
-    }
+        entries.forEach(function (e) { if (e.isIntersecting) { run(); io.disconnect(); } });
+      }, { threshold: 0.25 });
+      io.observe(rail);
+    } else { run(); }
   }
 
   /* ---------- project cards ---------- */
@@ -303,11 +391,12 @@
 
     var actions = el('heroActions');
     if (actions) {
-      var html = '<a class="btn btn--primary" href="#contact">' + icon('mail') + 'Get in touch</a>';
+      var html = '';
       if (safeUrl(p.resumeUrl)) {
-        html += '<a class="btn btn--ghost" href="' + esc(safeUrl(p.resumeUrl)) +
-          '" target="_blank" rel="noopener">' + icon('download') + 'Résumé</a>';
+        html += '<a class="btn btn--primary" href="' + esc(safeUrl(p.resumeUrl)) +
+          '" target="_blank" rel="noopener">' + icon('download') + 'Download résumé</a>';
       }
+      html += '<a class="btn btn--ghost" href="projects.html">' + icon('folder') + 'View my work</a>';
       actions.innerHTML = html;
     }
 
@@ -324,20 +413,33 @@
     }
 
     /* roadmap */
-    var track = el('roadmapItems');
-    if (track) {
-      track.innerHTML = (c.roadmap || []).map(function (m) {
-        return '<div class="milestone' + (m.present ? ' is-present' : '') + '">' +
-          '<span class="milestone__node"></span>' +
-          '<p class="milestone__year">' + esc(m.year) + '</p>' +
-          '<h3 class="milestone__title">' + esc(m.title) + '</h3>' +
-          (m.meta ? '<p class="milestone__meta">' + esc(m.meta) + '</p>' : '') +
-          (m.note ? '<p class="milestone__note">' + esc(m.note) + '</p>' : '') +
-          '</div>';
+    var wrap = el('roadmapWrap');
+    if (wrap) {
+      var ms = c.roadmap || [];
+      window.__ROADMAP__ = ms;
+      wrap.style.setProperty('--cols', ms.length || 1);
+
+      function cardHtml(m) {
+        return '<article class="mstone' + (m.present ? ' is-present' : '') + '">' +
+          '<p class="mstone__year">' + esc(m.year) + '</p>' +
+          '<h3 class="mstone__title">' + esc(m.title) + '</h3>' +
+          (m.meta ? '<p class="mstone__meta">' + esc(m.meta) + '</p>' : '') +
+          (m.note ? '<p class="mstone__note">' + esc(m.note) + '</p>' : '') +
+          '</article>';
+      }
+
+      el('snakeTop').innerHTML = ms.map(function (m, i) {
+        return i % 2 === 0 ? cardHtml(m) : '<span></span>';
       }).join('');
-      var hint = el('roadmapHint');
-      if (hint) hint.innerHTML = 'Scroll sideways to follow the timeline' + icon('arrowRight');
-      requestAnimationFrame(drawRibbon);
+      el('snakeBottom').innerHTML = ms.map(function (m, i) {
+        return i % 2 === 1 ? cardHtml(m) : '<span></span>';
+      }).join('');
+      el('snakeVertical').innerHTML = ms.map(function (m) {
+        return '<div class="snake__vitem' + (m.present ? ' is-present' : '') + '">' +
+          cardHtml(m) + '</div>';
+      }).join('');
+
+      requestAnimationFrame(drawSnake);
     }
 
     /* jobs */
@@ -417,6 +519,11 @@
 
   /* ---------- contact ---------- */
 
+  function gmailCompose(to, subject) {
+    return 'https://mail.google.com/mail/u/0/?to=' + encodeURIComponent(to) +
+      '&su=' + encodeURIComponent(subject) + '&fs=1&tf=cm';
+  }
+
   function renderContact(c) {
     var p = c.profile || {}, ct = c.contact || {};
 
@@ -425,27 +532,59 @@
     var blurb = el('contactBlurb');
     if (blurb) blurb.textContent = ct.blurb || '';
 
+    var linkedin = (p.socials || []).filter(function (s) {
+      return String(s.type || '').toLowerCase() === 'linkedin' && safeUrl(s.url);
+    })[0];
+
+    /* the two big buttons */
+    var actions = el('contactActions');
+    if (actions) {
+      var html = '';
+      if (p.email) {
+        var subject = ct.emailSubject || ('Hello ' + (p.name || '').split(' ')[0]);
+        var href = ct.useGmail === false
+          ? 'mailto:' + p.email + '?subject=' + encodeURIComponent(subject)
+          : gmailCompose(p.email, subject);
+        html += '<a class="contact__btn contact__btn--solid" href="' + esc(href) + '"' +
+          (ct.useGmail === false ? '' : ' target="_blank" rel="noopener"') + '>' +
+          icon('mail') + 'Email</a>';
+      }
+      if (linkedin) {
+        html += '<a class="contact__btn contact__btn--outline" href="' + esc(safeUrl(linkedin.url)) +
+          '" target="_blank" rel="noopener">' + icon('linkedin') + 'LinkedIn</a>';
+      }
+      actions.innerHTML = html;
+    }
+
+    var fallback = el('contactFallback');
+    if (fallback) {
+      fallback.innerHTML = p.email
+        ? 'Or write to me at <a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a>.'
+        : '';
+    }
+
     var direct = el('contactDirect');
     if (direct) {
       var rows = '';
-      if (p.email) {
-        rows += '<a class="contact__row" href="mailto:' + esc(p.email) + '">' +
-          icon('mail') + '<span>' + esc(p.email) + '</span></a>';
-      }
       if (p.location) {
         rows += '<span class="contact__row">' + icon('pin') + '<span>' + esc(p.location) + '</span></span>';
       }
-      (p.socials || []).filter(function (s) { return safeUrl(s.url); }).forEach(function (s) {
+      (p.socials || []).filter(function (s) {
+        return safeUrl(s.url) && String(s.type || '').toLowerCase() !== 'linkedin';
+      }).forEach(function (s) {
         var key = String(s.type || 'website').toLowerCase();
         rows += '<a class="contact__row" href="' + esc(safeUrl(s.url)) + '" target="_blank" rel="noopener">' +
-          icon(ICONS[key] ? key : 'website') + '<span>' + esc(s.url.replace(/^https?:\/\//, '')) + '</span></a>';
+          icon(ICONS[key] ? key : 'website') + '<span>' +
+          esc(String(s.url).replace(/^https?:\/\//, '')) + '</span></a>';
       });
       direct.innerHTML = rows;
     }
 
+    /* optional message form */
     var form = el('contactForm');
     if (!form) return;
-    if (ct.showForm === false) { form.remove(); return; }
+    if (!ct.showForm) { form.remove(); return; }
+    form.classList.remove('hide');
 
     var endpoint = safeUrl(ct.formEndpoint);
     var note = el('formNote');
@@ -471,10 +610,9 @@
       }
 
       if (!endpoint) {
-        var subject = 'Portfolio enquiry from ' + name;
-        var body = message + '\n\n—\n' + name + '\n' + email;
         window.location.href = 'mailto:' + encodeURIComponent(p.email || '') +
-          '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          '?subject=' + encodeURIComponent('Portfolio enquiry from ' + name) +
+          '&body=' + encodeURIComponent(message + '\n\n—\n' + name + '\n' + email);
         status.className = 'form__status is-ok';
         status.textContent = 'Opening your email app…';
         return;
@@ -581,30 +719,51 @@
       links += '<a class="btn btn--ghost btn--sm" href="' + esc(safeUrl(pr.links.repo)) +
         '" target="_blank" rel="noopener">' + icon('github') + 'Source</a>';
     }
-    var gallery = (pr.gallery || []).filter(safeUrl).map(function (g) {
-      return '<img src="' + esc(g) + '" alt="" loading="lazy">';
+    var galleryItems = (pr.gallery || []).map(function (g) {
+      var src = typeof g === 'string' ? g : (g && g.src);
+      var cap = (g && g.caption) || '';
+      if (!safeUrl(src)) return '';
+      return '<figure><a href="' + esc(safeUrl(src)) + '" target="_blank" rel="noopener">' +
+        '<img src="' + esc(safeUrl(src)) + '" alt="' + esc(cap || pr.title) + '" loading="lazy"></a>' +
+        (cap ? '<figcaption>' + esc(cap) + '</figcaption>' : '') + '</figure>';
+    }).join('');
+
+    var attachItems = (pr.attachments || []).filter(function (a) {
+      return a && safeUrl(a.url);
+    }).map(function (a) {
+      var url = safeUrl(a.url);
+      var isImg = /\.(png|jpe?g|gif|webp|svg)$/i.test(url);
+      var kind = isImg ? 'image' : (/\.(pdf|docx?|pptx?|xlsx?|csv|zip)$/i.test(url) ? 'file' : 'paperclip');
+      return '<a class="attach" href="' + esc(url) + '" target="_blank" rel="noopener">' +
+        icon(kind) + '<span>' + esc(a.label || url.split('/').pop()) + '</span>' +
+        '<span class="attach__go">' + icon('external') + '</span></a>';
     }).join('');
 
     wrap.innerHTML =
       '<div class="shell detail__head reveal">' +
-        '<a class="textlink" href="projects.html" style="margin-bottom:1.5rem">' +
-          icon('arrowLeft') + 'All projects</a>' +
-        '<h1 style="margin-top:1rem">' + esc(pr.title) + '</h1>' +
+        '<a class="textlink" href="projects.html">' + icon('arrowLeft') + 'All projects</a>' +
+        '<h1 style="margin-top:1.25rem">' + esc(pr.title) + '</h1>' +
         '<p class="lede" style="margin-top:1rem">' + esc(pr.blurb) + '</p>' +
         (links ? '<div class="hero__actions">' + links + '</div>' : '') +
         (meta ? '<dl class="detail__meta">' + meta + '</dl>' : '') +
       '</div>' +
       '<div class="shell" style="padding-bottom:clamp(3rem,6vw,5rem)">' +
         '<div class="prose reveal">' + md(pr.content) + '</div>' +
-        (gallery ? '<div class="gallery reveal">' + gallery + '</div>' : '') +
+        (galleryItems
+          ? '<div class="reveal"><p class="eyebrow" style="margin-top:2.5rem">Gallery</p>' +
+            '<div class="gallery">' + galleryItems + '</div></div>' : '') +
+        (attachItems
+          ? '<div class="reveal"><p class="eyebrow" style="margin-top:2.5rem">Files and links</p>' +
+            '<div class="attachments">' + attachItems + '</div></div>' : '') +
       '</div>';
 
-    initReveal();
+        initReveal();
   }
 
   /* ---------- boot ---------- */
 
   document.addEventListener('DOMContentLoaded', function () {
+    initTheme();
     initNav();
 
     loadContent().then(function (c) {
@@ -616,7 +775,7 @@
       initReveal();
       window.addEventListener('resize', function () {
         clearTimeout(window.__rmT);
-        window.__rmT = setTimeout(drawRibbon, 180);
+        window.__rmT = setTimeout(drawSnake, 160);
       });
     }).catch(function (err) {
       var main = document.querySelector('main');
