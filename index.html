@@ -19,17 +19,15 @@
 
 <header class="nav" id="nav">
   <div class="shell nav__inner">
-        <a class="nav__brand" id="brand" href="index.html">Portfolio</a>
-    <div style="display:flex;align-items:center;gap:.6rem">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"></button>
-      <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
-    </div>
+    <a class="nav__brand" id="brand" href="./">Portfolio</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
     <nav class="nav__links" id="navLinks">
       <a href="#journey">Journey</a>
       <a href="#work">Work</a>
-      <a href="#projects">Projects</a>
+      <a href="projects.html">Projects</a>
       <a href="#skills">Skills</a>
       <a class="btn btn--primary btn--sm" href="#contact">Contact</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"></button>
     </nav>
   </div>
 </header>
@@ -72,7 +70,6 @@
   <section class="band band--cream" id="work">
     <div class="shell">
       <div class="band__head reveal">
-        <p class="eyebrow">Where I have worked</p>
         <h2>Experience</h2>
       </div>
       <div class="grid grid--2 stagger" id="jobsGrid"></div>
@@ -82,7 +79,6 @@
   <section class="band band--card" id="education">
     <div class="shell">
       <div class="band__head reveal">
-        <p class="eyebrow">What I studied</p>
         <h2>Education</h2>
       </div>
       <div class="grid grid--2 stagger" id="eduGrid"></div>
@@ -110,7 +106,6 @@
   <section class="band band--lav" id="certificates">
     <div class="shell">
       <div class="band__head reveal">
-        <p class="eyebrow">Verified along the way</p>
         <h2>Certificates</h2>
       </div>
       <div class="grid grid--3 stagger" id="certGrid"></div>
@@ -120,7 +115,6 @@
   <section class="band band--card" id="skills">
     <div class="shell">
       <div class="band__head reveal">
-        <p class="eyebrow">Grouped by what it is for</p>
         <h2>Skills</h2>
       </div>
       <div id="skillsWrap"></div>

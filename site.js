@@ -45,6 +45,142 @@
   }
 
 
+
+  /* ---------- palette ---------- */
+
+  var PRESETS = {
+    lavender: { accent: '#565483', background: '#F4F3EF', label: 'Lavender' },
+    forest:   { accent: '#3F6152', background: '#F2F4F0', label: 'Forest' },
+    clay:     { accent: '#8A5340', background: '#F6F1EC', label: 'Clay' },
+    ink:      { accent: '#2F4562', background: '#F1F3F6', label: 'Ink' },
+    plum:     { accent: '#6D3F5B', background: '#F6F1F4', label: 'Plum' },
+    slate:    { accent: '#4A4F58', background: '#F3F3F2', label: 'Slate' }
+  };
+
+  function hexToHsl(hex) {
+    hex = String(hex || '').replace('#', '');
+    if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    var r = parseInt(hex.slice(0, 2), 16) / 255,
+        g = parseInt(hex.slice(2, 4), 16) / 255,
+        b = parseInt(hex.slice(4, 6), 16) / 255;
+    if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var h = 0, s = 0, l = (max + min) / 2, d = max - min;
+    if (d) {
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0));
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h /= 6;
+    }
+    return { h: h * 360, s: s, l: l };
+  }
+
+
+  function hslToRgb(h, s, l) {
+    h /= 360;
+    var r, g, b;
+    if (!s) { r = g = b = l; }
+    else {
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+      var f = function (t) {
+        if (t < 0) t += 1; if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+      r = f(h + 1 / 3); g = f(h); b = f(h - 1 / 3);
+    }
+    return [r, g, b];
+  }
+
+  function relLum(rgb) {
+    var f = function (c) { return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+  }
+
+  function contrast(a, b) {
+    var x = relLum(a), y = relLum(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  }
+
+  /* Darkest-acceptable lightness search: whatever hue the user picks, text
+     built from it still clears WCAG AA against the background behind it. */
+  function readableL(h, s, bgRgb, target, startL) {
+    var l = startL;
+    for (var i = 0; i < 40 && l > 0.04; i++) {
+      if (contrast(hslToRgb(h, s, l), bgRgb) >= target) return l;
+      l -= 0.015;
+    }
+    return Math.max(l, 0.04);
+  }
+
+  function hsl(h, s, l) {
+    return 'hsl(' + h.toFixed(1) + ' ' + (s * 100).toFixed(1) + '% ' + (l * 100).toFixed(1) + '%)';
+  }
+
+  function applyPalette(theme) {
+    theme = theme || {};
+    var preset = PRESETS[theme.preset];
+    var accentHex = theme.accent || (preset && preset.accent) || PRESETS.lavender.accent;
+    var bgHex = theme.background || (preset && preset.background) || PRESETS.lavender.background;
+
+    var a = hexToHsl(accentHex), bg = hexToHsl(bgHex);
+    if (!a || !bg) return;
+
+    var h = a.h, s = Math.min(Math.max(a.s, 0.10), 0.55);
+    var bh = bg.h, bs = Math.min(bg.s, 0.14);
+
+    var cardRgb = hslToRgb(bh, bs * 0.55, Math.min(bg.l + 0.05, 0.995));
+    var l500 = readableL(h, s, cardRgb, 4.5, 0.50);
+    var l600 = readableL(h, s, [1, 1, 1], 4.5, 0.46); // white text sits on this one
+
+    var light = [
+      '--cream: ' + hsl(bh, bs, bg.l),
+      '--cream-deep: ' + hsl(bh, bs, Math.max(bg.l - 0.03, 0)),
+      '--card: ' + hsl(bh, bs * 0.55, Math.min(bg.l + 0.05, 0.995)),
+      '--lav-50: ' + hsl(h, s * 0.30, 0.955),
+      '--lav-100: ' + hsl(h, s * 0.42, 0.885),
+      '--lav-200: ' + hsl(h, s * 0.50, 0.815),
+      '--lav-300: ' + hsl(h, s * 0.58, 0.735),
+      '--lav-500: ' + hsl(h, s, l500),
+      '--lav-600: ' + hsl(h, s, l600),
+      '--lav-800: ' + hsl(h, s, 0.26),
+      '--lav-900: ' + hsl(h, s, 0.18),
+      '--ink: ' + hsl(h, 0.10, 0.17),
+      '--body: ' + hsl(h, 0.05, 0.34),
+      '--muted: ' + hsl(h, 0.05, 0.42),
+      '--on-accent: #FFFFFF'
+    ].join(';');
+
+    var dark = [
+      '--cream: ' + hsl(h, 0.14, 0.095),
+      '--cream-deep: ' + hsl(h, 0.14, 0.07),
+      '--card: ' + hsl(h, 0.13, 0.145),
+      '--lav-50: ' + hsl(h, 0.13, 0.125),
+      '--lav-100: ' + hsl(h, 0.14, 0.195),
+      '--lav-200: ' + hsl(h, 0.15, 0.265),
+      '--lav-300: ' + hsl(h, 0.16, 0.345),
+      '--lav-500: ' + hsl(h, Math.max(s * 0.7, 0.28), 0.71),
+      '--lav-600: ' + hsl(h, Math.max(s * 0.7, 0.30), 0.79),
+      '--lav-800: ' + hsl(h, Math.max(s * 0.5, 0.20), 0.89),
+      '--lav-900: ' + hsl(h, Math.max(s * 0.4, 0.15), 0.95),
+      '--ink: ' + hsl(h, 0.10, 0.94),
+      '--body: ' + hsl(h, 0.08, 0.74),
+      '--muted: ' + hsl(h, 0.07, 0.57),
+      '--on-accent: ' + hsl(h, 0.14, 0.095)
+    ].join(';');
+
+    var tag = document.getElementById('palette');
+    if (!tag) {
+      tag = document.createElement('style');
+      tag.id = 'palette';
+      document.head.appendChild(tag);
+    }
+    tag.textContent = ':root{' + light + '}\n[data-theme="dark"]{' + dark + '}';
+  }
+
   /* ---------- theme ---------- */
 
   var THEME_KEY = 'pf_theme';
@@ -196,8 +332,10 @@
     var brand = el('brand');
     if (brand) {
       brand.href = root + 'index.html';
-      brand.innerHTML = '<span class="mono-mark">' + esc(initials(p.name)) + '</span>' +
-        '<span class="nav__brandname">' + esc(p.name || 'Portfolio') + '</span>';
+      var mark = safeUrl(p.logo)
+        ? '<img class="logo-img" src="' + esc(root + p.logo) + '" alt="">'
+        : '<span class="mono-mark">' + esc(initials(p.name)) + '</span>';
+      brand.innerHTML = mark + '<span class="nav__brandname">' + esc(p.name || 'Portfolio') + '</span>';
     }
 
     var year = el('footYear');
@@ -219,6 +357,21 @@
           '<a href="mailto:' + esc(p.email) + '" aria-label="Email">' + icon('mail') + '</a>');
       }
     }
+  }
+
+  function initProgress() {
+    var bar = document.createElement('span');
+    bar.className = 'progress';
+    var nav = el('nav');
+    if (!nav) return;
+    nav.appendChild(bar);
+    var onScroll = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
   }
 
   function initNav() {
@@ -252,7 +405,7 @@
   /* ---------- scroll reveal ---------- */
 
   function initReveal() {
-    var targets = document.querySelectorAll('.reveal, .stagger, .hero__grid');
+    var targets = document.querySelectorAll('.reveal, .stagger, .hero__grid, .pop, .slide');
     if (!('IntersectionObserver' in window)) {
       Array.prototype.forEach.call(targets, function (t) { t.classList.add('is-in'); });
       return;
@@ -385,7 +538,17 @@
     }
 
     var headline = el('heroHeadline');
-    if (headline) headline.textContent = p.headline || '';
+    if (headline) {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) {
+        headline.textContent = p.headline || '';
+      } else {
+        headline.innerHTML = String(p.headline || '').split(/\s+/).map(function (w, i) {
+          return '<span class="word" style="animation-delay:' + (0.12 + i * 0.055).toFixed(2) +
+            's">' + esc(w) + '</span>';
+        }).join(' ');
+      }
+    }
     var lede = el('heroLede');
     if (lede) lede.textContent = p.lede || '';
 
@@ -394,7 +557,7 @@
       var html = '';
       if (safeUrl(p.resumeUrl)) {
         html += '<a class="btn btn--primary" href="' + esc(safeUrl(p.resumeUrl)) +
-          '" target="_blank" rel="noopener">' + icon('download') + 'Download résumé</a>';
+          '" target="_blank" rel="noopener">' + icon('download') + 'Download Resume</a>';
       }
       html += '<a class="btn btn--ghost" href="projects.html">' + icon('folder') + 'View my work</a>';
       actions.innerHTML = html;
@@ -698,7 +861,7 @@
     if (!pr) {
       wrap.innerHTML = '<div class="shell"><div class="empty">' +
         '<p>That project does not exist.</p>' +
-        '<a class="btn btn--ghost btn--sm" href="projects.html">See all projects</a></div></div>';
+        '<a class="btn btn--ghost btn--sm" href="index.html">Back to home</a></div></div>';
       return;
     }
 
@@ -741,7 +904,7 @@
 
     wrap.innerHTML =
       '<div class="shell detail__head reveal">' +
-        '<a class="textlink" href="projects.html">' + icon('arrowLeft') + 'All projects</a>' +
+        '<a class="textlink" href="index.html">' + icon('arrowLeft') + 'Back to home</a>' +
         '<h1 style="margin-top:1.25rem">' + esc(pr.title) + '</h1>' +
         '<p class="lede" style="margin-top:1rem">' + esc(pr.blurb) + '</p>' +
         (links ? '<div class="hero__actions">' + links + '</div>' : '') +
@@ -765,8 +928,10 @@
   document.addEventListener('DOMContentLoaded', function () {
     initTheme();
     initNav();
+    initProgress();
 
     loadContent().then(function (c) {
+      applyPalette(c.theme);
       renderChrome(c);
       var page = document.body.getAttribute('data-page');
       if (page === 'home') renderHome(c);

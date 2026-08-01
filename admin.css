@@ -175,3 +175,27 @@ input:focus, textarea:focus, select:focus {
   border: 1px dashed var(--lav-200); border-radius: 12px;
   padding: 1.75rem 1rem; text-align: center; color: var(--muted); font-size: 0.875rem;
 }
+
+/* appearance */
+.colorrow { display: flex; gap: 0.5rem; align-items: center; }
+.colorrow input[type=color] {
+  width: 46px; height: 34px; padding: 2px; flex: none; cursor: pointer;
+  border: 1px solid var(--lav-100); border-radius: 8px; background: var(--cream);
+}
+.hexbox { font-family: var(--font-mono); font-size: 0.8125rem; }
+.swatches { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.swatch {
+  display: flex; align-items: center; gap: 0.45rem;
+  font: inherit; font-size: 0.8125rem; text-transform: capitalize;
+  background: var(--card); border: 1px solid var(--lav-100);
+  border-radius: 999px; padding: 0.35rem 0.8rem 0.35rem 0.4rem; cursor: pointer;
+  transition: border-color 0.2s var(--ease);
+}
+.swatch:hover { border-color: var(--lav-300); }
+.swatch.is-active { border-color: var(--lav-500); background: var(--lav-50); font-weight: 500; }
+.swatch__dots { display: inline-flex; }
+.swatch__dots i {
+  width: 15px; height: 15px; border-radius: 50%; display: block;
+  border: 1px solid rgba(0,0,0,.12);
+}
+.swatch__dots i:last-child { margin-left: -6px; }

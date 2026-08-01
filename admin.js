@@ -151,6 +151,8 @@
         { k: 'badge.text', l: 'Badge text', t: 'text', hint: 'For example "Open to opportunities" or "Currently exploring AI". Untick above to hide it entirely.' },
         { k: 'headline', l: 'Headline', t: 'textarea' },
         { k: 'lede', l: 'Intro paragraph', t: 'textarea' },
+        { k: 'logo', l: 'Logo', t: 'image',
+          hint: 'Upload a logo image (PNG with transparency works best). Leave empty to use your initials in a circle.' },
         { k: 'photo', l: 'Photo', t: 'image', hint: 'Leave empty to drop the photo and let the text run full width.' },
         { k: 'photoAlt', l: 'Photo description', t: 'text', hint: 'Read aloud by screen readers.' },
         { k: 'resumeUrl', l: 'Résumé', t: 'file',
@@ -261,6 +263,17 @@
       ]
     },
     {
+      key: 'theme', label: 'Appearance', kind: 'object',
+      hint: 'Pick a ready-made palette, or set your own two colours. Everything else on the site is worked out from these, and the contrast is checked automatically so text always stays readable.',
+      fields: [
+        { k: 'preset', l: 'Ready-made palette', t: 'preset' },
+        { k: 'accent', l: 'Accent colour', t: 'color',
+          hint: 'Buttons, links, the timeline and the logo circle.' },
+        { k: 'background', l: 'Page background', t: 'color',
+          hint: 'The base colour of the page. Keep it very light — cards sit on top of it.' }
+      ]
+    },
+    {
       key: 'meta', label: 'Site details', kind: 'object',
       hint: 'Browser tab title and the description search engines show.',
       fields: [
@@ -326,6 +339,26 @@
         esc(val || '') + '" placeholder="assets/img/…">' +
         '<button type="button" class="btn btn--icon" data-upload="' + esc(path) + '">Upload</button>' +
         '</div>';
+    } else if (f.t === 'color') {
+      h += '<div class="colorrow">' +
+        '<input type="color" id="' + id + '" data-path="' + esc(path) + '" data-t="text" value="' +
+        esc(val || '#000000') + '">' +
+        '<input type="text" data-path="' + esc(path) + '" data-t="text" value="' + esc(val || '') +
+        '" placeholder="#565483" class="hexbox">' +
+        '</div>';
+    } else if (f.t === 'preset') {
+      var PRESETS = {
+        lavender: ['#565483', '#F4F3EF'], forest: ['#3F6152', '#F2F4F0'],
+        clay: ['#8A5340', '#F6F1EC'], ink: ['#2F4562', '#F1F3F6'],
+        plum: ['#6D3F5B', '#F6F1F4'], slate: ['#4A4F58', '#F3F3F2']
+      };
+      h += '<div class="swatches">' + Object.keys(PRESETS).map(function (k) {
+        var pc = PRESETS[k];
+        return '<button type="button" class="swatch' + (val === k ? ' is-active' : '') +
+          '" data-preset="' + k + '" data-accent="' + pc[0] + '" data-bg="' + pc[1] + '">' +
+          '<span class="swatch__dots"><i style="background:' + pc[1] + '"></i>' +
+          '<i style="background:' + pc[0] + '"></i></span>' + k + '</button>';
+      }).join('') + '</div>';
     } else if (f.t === 'file') {
       h += '<div class="imgrow">' +
         '<input type="text" id="' + id + '" data-path="' + esc(path) + '" data-t="text" value="' +
@@ -459,6 +492,7 @@
     } else if (t === 'slug') { v = slugify(input.value); }
     else v = input.value;
     set(data, path, v);
+    if (path === 'theme.accent' || path === 'theme.background') data.theme.preset = 'custom';
     touch();
   }
 
@@ -512,6 +546,13 @@
         if (!window.confirm('Delete "' + name + '"? This cannot be undone once published.')) return;
         list.splice(di, 1);
         openSet = {};
+        touch(); paintEditor(); return;
+      }
+      if (b.hasAttribute('data-preset')) {
+        data.theme = data.theme || {};
+        data.theme.preset = b.getAttribute('data-preset');
+        data.theme.accent = b.getAttribute('data-accent');
+        data.theme.background = b.getAttribute('data-bg');
         touch(); paintEditor(); return;
       }
       if (b.hasAttribute('data-subadd')) {
