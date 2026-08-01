@@ -49,6 +49,10 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 
+/* Default icon size. Every icon must have a bound, or an unstyled context
+   lets the SVG expand to fill its container. */
+.ic { width: 16px; height: 16px; flex: none; }
+
 ::selection { background: var(--lav-100); color: var(--lav-900); }
 
 :focus-visible {
@@ -323,6 +327,7 @@ p:last-child { margin-bottom: 0; }
   color: var(--muted); margin: 0.75rem 0 0;
   display: flex; align-items: center; gap: 0.5rem;
 }
+.roadmap__hint .ic { width: 13px; height: 13px; flex: none; }
 
 /* ---------- generic cards ---------- */
 
