@@ -5,22 +5,22 @@
    ========================================================================== */
 
 :root {
-  --cream:      #F4F3EF;
+  --cream:      #F7F3F9;
   --cream-deep: #EFEEE8;
-  --card:       #FCFBF7;
+  --card:       #FDFCFD;
 
-  --lav-50:  #F0F0F5;
-  --lav-100: #DDDCE5;
-  --lav-200: #C8C7D6;
-  --lav-300: #B3B1C8;
-  --lav-500: #6F6C9D;
-  --lav-600: #565483;
-  --lav-800: #343252;
-  --lav-900: #23223A;
+  --lav-50:  #F4EFF6;
+  --lav-100: #E9DFED;
+  --lav-200: #DDCDE3;
+  --lav-300: #CEB7D7;
+  --lav-500: #6B4F86;
+  --lav-600: #6B4F86;
+  --lav-800: #4A3560;
+  --lav-900: #332443;
 
-  --ink:     #2B2A33;
-  --body:    #575450;
-  --muted:   #7C7975;
+  --ink:     #231D2A;
+  --body:    #443C4E;
+  --muted:   #5C5367;
 
   --on-accent: #FFFFFF;
   --shadow:  rgba(35, 34, 58, 0.16);
@@ -38,24 +38,24 @@
 /* Dark theme: same variable names, so every component follows automatically.
    Hue stays 243 so it reads as the same palette after dark. */
 [data-theme="dark"] {
-  --cream:      #16151E;
+  --cream:      #1A1622;
   --cream-deep: #121118;
-  --card:       #201F2B;
+  --card:       #241E31;
 
-  --lav-50:  #1D1C27;
-  --lav-100: #2C2A3A;
-  --lav-200: #3A3850;
-  --lav-300: #4C4A66;
-  --lav-500: #9E9AD2;
-  --lav-600: #B0ACE0;
-  --lav-800: #D6D3EE;
-  --lav-900: #ECEBF6;
+  --lav-50:  #201A2B;
+  --lav-100: #312741;
+  --lav-200: #423457;
+  --lav-300: #594876;
+  --lav-500: #C6ADDB;
+  --lav-600: #CEB7D7;
+  --lav-800: #E5DAEC;
+  --lav-900: #F2ECF6;
 
-  --ink:     #EDECF2;
-  --body:    #B6B3C4;
-  --muted:   #8B8899;
+  --ink:     #F1EBF5;
+  --body:    #C3B8CD;
+  --muted:   #958BA1;
 
-  --on-accent: #16151E;
+  --on-accent: #231D2A;
   --shadow:  rgba(0, 0, 0, 0.5);
 }
 
@@ -760,3 +760,51 @@ p:last-child { margin-bottom: 0; }
   .portrait__frame, .hero__wash--a, .hero__wash--b { animation: none !important; }
   .project:hover .project__cover img { transform: none; }
 }
+
+
+/* ==========================================================================
+   Section ladder — the default "Ankita" palette.
+   Each section ends on exactly the colour the next one starts with, so
+   the joins are invisible. Lilac and beige carry the page; sage appears
+   only at contact, purple only in the footer.
+   ========================================================================== */
+
+body { background: #CAD2CB; }
+.hero          { background: linear-gradient(180deg, #F7F3F9 0%, #EAE1EE 100%); }
+#journey       { background: linear-gradient(180deg, #EAE1EE 0%, #DCCBE2 100%); }
+#work          { background: linear-gradient(180deg, #DCCBE2 0%, #D9CED3 100%); }
+#education     { background: linear-gradient(180deg, #D9CED3 0%, #E9E6DE 100%); }
+#projects      { background: linear-gradient(180deg, #E9E6DE 0%, #EBE2EF 100%); }
+#certificates  { background: linear-gradient(180deg, #EBE2EF 0%, #E4E1D7 100%); }
+#skills        { background: linear-gradient(180deg, #E4E1D7 0%, #DECEE4 100%); }
+#contact       { background: linear-gradient(180deg, #DECEE4 0%, #EDEBE4 100%); }
+.footer       { background: linear-gradient(180deg, #CAD2CB 0%, #C0A9D4 100%); }
+.footer .footer__copy, .footer .social a { color: #2E2140; }
+
+.card, .mstone, .contact__card {
+  background: #FDFCFD;
+  border-color: rgba(51,36,67,.09);
+  box-shadow: 0 1px 2px rgba(51,36,67,.04), 0 12px 28px -22px rgba(51,36,67,.35);
+}
+.nav { background: #F7F3F9D9; }
+.hero__wash--a { background: #DDCDE3; opacity: .5; }
+.hero__wash--b { background: #D1D8D2; opacity: .45; }
+.snake__rail .rail-base { stroke: #E9DFED; }
+.snake__rail .rail-line { stroke: #8E6FA8; }
+.pill { background: #E9DFED; color: #4A3560; }
+
+[data-theme="dark"] body { background: #1A1622; }
+[data-theme="dark"] .hero         { background: linear-gradient(180deg, #1E1828 0%, #241D31 100%); }
+[data-theme="dark"] #journey      { background: linear-gradient(180deg, #241D31 0%, #2B2239 100%); }
+[data-theme="dark"] #work         { background: linear-gradient(180deg, #2B2239 0%, #221E2C 100%); }
+[data-theme="dark"] #education    { background: linear-gradient(180deg, #221E2C 0%, #1C1826 100%); }
+[data-theme="dark"] #projects     { background: linear-gradient(180deg, #1C1826 0%, #282039 100%); }
+[data-theme="dark"] #certificates { background: linear-gradient(180deg, #282039 0%, #1E1A28 100%); }
+[data-theme="dark"] #skills       { background: linear-gradient(180deg, #1E1A28 0%, #232B24 100%); }
+[data-theme="dark"] #contact      { background: linear-gradient(180deg, #232B24 0%, #2A2138 100%); }
+[data-theme="dark"] .footer { background: linear-gradient(180deg, #2A2138 0%, #3A2C4E 100%); }
+[data-theme="dark"] .footer .footer__copy, [data-theme="dark"] .footer .social a { color: #E5DAEC; }
+[data-theme="dark"] .card, [data-theme="dark"] .mstone, [data-theme="dark"] .contact__card {
+  background: #241E31; border-color: rgba(255,255,255,.08); box-shadow: none; }
+[data-theme="dark"] .nav { background: rgba(26,22,34,.88); }
+[data-theme="dark"] .pill { background: #312741; color: #E5DAEC; }

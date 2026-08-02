@@ -21,6 +21,10 @@
       {
         "type": "linkedin",
         "url": "https://linkedin.com/in/your-handle"
+      },
+      {
+        "type": "github",
+        "url": "https://github.com/AnkitaPathak06"
       }
     ],
     "logo": ""
@@ -268,8 +272,11 @@
     }
   ],
   "theme": {
-    "preset": "lavender",
-    "accent": "#565483",
-    "background": "#F4F3EF"
+    "preset": "lilac",
+    "colorA": "#CEB7D7",
+    "colorB": "#E0DCD1",
+    "contactColor": "#ACB9AD",
+    "footerColor": "#B296CA",
+    "accent": "#6B4F86"
   }
 }

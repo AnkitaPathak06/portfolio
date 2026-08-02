@@ -7,6 +7,9 @@
 (function () {
   'use strict';
 
+  var PF_ADMIN_VERSION = 9;
+  console.log('admin build v' + PF_ADMIN_VERSION);
+
   var API = 'https://api.github.com';
   var FILE = 'content.json';
   var IMG_DIR = 'files';
@@ -264,13 +267,18 @@
     },
     {
       key: 'theme', label: 'Appearance', kind: 'object',
-      hint: 'Pick a ready-made palette, or set your own two colours. Everything else on the site is worked out from these, and the contrast is checked automatically so text always stays readable.',
+      hint: 'Two lead colours build a ten-step ladder down the page — each section ends on exactly the colour the next begins with, so there are no visible joins. Contrast is checked automatically, and any shade too dark for small text is lightened for you.',
       fields: [
         { k: 'preset', l: 'Ready-made palette', t: 'preset' },
-        { k: 'accent', l: 'Accent colour', t: 'color',
-          hint: 'Buttons, links, the timeline and the logo circle.' },
-        { k: 'background', l: 'Page background', t: 'color',
-          hint: 'The base colour of the page. Keep it very light — cards sit on top of it.' }
+        { k: 'colorA', l: 'Lead colour', t: 'color',
+          hint: 'The dominant tone. Appears in the roadmap, certificates and the timeline.' },
+        { k: 'colorB', l: 'Second colour', t: 'color',
+          hint: 'The resting tone between passages of the lead colour.' },
+        { k: 'contactColor', l: 'Contact section', t: 'color',
+          hint: 'Used only at the bottom, so the page arrives somewhere different.' },
+        { k: 'footerColor', l: 'Footer', t: 'color' },
+        { k: 'accent', l: 'Buttons and links', t: 'color',
+          hint: 'Darkened automatically if needed so white text on buttons stays readable.' }
       ]
     },
     {
@@ -347,17 +355,25 @@
         '" placeholder="#565483" class="hexbox">' +
         '</div>';
     } else if (f.t === 'preset') {
-      var PRESETS = {
-        lavender: ['#565483', '#F4F3EF'], forest: ['#3F6152', '#F2F4F0'],
-        clay: ['#8A5340', '#F6F1EC'], ink: ['#2F4562', '#F1F3F6'],
-        plum: ['#6D3F5B', '#F6F1F4'], slate: ['#4A4F58', '#F3F3F2']
+      var LADDERS = {
+        lilac: ['#CEB7D7','#E0DCD1','#ACB9AD','#B296CA'],
+        beige: ['#E0DCD1','#CEB7D7','#ACB9AD','#B296CA'],
+        sage:  ['#BFCBC0','#E4E1D6','#CDBFD8','#9FB0A1'],
+        clay:  ['#E2CFC2','#E9E4DA','#C7B9AC','#C09B82'],
+        mist:  ['#C6CEDD','#E3E4E0','#B7C2CE','#9FAFC4'],
+        rose:  ['#E2C6CE','#E8E2DA','#CDB6BC','#C79AA6']
       };
-      h += '<div class="swatches">' + Object.keys(PRESETS).map(function (k) {
-        var pc = PRESETS[k];
+      var ACCENTS = { lilac:'#6B4F86', beige:'#6B4F86', sage:'#3F6152',
+                      clay:'#8A5340', mist:'#3D5372', rose:'#7E4457' };
+      h += '<div class="swatches">' + Object.keys(LADDERS).map(function (k) {
+        var pc = LADDERS[k];
         return '<button type="button" class="swatch' + (val === k ? ' is-active' : '') +
-          '" data-preset="' + k + '" data-accent="' + pc[0] + '" data-bg="' + pc[1] + '">' +
-          '<span class="swatch__dots"><i style="background:' + pc[1] + '"></i>' +
-          '<i style="background:' + pc[0] + '"></i></span>' + k + '</button>';
+          '" data-preset="' + k + '" data-a="' + pc[0] + '" data-b="' + pc[1] +
+          '" data-contact="' + pc[2] + '" data-footer="' + pc[3] +
+          '" data-accent="' + ACCENTS[k] + '">' +
+          '<span class="swatch__dots">' + pc.map(function (x) {
+            return '<i style="background:' + x + '"></i>';
+          }).join('') + '</span>' + k + '</button>';
       }).join('') + '</div>';
     } else if (f.t === 'file') {
       h += '<div class="imgrow">' +
@@ -492,7 +508,7 @@
     } else if (t === 'slug') { v = slugify(input.value); }
     else v = input.value;
     set(data, path, v);
-    if (path === 'theme.accent' || path === 'theme.background') data.theme.preset = 'custom';
+    if (path.indexOf('theme.') === 0 && path !== 'theme.preset') data.theme.preset = 'custom';
     touch();
   }
 
@@ -551,8 +567,11 @@
       if (b.hasAttribute('data-preset')) {
         data.theme = data.theme || {};
         data.theme.preset = b.getAttribute('data-preset');
+        data.theme.colorA = b.getAttribute('data-a');
+        data.theme.colorB = b.getAttribute('data-b');
+        data.theme.contactColor = b.getAttribute('data-contact');
+        data.theme.footerColor = b.getAttribute('data-footer');
         data.theme.accent = b.getAttribute('data-accent');
-        data.theme.background = b.getAttribute('data-bg');
         touch(); paintEditor(); return;
       }
       if (b.hasAttribute('data-subadd')) {

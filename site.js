@@ -7,6 +7,9 @@
 (function () {
   'use strict';
 
+  var PF_VERSION = 9;
+  console.log('portfolio build v' + PF_VERSION);
+
   /* ---------- icons ---------- */
 
   var ICONS = {
@@ -48,129 +51,167 @@
 
   /* ---------- palette ---------- */
 
+  /* Two lead colours build a ten-step ladder down the page. Each section ends
+     on exactly the colour the next one starts with, so the joins are invisible.
+     Every step is auto-lightened until small text on it clears WCAG AA. */
+
   var PRESETS = {
-    lavender: { accent: '#565483', background: '#F4F3EF', label: 'Lavender' },
-    forest:   { accent: '#3F6152', background: '#F2F4F0', label: 'Forest' },
-    clay:     { accent: '#8A5340', background: '#F6F1EC', label: 'Clay' },
-    ink:      { accent: '#2F4562', background: '#F1F3F6', label: 'Ink' },
-    plum:     { accent: '#6D3F5B', background: '#F6F1F4', label: 'Plum' },
-    slate:    { accent: '#4A4F58', background: '#F3F3F2', label: 'Slate' }
+    lilac:  { a: '#CEB7D7', b: '#E0DCD1', contact: '#ACB9AD', footer: '#B296CA',
+              accent: '#6B4F86', label: 'Lilac led' },
+    beige:  { a: '#E0DCD1', b: '#CEB7D7', contact: '#ACB9AD', footer: '#B296CA',
+              accent: '#6B4F86', label: 'Beige led' },
+    sage:   { a: '#BFCBC0', b: '#E4E1D6', contact: '#CDBFD8', footer: '#9FB0A1',
+              accent: '#3F6152', label: 'Sage led' },
+    clay:   { a: '#E2CFC2', b: '#E9E4DA', contact: '#C7B9AC', footer: '#C09B82',
+              accent: '#8A5340', label: 'Clay' },
+    mist:   { a: '#C6CEDD', b: '#E3E4E0', contact: '#B7C2CE', footer: '#9FAFC4',
+              accent: '#3D5372', label: 'Mist' },
+    rose:   { a: '#E2C6CE', b: '#E8E2DA', contact: '#CDB6BC', footer: '#C79AA6',
+              accent: '#7E4457', label: 'Rose' }
   };
 
-  function hexToHsl(hex) {
+  var SECTION_SEL = ['.hero', '#journey', '#work', '#education', '#projects',
+                     '#certificates', '#skills', '#contact'];
+
+  /* pattern: which lead colour each anchor comes from, and how far toward white */
+  var LADDER = [
+    ['a', 0.84], ['a', 0.58], ['a', 0.28], ['ab', 0.62], ['b', 0.28],
+    ['a', 0.60], ['b', 0.14], ['a', 0.32], ['b', 0.42], ['contact', 0.36]
+  ];
+
+  function toRgb(hex) {
     hex = String(hex || '').replace('#', '');
     if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-    var r = parseInt(hex.slice(0, 2), 16) / 255,
-        g = parseInt(hex.slice(2, 4), 16) / 255,
-        b = parseInt(hex.slice(4, 6), 16) / 255;
-    if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var h = 0, s = 0, l = (max + min) / 2, d = max - min;
-    if (d) {
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0));
-      else if (max === g) h = (b - r) / d + 2;
-      else h = (r - g) / d + 4;
-      h /= 6;
-    }
-    return { h: h * 360, s: s, l: l };
+    var n = parseInt(hex, 16);
+    if (isNaN(n) || hex.length !== 6) return null;
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
-
-
-  function hslToRgb(h, s, l) {
-    h /= 360;
-    var r, g, b;
-    if (!s) { r = g = b = l; }
-    else {
-      var q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
-      var f = function (t) {
-        if (t < 0) t += 1; if (t > 1) t -= 1;
-        if (t < 1 / 6) return p + (q - p) * 6 * t;
-        if (t < 1 / 2) return q;
-        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-        return p;
-      };
-      r = f(h + 1 / 3); g = f(h); b = f(h - 1 / 3);
-    }
-    return [r, g, b];
+  function toHex(c) {
+    return '#' + c.map(function (x) {
+      return ('0' + Math.max(0, Math.min(255, Math.round(x))).toString(16)).slice(-2);
+    }).join('').toUpperCase();
   }
-
-  function relLum(rgb) {
-    var f = function (c) { return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
-    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+  function mix(a, b, t) {
+    var A = toRgb(a), B = toRgb(b);
+    if (!A || !B) return a;
+    return toHex([0, 1, 2].map(function (i) { return A[i] + (B[i] - A[i]) * t; }));
   }
-
-  function contrast(a, b) {
-    var x = relLum(a), y = relLum(b);
+  function lumHex(hex) {
+    var c = toRgb(hex);
+    if (!c) return 1;
+    var f = function (x) {
+      x /= 255;
+      return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+  }
+  function contrastHex(a, b) {
+    var x = lumHex(a), y = lumHex(b);
     return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
   }
-
-  /* Darkest-acceptable lightness search: whatever hue the user picks, text
-     built from it still clears WCAG AA against the background behind it. */
-  function readableL(h, s, bgRgb, target, startL) {
-    var l = startL;
-    for (var i = 0; i < 40 && l > 0.04; i++) {
-      if (contrast(hslToRgb(h, s, l), bgRgb) >= target) return l;
-      l -= 0.015;
+  /* lighten toward white until the given text colour is readable on it */
+  function ensureReadable(bg, textHex, target) {
+    var out = bg;
+    for (var i = 0; i < 30; i++) {
+      if (contrastHex(textHex, out) >= target) return out;
+      out = mix(out, '#FFFFFF', 0.06);
     }
-    return Math.max(l, 0.04);
+    return out;
+  }
+  /* darken toward black until white text is readable on it */
+  function ensureAccent(hex) {
+    var out = hex;
+    for (var i = 0; i < 30; i++) {
+      if (contrastHex('#FFFFFF', out) >= 4.5) return out;
+      out = mix(out, '#000000', 0.06);
+    }
+    return out;
   }
 
-  function hsl(h, s, l) {
-    return 'hsl(' + h.toFixed(1) + ' ' + (s * 100).toFixed(1) + '% ' + (l * 100).toFixed(1) + '%)';
+  function buildLadder(cfg) {
+    var muted = '#5C5367';
+    return LADDER.map(function (step) {
+      var base = step[0] === 'ab' ? mix(cfg.a, cfg.b, 0.62)
+               : step[0] === 'contact' ? cfg.contact
+               : cfg[step[0]];
+      var t = step[0] === 'ab' ? 0 : step[1];
+      var shade = t ? mix(base, '#FFFFFF', t) : base;
+      return ensureReadable(shade, muted, 4.5);
+    });
   }
 
   function applyPalette(theme) {
     theme = theme || {};
-    var preset = PRESETS[theme.preset];
-    var accentHex = theme.accent || (preset && preset.accent) || PRESETS.lavender.accent;
-    var bgHex = theme.background || (preset && preset.background) || PRESETS.lavender.background;
+    var preset = PRESETS[theme.preset] || PRESETS.lilac;
+    var cfg = {
+      a: theme.colorA || preset.a,
+      b: theme.colorB || preset.b,
+      contact: theme.contactColor || preset.contact,
+      footer: theme.footerColor || preset.footer
+    };
+    if (!toRgb(cfg.a) || !toRgb(cfg.b)) return;
 
-    var a = hexToHsl(accentHex), bg = hexToHsl(bgHex);
-    if (!a || !bg) return;
+    var anchors = buildLadder(cfg);
+    var accent = ensureAccent(theme.accent || preset.accent);
+    var ink = '#231D2A', body = '#443C4E', muted = '#5C5367';
 
-    var h = a.h, s = Math.min(Math.max(a.s, 0.10), 0.55);
-    var bh = bg.h, bs = Math.min(bg.s, 0.14);
-
-    var cardRgb = hslToRgb(bh, bs * 0.55, Math.min(bg.l + 0.05, 0.995));
-    var l500 = readableL(h, s, cardRgb, 4.5, 0.50);
-    var l600 = readableL(h, s, [1, 1, 1], 4.5, 0.46); // white text sits on this one
-
-    var light = [
-      '--cream: ' + hsl(bh, bs, bg.l),
-      '--cream-deep: ' + hsl(bh, bs, Math.max(bg.l - 0.03, 0)),
-      '--card: ' + hsl(bh, bs * 0.55, Math.min(bg.l + 0.05, 0.995)),
-      '--lav-50: ' + hsl(h, s * 0.30, 0.955),
-      '--lav-100: ' + hsl(h, s * 0.42, 0.885),
-      '--lav-200: ' + hsl(h, s * 0.50, 0.815),
-      '--lav-300: ' + hsl(h, s * 0.58, 0.735),
-      '--lav-500: ' + hsl(h, s, l500),
-      '--lav-600: ' + hsl(h, s, l600),
-      '--lav-800: ' + hsl(h, s, 0.26),
-      '--lav-900: ' + hsl(h, s, 0.18),
-      '--ink: ' + hsl(h, 0.10, 0.17),
-      '--body: ' + hsl(h, 0.05, 0.34),
-      '--muted: ' + hsl(h, 0.05, 0.42),
+    var root = [
+      '--cream: ' + anchors[0],
+      '--card: #FDFCFD',
+      '--lav-50: ' + mix(cfg.a, '#FFFFFF', 0.78),
+      '--lav-100: ' + mix(cfg.a, '#FFFFFF', 0.55),
+      '--lav-200: ' + mix(cfg.a, '#FFFFFF', 0.30),
+      '--lav-300: ' + cfg.a,
+      '--lav-500: ' + accent,
+      '--lav-600: ' + accent,
+      '--lav-800: ' + mix(accent, '#000000', 0.22),
+      '--lav-900: ' + mix(accent, '#000000', 0.42),
+      '--ink: ' + ink, '--body: ' + body, '--muted: ' + muted,
       '--on-accent: #FFFFFF'
     ].join(';');
 
-    var dark = [
-      '--cream: ' + hsl(h, 0.14, 0.095),
-      '--cream-deep: ' + hsl(h, 0.14, 0.07),
-      '--card: ' + hsl(h, 0.13, 0.145),
-      '--lav-50: ' + hsl(h, 0.13, 0.125),
-      '--lav-100: ' + hsl(h, 0.14, 0.195),
-      '--lav-200: ' + hsl(h, 0.15, 0.265),
-      '--lav-300: ' + hsl(h, 0.16, 0.345),
-      '--lav-500: ' + hsl(h, Math.max(s * 0.7, 0.28), 0.71),
-      '--lav-600: ' + hsl(h, Math.max(s * 0.7, 0.30), 0.79),
-      '--lav-800: ' + hsl(h, Math.max(s * 0.5, 0.20), 0.89),
-      '--lav-900: ' + hsl(h, Math.max(s * 0.4, 0.15), 0.95),
-      '--ink: ' + hsl(h, 0.10, 0.94),
-      '--body: ' + hsl(h, 0.08, 0.74),
-      '--muted: ' + hsl(h, 0.07, 0.57),
-      '--on-accent: ' + hsl(h, 0.14, 0.095)
+    var rules = [':root{' + root + '}'];
+    rules.push('body{background:' + anchors[anchors.length - 1] + '}');
+    SECTION_SEL.forEach(function (sel, i) {
+      rules.push(sel + '{background:linear-gradient(180deg,' +
+        anchors[i] + ' 0%,' + anchors[i + 1] + ' 100%)}');
+    });
+    rules.push('.footer{background:linear-gradient(180deg,' + anchors[anchors.length - 1] +
+      ' 0%,' + mix(cfg.footer, '#FFFFFF', 0.18) + ' 100%)}');
+    rules.push('.footer .footer__copy,.footer .social a{color:' + mix(accent, '#000000', 0.3) + '}');
+    rules.push('.nav{background:' + anchors[0] + 'D9}');
+    rules.push('.snake__rail .rail-base{stroke:' + mix(cfg.a, '#FFFFFF', 0.55) + '}');
+    rules.push('.snake__rail .rail-line{stroke:' + mix(accent, '#FFFFFF', 0.22) + '}');
+    rules.push('.hero__wash--a{background:' + mix(cfg.a, '#FFFFFF', 0.3) + ';opacity:.5}');
+    rules.push('.hero__wash--b{background:' + mix(cfg.contact, '#FFFFFF', 0.45) + ';opacity:.45}');
+    rules.push('.pill{background:' + mix(cfg.a, '#FFFFFF', 0.55) + ';color:' +
+      mix(accent, '#000000', 0.22) + '}');
+
+    /* dark theme: same hues, inverted and desaturated */
+    var dAnchors = anchors.map(function (x, i) {
+      return mix(mix(cfg.a, cfg.b, (i % 2) ? 0.7 : 0.3), '#141019', 0.9 - (i % 3) * 0.02);
+    });
+    var dRoot = [
+      '--cream: #1A1622', '--card: #241E31',
+      '--lav-50: #201A2B', '--lav-100: #312741', '--lav-200: #423457', '--lav-300: #594876',
+      '--lav-500: ' + mix(cfg.a, '#FFFFFF', 0.12), '--lav-600: ' + cfg.a,
+      '--lav-800: ' + mix(cfg.a, '#FFFFFF', 0.55), '--lav-900: ' + mix(cfg.a, '#FFFFFF', 0.78),
+      '--ink: #F1EBF5', '--body: #C3B8CD', '--muted: #958BA1', '--on-accent: #231D2A'
     ].join(';');
+    rules.push('[data-theme="dark"]{' + dRoot + '}');
+    rules.push('[data-theme="dark"] body{background:#1A1622}');
+    SECTION_SEL.forEach(function (sel, i) {
+      rules.push('[data-theme="dark"] ' + sel + '{background:linear-gradient(180deg,' +
+        dAnchors[i] + ' 0%,' + dAnchors[i + 1] + ' 100%)}');
+    });
+    rules.push('[data-theme="dark"] .footer{background:linear-gradient(180deg,' +
+      dAnchors[dAnchors.length - 1] + ' 0%,' + mix(cfg.footer, '#141019', 0.72) + ' 100%)}');
+    rules.push('[data-theme="dark"] .footer .footer__copy,[data-theme="dark"] .footer .social a{color:' +
+      mix(cfg.a, '#FFFFFF', 0.55) + '}');
+    rules.push('[data-theme="dark"] .card,[data-theme="dark"] .mstone,' +
+      '[data-theme="dark"] .contact__card{background:#241E31;border-color:rgba(255,255,255,.08);box-shadow:none}');
+    rules.push('[data-theme="dark"] .nav{background:rgba(26,22,34,.88)}');
+    rules.push('[data-theme="dark"] .pill{background:#312741;color:#E5DAEC}');
 
     var tag = document.getElementById('palette');
     if (!tag) {
@@ -178,7 +219,7 @@
       tag.id = 'palette';
       document.head.appendChild(tag);
     }
-    tag.textContent = ':root{' + light + '}\n[data-theme="dark"]{' + dark + '}';
+    tag.textContent = rules.join('\n');
   }
 
   /* ---------- theme ---------- */
@@ -331,7 +372,7 @@
 
     var brand = el('brand');
     if (brand) {
-      brand.href = root + 'index.html';
+      brand.href = root || './';
       var mark = safeUrl(p.logo)
         ? '<img class="logo-img" src="' + esc(root + p.logo) + '" alt="">'
         : '<span class="mono-mark">' + esc(initials(p.name)) + '</span>';
@@ -861,7 +902,7 @@
     if (!pr) {
       wrap.innerHTML = '<div class="shell"><div class="empty">' +
         '<p>That project does not exist.</p>' +
-        '<a class="btn btn--ghost btn--sm" href="index.html">Back to home</a></div></div>';
+        '<a class="btn btn--ghost btn--sm" href="./">Back to home</a></div></div>';
       return;
     }
 
@@ -904,7 +945,7 @@
 
     wrap.innerHTML =
       '<div class="shell detail__head reveal">' +
-        '<a class="textlink" href="index.html">' + icon('arrowLeft') + 'Back to home</a>' +
+        '<a class="textlink" href="./">' + icon('arrowLeft') + 'Back to home</a>' +
         '<h1 style="margin-top:1.25rem">' + esc(pr.title) + '</h1>' +
         '<p class="lede" style="margin-top:1rem">' + esc(pr.blurb) + '</p>' +
         (links ? '<div class="hero__actions">' + links + '</div>' : '') +
