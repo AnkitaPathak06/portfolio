@@ -219,19 +219,19 @@
       "label": "Technical",
       "items": [
         {
-          "name": "Python",
+          "name": "Data Visualization",
           "core": true
         },
         {
-          "name": "SQL",
+          "name": "Dashboard Automation",
           "core": true
         },
         {
-          "name": "dbt",
+          "name": "Google Analytics",
           "core": false
         },
         {
-          "name": "Airflow",
+          "name": "PowerBi",
           "core": false
         },
         {
@@ -244,15 +244,27 @@
       "label": "Product",
       "items": [
         {
+          "name": "Requirement Gathering",
+          "core": true
+        },
+        {
+          "name": "Backlog Prioritization",
+          "core": true
+        },
+        {
+          "name": "User Stories & Specification",
+          "core": true
+        },
+        {
           "name": "Roadmapping",
-          "core": true
+          "core": false
         },
         {
-          "name": "User discovery",
-          "core": true
+          "name": "Competitor Analysis",
+          "core": false
         },
         {
-          "name": "Stakeholder management",
+          "name": "Stakeholder Management",
           "core": false
         }
       ]
@@ -261,15 +273,23 @@
       "label": "Ways of working",
       "items": [
         {
-          "name": "Writing",
+          "name": "Agile Methodology",
           "core": true
         },
         {
-          "name": "Mentoring",
+          "name": "Business Storytelling",
           "core": false
         },
         {
-          "name": "Facilitation",
+          "name": "Client Relationship Management",
+          "core": false
+        },
+        {
+          "name": "Cross-functional Facilitation",
+          "core": false
+        },
+        {
+          "name": "Mentoring / Training",
           "core": false
         }
       ]
