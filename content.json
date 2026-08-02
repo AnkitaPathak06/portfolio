@@ -35,38 +35,38 @@
   },
   "roadmap": [
     {
-      "year": "2017",
-      "title": "B.Sc. Economics",
-      "meta": "University name",
-      "note": "Where the interest in numbers started.",
+      "year": "2018",
+      "title": "B.Tech",
+      "meta": "Jaypee Institute of Information Technology",
+      "note": "Building strong engineering and analytical foundations",
       "present": false
     },
     {
-      "year": "2019",
-      "title": "Data analyst",
-      "meta": "Company name",
-      "note": "First role. Learned SQL properly and how to ask better questions.",
+      "year": "2020",
+      "title": "Executive Post Graduate Certificate in Business Analytics",
+      "meta": "IIM Indore",
+      "note": "Formalizing expertise in data-driven analytics and business intelligence",
       "present": false
     },
     {
-      "year": "2021",
-      "title": "Senior analyst",
-      "meta": "Company name",
-      "note": "Owned reporting for two business units.",
+      "year": "2020",
+      "title": "Business Analyst",
+      "meta": "Codewalla Software",
+      "note": "User behavior metrics, competitor analysis, and accelerating feature delivery",
       "present": false
     },
     {
-      "year": "2023",
-      "title": "M.S. Computer Science",
-      "meta": "University name",
-      "note": "Part-time, focused on applied machine learning.",
+      "year": "2022",
+      "title": "Senior Associate Analytics",
+      "meta": "WNS",
+      "note": "Product requirement translation, agile coordination, and dashboard automation",
       "present": false
     },
     {
-      "year": "Now",
-      "title": "Product manager",
-      "meta": "Company name",
-      "note": "Building data products end to end.",
+      "year": "2027",
+      "title": "PGCM",
+      "meta": "Great Lakes Institute of Management",
+      "note": "Strategic management, AI initiatives, and high-impact business simulations.",
       "present": true
     }
   ],
