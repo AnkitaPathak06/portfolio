@@ -98,16 +98,22 @@
   ],
   "education": [
     {
-      "year": "2023",
-      "degree": "M.S. Computer Science",
-      "org": "University name",
-      "note": "Applied machine learning specialisation."
+      "year": "2027",
+      "degree": "Post Graduate Certificate in Management",
+      "org": "Great Lakes Institute of Management, Gurgaon",
+      "note": "Focused on management fundamentals, business strategy, and analytical problem-solving."
     },
     {
-      "year": "2017",
-      "degree": "B.Sc. Economics",
-      "org": "University name",
-      "note": "Econometrics and statistics."
+      "year": "2020",
+      "degree": "Integrated Program in Business Analytics",
+      "org": "Indian Institute of Management, Indore",
+      "note": "Specialized in data-driven analytics, business intelligence, and predictive modeling."
+    },
+    {
+      "year": "2018",
+      "degree": "B.tech",
+      "org": "Jaypee Institute of Information technology, Noida",
+      "note": "Combined healthcare domain fundamentals with analytical problem-solving and cross-functional project management."
     }
   ],
   "projects": [
