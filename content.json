@@ -140,7 +140,12 @@
         "live": "",
         "repo": "https://colab.research.google.com/drive/1mZxpPF3_tzzc-mu8QtBkcfgwM16-yg8-?usp=sharing"
       },
-      "gallery": [],
+      "gallery": [
+        {
+          "src": "files/gemini-generated-image-gkubufgkubufgkub-1785786631271.png",
+          "caption": ""
+        }
+      ],
       "content": "**Business Objective:**\n- The project aims to build a machine learning triage tool that ranks 20,100 historical health insurance claims by fraud risk\n- This ensures investigators focus their manual reviews on the most suspicious claims, balancing the high cost of a missed fraud against the time cost of a false alarm\n\n**Methodology:**\n- The data analysis included a crucial safeguard: splitting the data into training and test sets before duplicating the fraud rows for class balancing\n- This prevented data leakage and ensured the models were evaluated on genuinely unseen claims\n- Six supervised algorithms and one unsupervised algorithm (K-Means) were compared\n\n**Key Findings:**\n- XGBoost emerged as the best-performing model, achieving an ROC-AUC score of 0.874\n- The strongest drivers of fraud were identified as Specialist Office providers (which had a nearly 50% fraud rate), high procedure counts, elevated cost per procedure, and longer distances between the patient and provider\n\n**Recommendations & Next Steps:**\n- The exact probability cut-off for flagging a claim should be determined by comparing the insurer's investigation costs against average fraudulent payouts\n- Since the current dataset uses synthetic data, the next critical step is to validate the model's performance on a real claims extract",
       "attachments": [
         {
