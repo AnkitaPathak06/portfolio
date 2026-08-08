@@ -120,7 +120,7 @@
       "year": "2024",
       "role": "Lead",
       "featured": true,
-      "cover": "",
+      "cover": "files/profile-1786192179108.jpg",
       "tags": [
         "Python",
         "Forecasting"
@@ -133,12 +133,12 @@
       ],
       "links": {
         "live": "",
-        "repo": ""
+        "repo": "https://colab.research.google.com/drive/1mZxpPF3_tzzc-mu8QtBkcfgwM16-yg8-?usp=sharing"
       },
       "content": "## The problem\n\nEvery month, three people spent the better part of a week rebuilding the same forecast by hand. The numbers were never reproducible, and nobody could explain a variance after the fact.\n\n## What I did\n\n- Interviewed the planners to understand which adjustments they were making by instinct, and why\n- Built a baseline model, then added the two seasonal effects that actually mattered\n- Shipped a review step so planners could override a number and have that override recorded\n\n## Result\n\nForecast prep dropped from five days to under an hour. More importantly, every number now has a traceable reason behind it.\n\n## What I would change\n\nI over-invested in model accuracy early on. The thing that made adoption work was the override log, and I built that last.",
       "attachments": [],
       "organization": "IIM Indore",
-      "slidesUrl": ""
+      "slidesUrl": "https://docs.google.com/presentation/d/1KkiOP_2ESXRDkPL1_KytMZh2j-bPOpgobypkG0ju_ig/edit"
     },
     {
       "slug": "insights-dashboard",
