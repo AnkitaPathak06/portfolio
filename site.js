@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var PF_VERSION = 9;
+  var PF_VERSION = 12;
   console.log('portfolio build v' + PF_VERSION);
 
   /* ---------- icons ---------- */
@@ -38,7 +38,8 @@
     moon: '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/>',
     paperclip: '<path d="M21 11.5 12.5 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L10 17.9a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/>',
     file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
-    image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>'
+    image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
+    presentation: '<path d="M3 4h18"/><path d="M4 4v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4"/><path d="m9 19 3-4 3 4"/>'
   };
 
   function icon(name, cls) {
@@ -346,6 +347,23 @@
     });
     flushPara(); closeList();
     return out.join('');
+  }
+
+
+  /* Accepts any Google Slides link the person pastes — the normal /edit URL,
+     a published /pub link, or an /embed URL — and returns a safe embed URL.
+     Anything not on docs.google.com is rejected. */
+  function slidesEmbed(url) {
+    url = String(url || '').trim();
+    if (!url) return '';
+    if (!/^https:\/\/docs\.google\.com\/presentation\//i.test(url)) return '';
+    var pub = url.match(/\/presentation\/d\/e\/([A-Za-z0-9_-]+)/);
+    var normal = url.match(/\/presentation\/d\/([A-Za-z0-9_-]+)/);
+    var base;
+    if (pub) base = 'https://docs.google.com/presentation/d/e/' + pub[1] + '/embed';
+    else if (normal) base = 'https://docs.google.com/presentation/d/' + normal[1] + '/embed';
+    else return '';
+    return base + '?start=false&loop=false&delayms=60000&rm=minimal';
   }
 
   /* ---------- data ---------- */
@@ -908,60 +926,98 @@
 
     document.title = pr.title + ' — ' + ((c.profile || {}).name || 'Portfolio');
 
-    var meta = '';
-    if (pr.year) meta += '<div><dt>Year</dt><dd>' + esc(pr.year) + '</dd></div>';
-    if (pr.role) meta += '<div><dt>Role</dt><dd>' + esc(pr.role) + '</dd></div>';
-    if ((pr.stack || []).length) {
-      meta += '<div><dt>Stack</dt><dd>' + esc((pr.stack || []).join(', ')) + '</dd></div>';
-    }
-    var links = '';
+    /* --- header: square image + title block. Either half may be absent. --- */
+    var cover = safeUrl(pr.cover)
+      ? '<div class="pdetail__thumb"><img src="' + esc(pr.cover) + '" alt="' + esc(pr.title) + '"></div>'
+      : '';
+
+    var badges = '';
+    if (pr.organization) badges += '<span class="pdetail__org">' + esc(pr.organization) + '</span>';
+    if (pr.year) badges += '<span class="pdetail__year">' + esc(pr.year) + '</span>';
+    if (pr.role) badges += '<span class="pdetail__year">' + esc(pr.role) + '</span>';
+
+    var tags = (pr.tags || []).filter(Boolean)
+      .map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join('');
+
+    var titleBlock =
+      (badges ? '<div class="pdetail__badges">' + badges + '</div>' : '') +
+      '<h1>' + esc(pr.title) + '</h1>' +
+      (pr.blurb ? '<p class="lede">' + esc(pr.blurb) + '</p>' : '') +
+      (tags ? '<div class="tag-row">' + tags + '</div>' : '');
+
+    var header = '<div class="pdetail__head' + (cover ? '' : ' pdetail__head--notext') + '">' +
+      cover + '<div class="pdetail__intro">' + titleBlock + '</div></div>';
+
+    /* --- tools and links strip: hides completely when both are empty --- */
+    var tools = (pr.stack || []).filter(Boolean)
+      .map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join('');
+    var linkBtns = '';
     if (safeUrl((pr.links || {}).live)) {
-      links += '<a class="btn btn--primary btn--sm" href="' + esc(safeUrl(pr.links.live)) +
+      linkBtns += '<a class="btn btn--primary btn--sm" href="' + esc(safeUrl(pr.links.live)) +
         '" target="_blank" rel="noopener">' + icon('external') + 'View live</a>';
     }
     if (safeUrl((pr.links || {}).repo)) {
-      links += '<a class="btn btn--ghost btn--sm" href="' + esc(safeUrl(pr.links.repo)) +
-        '" target="_blank" rel="noopener">' + icon('github') + 'Source</a>';
+      linkBtns += '<a class="btn btn--ghost btn--sm" href="' + esc(safeUrl(pr.links.repo)) +
+        '" target="_blank" rel="noopener">' + icon('github') + 'Source code</a>';
     }
-    var galleryItems = (pr.gallery || []).map(function (g) {
-      var src = typeof g === 'string' ? g : (g && g.src);
-      var cap = (g && g.caption) || '';
-      if (!safeUrl(src)) return '';
-      return '<figure><a href="' + esc(safeUrl(src)) + '" target="_blank" rel="noopener">' +
-        '<img src="' + esc(safeUrl(src)) + '" alt="' + esc(cap || pr.title) + '" loading="lazy"></a>' +
-        (cap ? '<figcaption>' + esc(cap) + '</figcaption>' : '') + '</figure>';
-    }).join('');
+    var strip = (tools || linkBtns)
+      ? '<div class="pdetail__strip reveal">' +
+          (tools ? '<div class="pdetail__tools"><span class="pdetail__label">Tools used</span>' +
+                   '<div class="tag-row">' + tools + '</div></div>' : '<span></span>') +
+          (linkBtns ? '<div class="pdetail__links">' + linkBtns + '</div>' : '') +
+        '</div>'
+      : '';
 
-    var attachItems = (pr.attachments || []).filter(function (a) {
-      return a && safeUrl(a.url);
-    }).map(function (a) {
-      var url = safeUrl(a.url);
-      var isImg = /\.(png|jpe?g|gif|webp|svg)$/i.test(url);
-      var kind = isImg ? 'image' : (/\.(pdf|docx?|pptx?|xlsx?|csv|zip)$/i.test(url) ? 'file' : 'paperclip');
-      return '<a class="attach" href="' + esc(url) + '" target="_blank" rel="noopener">' +
-        icon(kind) + '<span>' + esc(a.label || url.split('/').pop()) + '</span>' +
-        '<span class="attach__go">' + icon('external') + '</span></a>';
-    }).join('');
+    /* --- google slides --- */
+    var embed = slidesEmbed(pr.slidesUrl);
+    var deck = embed
+      ? '<div class="pdetail__deck reveal">' +
+          '<div class="deckframe"><iframe src="' + esc(embed) + '" title="' + esc(pr.title) +
+          ' presentation" frameborder="0" allowfullscreen loading="lazy"></iframe></div>' +
+          '<p class="deckhint">' + icon('presentation') +
+          'Use the arrows inside the deck to move between slides' +
+          (safeUrl(pr.slidesUrl) ? ' · <a href="' + esc(safeUrl(pr.slidesUrl)) +
+            '" target="_blank" rel="noopener">open in Google Slides</a>' : '') +
+          '</p></div>'
+      : '';
+
+    /* --- details --- */
+    var body = String(pr.content || '').trim();
+    var details = body
+      ? '<div class="pdetail__body reveal"><span class="pdetail__label">Project details</span>' +
+        '<div class="prose">' + md(body) + '</div></div>'
+      : '';
+
+    /* --- files --- */
+    var files = (pr.attachments || []).filter(function (a) { return a && safeUrl(a.url); })
+      .map(function (a) {
+        var url = safeUrl(a.url);
+        var ext = (url.split('.').pop() || '').toLowerCase().split(/[?#]/)[0];
+        var kind = /^(png|jpe?g|gif|webp|svg)$/.test(ext) ? 'image'
+                 : /^(pdf|docx?|pptx?|xlsx?|csv|zip|txt|ipynb)$/.test(ext) ? 'file' : 'paperclip';
+        var isLocal = !/^https?:/i.test(url);
+        return '<a class="attach" href="' + esc(url) + '"' +
+          (isLocal ? ' download' : ' target="_blank" rel="noopener"') + '>' +
+          icon(kind) + '<span>' + esc(a.label || url.split('/').pop()) + '</span>' +
+          (ext ? '<span class="attach__ext">' + esc(ext) + '</span>' : '') +
+          '<span class="attach__go">' + icon(isLocal ? 'download' : 'external') + '</span></a>';
+      }).join('');
+    var filesBlock = files
+      ? '<div class="pdetail__files reveal"><span class="pdetail__label">Project files</span>' +
+        '<div class="attachments">' + files + '</div></div>'
+      : '';
 
     wrap.innerHTML =
-      '<div class="shell detail__head reveal">' +
-        '<a class="textlink" href="./">' + icon('arrowLeft') + 'Back to home</a>' +
-        '<h1 style="margin-top:1.25rem">' + esc(pr.title) + '</h1>' +
-        '<p class="lede" style="margin-top:1rem">' + esc(pr.blurb) + '</p>' +
-        (links ? '<div class="hero__actions">' + links + '</div>' : '') +
-        (meta ? '<dl class="detail__meta">' + meta + '</dl>' : '') +
-      '</div>' +
-      '<div class="shell" style="padding-bottom:clamp(3rem,6vw,5rem)">' +
-        '<div class="prose reveal">' + md(pr.content) + '</div>' +
-        (galleryItems
-          ? '<div class="reveal"><p class="eyebrow" style="margin-top:2.5rem">Gallery</p>' +
-            '<div class="gallery">' + galleryItems + '</div></div>' : '') +
-        (attachItems
-          ? '<div class="reveal"><p class="eyebrow" style="margin-top:2.5rem">Files and links</p>' +
-            '<div class="attachments">' + attachItems + '</div></div>' : '') +
+      '<div class="shell pdetail">' +
+        '<a class="textlink pdetail__back" href="./">' + icon('arrowLeft') + 'Back to home</a>' +
+        '<div class="reveal">' + header + '</div>' +
+        strip + deck + details + filesBlock +
+        '<div class="pdetail__foot reveal">' +
+          '<a class="btn btn--ghost btn--sm" href="projects.html">' + icon('folder') +
+          'See all projects</a></div>' +
       '</div>';
 
-        initReveal();
+    initReveal();
   }
 
   /* ---------- boot ---------- */

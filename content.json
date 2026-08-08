@@ -1,6 +1,6 @@
 {
   "meta": {
-    "siteTitle": "Ankita Pathak - Portfolio",
+    "siteTitle": "Ankita Pathak — Portfolio",
     "description": "Portfolio, journey and selected work."
   },
   "profile": {
@@ -10,24 +10,28 @@
       "show": true,
       "text": "Open to opportunities"
     },
-    "headline": "Bridging Strategy, Product, and Execution",
-    "lede": "Hi, I’m Ankita Pathak, a business professional sitting at the intersection of data, product execution, and strategy. Backed by a strong foundation in analytics and product management, I help organizations align stakeholders, streamline operations, and turn data into measurable business impact.",
+    "headline": "Turning messy data into decisions people trust.",
+    "lede": "Replace this with two lines about your domain, how long you have worked in it, and the kind of problem you like being handed. Keep it specific — it is the only thing most visitors will read.",
     "photo": "profile.jpg",
     "photoAlt": "Portrait photograph",
-    "resumeUrl": "files/p2622010-ankitapathak-1785648041535.pdf",
+    "resumeUrl": "",
     "email": "pathak.ankita06@gmail.com",
-    "location": "Gurugram, India",
+    "location": "Delhi, India",
     "socials": [
       {
         "type": "linkedin",
-        "url": "https://www.linkedin.com/in/ankita-pathak06/"
+        "url": "https://linkedin.com/in/your-handle"
+      },
+      {
+        "type": "github",
+        "url": "https://github.com/AnkitaPathak06"
       }
     ],
-    "logo": "files/ap-logo-1785652770121.png"
+    "logo": ""
   },
   "contact": {
     "heading": "Let's talk",
-    "blurb": "Whether it is a role, a collaboration, or a question about something on this site - send a note and I will reply within a couple of days.",
+    "blurb": "Whether it is a role, a collaboration, or a question about something on this site — send a note and I will reply within a couple of days.",
     "useGmail": true,
     "emailSubject": "Hello Ankita",
     "showForm": false,
@@ -35,124 +39,106 @@
   },
   "roadmap": [
     {
-      "year": "2018",
-      "title": "B.Tech",
-      "meta": "Jaypee Institute of Information Technology",
-      "note": "Building strong engineering and analytical foundations",
+      "year": "2017",
+      "title": "B.Sc. Economics",
+      "meta": "University name",
+      "note": "Where the interest in numbers started.",
       "present": false
     },
     {
-      "year": "2020",
-      "title": "Executive Post Graduate Certificate in Business Analytics",
-      "meta": "IIM Indore",
-      "note": "Formalizing expertise in data-driven analytics and business intelligence",
+      "year": "2019",
+      "title": "Data analyst",
+      "meta": "Company name",
+      "note": "First role. Learned SQL properly and how to ask better questions.",
       "present": false
     },
     {
-      "year": "2020",
-      "title": "Business Analyst",
-      "meta": "Codewalla Software",
-      "note": "User behavior metrics, competitor analysis, and accelerating feature delivery",
+      "year": "2021",
+      "title": "Senior analyst",
+      "meta": "Company name",
+      "note": "Owned reporting for two business units.",
       "present": false
     },
     {
-      "year": "2022",
-      "title": "Senior Associate Analytics",
-      "meta": "WNS",
-      "note": "Product requirement translation, agile coordination, and dashboard automation",
+      "year": "2023",
+      "title": "M.S. Computer Science",
+      "meta": "University name",
+      "note": "Part-time, focused on applied machine learning.",
       "present": false
     },
     {
-      "year": "2027",
-      "title": "PGCM",
-      "meta": "Great Lakes Institute of Management",
-      "note": "Strategic management, AI initiatives, and high-impact business simulations.",
+      "year": "Now",
+      "title": "Product manager",
+      "meta": "Company name",
+      "note": "Building data products end to end.",
       "present": true
     }
   ],
   "jobs": [
     {
-      "period": "2022 - 2024",
-      "title": "Senior Associate Analytics",
-      "org": "WNS (Part of Capgemini)",
-      "body": "- Led requirements and backlog creation to build workflow tools that achieved 95% user adoption\n- Reduced development rework by 20% through detailed user stories and clear roadmap prioritization\n- Built automated reporting dashboards that eliminated 80% of manual effort for leadership",
+      "period": "2023 — Present",
+      "title": "Product manager",
+      "org": "Company name",
+      "body": "- Owned the roadmap for an internal analytics platform used by four teams\n- Cut manual reporting effort by roughly 60% by replacing spreadsheets with a modelled pipeline\n- Ran discovery interviews and translated findings into a quarterly plan",
       "tags": [
-        "Product Roadmapping",
-        "Dashboard Automation",
-        "Agile Delivery",
-        "Stakeholder Management"
+        "Roadmapping",
+        "Discovery",
+        "Analytics"
       ]
     },
     {
-      "period": "2020 - 2022",
-      "title": "Business Analyst",
-      "org": "Codewalla Software",
-      "body": "- Conducted competitor and market research to accelerate feature release cycles by 50%\n- Analyzed user behavior metrics to prioritize features that grew user engagement by 15%\n- Translated user insights into data-backed product strategies for cross-functional teams",
+      "period": "2021 — 2023",
+      "title": "Senior analyst",
+      "org": "Company name",
+      "body": "- Built the forecasting model that finance now uses for monthly planning\n- Mentored two junior analysts\n- Introduced version control and review to a team that had neither",
       "tags": [
-        "Market Research",
-        "User Analytics",
-        "Feature Prioritization",
-        "Product Strategy"
+        "SQL",
+        "Forecasting",
+        "Mentoring"
       ]
     }
   ],
   "education": [
     {
-      "year": "2027",
-      "degree": "Post Graduate Certificate in Management",
-      "org": "Great Lakes Institute of Management, Gurgaon",
-      "note": "Focused on management fundamentals, business strategy, and analytical problem-solving."
+      "year": "2023",
+      "degree": "M.S. Computer Science",
+      "org": "University name",
+      "note": "Applied machine learning specialisation."
     },
     {
-      "year": "2020",
-      "degree": "Integrated Program in Business Analytics",
-      "org": "Indian Institute of Management, Indore",
-      "note": "Specialized in data-driven analytics, business intelligence, and predictive modeling."
-    },
-    {
-      "year": "2018",
-      "degree": "B.tech",
-      "org": "Jaypee Institute of Information technology, Noida",
-      "note": "Combined healthcare domain fundamentals with analytical problem-solving and cross-functional project management."
+      "year": "2017",
+      "degree": "B.Sc. Economics",
+      "org": "University name",
+      "note": "Econometrics and statistics."
     }
   ],
   "projects": [
     {
-      "slug": "detecting-fraudulent",
-      "title": "Detecting Fraudulent Health Insurance Claims",
-      "blurb": "A machine learning study analyzing 20,100 health insurance claims",
-      "year": "2020",
+      "slug": "demand-forecasting",
+      "title": "Demand forecasting tool",
+      "blurb": "Replaced a hand-built monthly spreadsheet with a model the planning team actually trusts.",
+      "year": "2024",
       "role": "Lead",
       "featured": true,
-      "cover": "files/business-analytics-concept-double-exposure-background-161452-1785786887141.avif",
+      "cover": "",
       "tags": [
-        "Machine Learning",
-        "Exploratory Data Analysis",
-        "Feature Engineering",
-        "Random forest",
-        "XG Booster"
+        "Python",
+        "Forecasting"
       ],
       "stack": [
         "Python",
-        "Google Colab"
+        "Prophet",
+        "Airflow",
+        "Postgres"
       ],
       "links": {
         "live": "",
-        "repo": "https://colab.research.google.com/drive/1mZxpPF3_tzzc-mu8QtBkcfgwM16-yg8-?usp=sharing"
+        "repo": ""
       },
-      "gallery": [
-        {
-          "src": "files/gemini-generated-image-gkubufgkubufgkub-1785786631271.png",
-          "caption": ""
-        }
-      ],
-      "content": "**Business Objective:**\n- The project aims to build a machine learning triage tool that ranks 20,100 historical health insurance claims by fraud risk\n- This ensures investigators focus their manual reviews on the most suspicious claims, balancing the high cost of a missed fraud against the time cost of a false alarm\n\n**Methodology:**\n- The data analysis included a crucial safeguard: splitting the data into training and test sets before duplicating the fraud rows for class balancing\n- This prevented data leakage and ensured the models were evaluated on genuinely unseen claims\n- Six supervised algorithms and one unsupervised algorithm (K-Means) were compared\n\n**Key Findings:**\n- XGBoost emerged as the best-performing model, achieving an ROC-AUC score of 0.874\n- The strongest drivers of fraud were identified as Specialist Office providers (which had a nearly 50% fraud rate), high procedure counts, elevated cost per procedure, and longer distances between the patient and provider\n\n**Recommendations & Next Steps:**\n- The exact probability cut-off for flagging a claim should be determined by comparing the insurer's investigation costs against average fraudulent payouts\n- Since the current dataset uses synthetic data, the next critical step is to validate the model's performance on a real claims extract",
-      "attachments": [
-        {
-          "label": "Project Deck",
-          "url": "https://docs.google.com/presentation/d/1KkiOP_2ESXRDkPL1_KytMZh2j-bPOpgobypkG0ju_ig/edit?usp=sharing"
-        }
-      ]
+      "content": "## The problem\n\nEvery month, three people spent the better part of a week rebuilding the same forecast by hand. The numbers were never reproducible, and nobody could explain a variance after the fact.\n\n## What I did\n\n- Interviewed the planners to understand which adjustments they were making by instinct, and why\n- Built a baseline model, then added the two seasonal effects that actually mattered\n- Shipped a review step so planners could override a number and have that override recorded\n\n## Result\n\nForecast prep dropped from five days to under an hour. More importantly, every number now has a traceable reason behind it.\n\n## What I would change\n\nI over-invested in model accuracy early on. The thing that made adoption work was the override log, and I built that last.",
+      "attachments": [],
+      "organization": "IIM Indore",
+      "slidesUrl": ""
     },
     {
       "slug": "insights-dashboard",
@@ -175,9 +161,10 @@
         "live": "",
         "repo": ""
       },
-      "gallery": [],
       "content": "## The problem\n\nFour teams each maintained their own definition of an active customer. Meetings started with an argument about whose number was right.\n\n## What I did\n\n- Ran a short workshop to agree on one definition, in writing\n- Modelled the metric once in dbt so every report reads from the same source\n- Built a single dashboard and deprecated the other reports deliberately, with notice\n\n## Result\n\nThe definitional argument stopped. Adoption was helped more by turning the old reports off than by building the new one.",
-      "attachments": []
+      "attachments": [],
+      "organization": "",
+      "slidesUrl": ""
     },
     {
       "slug": "supply-chain-model",
@@ -200,9 +187,10 @@
         "live": "",
         "repo": ""
       },
-      "gallery": [],
       "content": "## The problem\n\nStock was allocated to warehouses using a rule written years earlier that nobody had revisited.\n\n## What I did\n\n- Framed allocation as a linear programme with real capacity and lead-time constraints\n- Validated against a year of historical data before proposing any change\n- Presented the result as a range, not a single number, so operations could weigh the risk\n\n## Result\n\nThe recommended reallocation was adopted for two regions and produced measurable savings in the first two quarters.",
-      "attachments": []
+      "attachments": [],
+      "organization": "",
+      "slidesUrl": ""
     }
   ],
   "certificates": [
@@ -230,19 +218,19 @@
       "label": "Technical",
       "items": [
         {
-          "name": "Data Visualization",
+          "name": "Python",
           "core": true
         },
         {
-          "name": "Dashboard Automation",
+          "name": "SQL",
           "core": true
         },
         {
-          "name": "Google Analytics",
+          "name": "dbt",
           "core": false
         },
         {
-          "name": "PowerBi",
+          "name": "Airflow",
           "core": false
         },
         {
@@ -255,27 +243,15 @@
       "label": "Product",
       "items": [
         {
-          "name": "Requirement Gathering",
-          "core": true
-        },
-        {
-          "name": "Backlog Prioritization",
-          "core": true
-        },
-        {
-          "name": "User Stories & Specification",
-          "core": true
-        },
-        {
           "name": "Roadmapping",
-          "core": false
+          "core": true
         },
         {
-          "name": "Competitor Analysis",
-          "core": false
+          "name": "User discovery",
+          "core": true
         },
         {
-          "name": "Stakeholder Management",
+          "name": "Stakeholder management",
           "core": false
         }
       ]
@@ -284,34 +260,26 @@
       "label": "Ways of working",
       "items": [
         {
-          "name": "Agile Methodology",
+          "name": "Writing",
           "core": true
         },
         {
-          "name": "Business Storytelling",
+          "name": "Mentoring",
           "core": false
         },
         {
-          "name": "Client Relationship Management",
-          "core": false
-        },
-        {
-          "name": "Cross-functional Facilitation",
-          "core": false
-        },
-        {
-          "name": "Mentoring / Training",
+          "name": "Facilitation",
           "core": false
         }
       ]
     }
   ],
   "theme": {
-    "preset": "clay",
-    "colorA": "#E2CFC2",
-    "colorB": "#E9E4DA",
-    "contactColor": "#C7B9AC",
-    "footerColor": "#C09B82",
-    "accent": "#8A5340"
+    "preset": "lilac",
+    "colorA": "#CEB7D7",
+    "colorB": "#E0DCD1",
+    "contactColor": "#ACB9AD",
+    "footerColor": "#B296CA",
+    "accent": "#6B4F86"
   }
 }

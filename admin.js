@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var PF_ADMIN_VERSION = 9;
+  var PF_ADMIN_VERSION = 12;
   console.log('admin build v' + PF_ADMIN_VERSION);
 
   var API = 'https://api.github.com';
@@ -201,31 +201,34 @@
       ]
     },
     {
-      key: 'projects', label: 'Projects', kind: 'list', titleKey: 'title', subKey: 'year',
+      key: 'projects', label: 'Projects', kind: 'list', titleKey: 'title', subKey: 'organization',
       flagKey: 'featured', flagLabel: 'Featured',
-      hint: 'Featured projects appear on the home page. Every project gets its own detail page.',
+      hint: 'Featured projects appear on the home page. Every project gets its own page. Anything you leave blank is simply left out — the layout closes up around it.',
       blank: {
-        slug: '', title: '', blurb: '', year: '', role: '', featured: false,
+        slug: '', title: '', blurb: '', organization: '', year: '', role: '', featured: false,
         cover: '', tags: [], stack: [], links: { live: '', repo: '' },
-        gallery: [], attachments: [], content: ''
+        slidesUrl: '', attachments: [], content: ''
       },
       fields: [
         { k: 'title', l: 'Title', t: 'text' },
         { k: 'slug', l: 'Page address', t: 'slug', hint: 'Used in the URL. Change it and old links break.' },
-        { k: 'blurb', l: 'One-line summary', t: 'textarea' },
+        { k: 'blurb', l: 'One line summary', t: 'textarea', hint: 'Shown under the title and on the projects grid.' },
+        { k: 'organization', l: 'Organization or college', t: 'text', hint: 'For example IIM Indore. Shown as a badge above the title.' },
         { k: 'year', l: 'Year', t: 'text' },
         { k: 'role', l: 'Your role', t: 'text' },
         { k: 'featured', l: 'Show on home page', t: 'check' },
-        { k: 'cover', l: 'Cover image', t: 'image' },
+        { k: 'cover', l: 'Image', t: 'image',
+          hint: 'Shown as a square, both here and on the projects grid. A square or near-square image works best.' },
         { k: 'tags', l: 'Tags', t: 'tags', hint: 'These become the filters on the projects page.' },
-        { k: 'stack', l: 'Tools used', t: 'tags' },
-        { k: 'links.live', l: 'Live link', t: 'text' },
-        { k: 'links.repo', l: 'Source code link', t: 'text' },
-        { k: 'content', l: 'Detail page', t: 'md', tall: true, hint: 'Markdown. ## makes a heading, - makes a bullet, **bold**, [text](url).' },
-        { k: 'gallery', l: 'Gallery images', t: 'gallery',
-          hint: 'Screenshots shown in a grid. Click Add image to upload from your computer.' },
-        { k: 'attachments', l: 'Files and links', t: 'attachments',
-          hint: 'PDFs, decks, certificates or any external link. Upload a file or paste a URL.' }
+        { k: 'stack', l: 'Tools used', t: 'tags', hint: 'Optional. Left out entirely if empty.' },
+        { k: 'links.repo', l: 'Source code link', t: 'text', hint: 'Optional.' },
+        { k: 'links.live', l: 'Live link', t: 'text', hint: 'Optional.' },
+        { k: 'slidesUrl', l: 'Google Slides link', t: 'text',
+          hint: 'Paste the normal share link from Google Slides. In Slides: Share, then set General access to "Anyone with the link", otherwise visitors see a blank frame.' },
+        { k: 'content', l: 'Project details', t: 'md', tall: true,
+          hint: 'Markdown. ## makes a heading, - makes a bullet, **bold**, [text](url).' },
+        { k: 'attachments', l: 'Project files', t: 'attachments',
+          hint: 'PDFs, decks, notebooks or links. Upload a file or paste a URL.' }
       ]
     },
     {
