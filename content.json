@@ -1,0 +1,246 @@
+{
+  "theme": {
+    "band": "#2f5d57",
+    "accent": "#b68235",
+    "bg": "#f7f4ee",
+    "ink": "#201f1d",
+    "headingFont": "Cormorant Garamond",
+    "bodyFont": "Lora",
+    "baseSize": 16,
+    "animations": true,
+    "sectionSpacing": 88,
+    "showPhoto": true
+  },
+  "meta": {
+    "name": "Ankita Pathak",
+    "tagline": "Project management · Business analysis · PGCM 2027",
+    "email": "hello@example.com",
+    "location": "Gurugram · English and Hindi · open to remote",
+    "linkedin": "https://www.linkedin.com/",
+    "resumeUrl": "",
+    "photo": "",
+    "photoCaption": "Gurugram, 2026"
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "type": "hero",
+      "enabled": true,
+      "kicker": "Project management · Business analysis · PGCM 2027",
+      "headline": "Most delivery problems are definition problems.",
+      "body": "Four and a half years turning stakeholder noise into requirements, roadmaps and dashboards people actually use — as a business analyst at Codewalla, then Senior Associate in analytics at WNS. Now reading for a PGCM at Great Lakes, still chasing the same thing: the problem underneath the problem."
+    },
+    {
+      "id": "journey",
+      "type": "journey",
+      "enabled": true,
+      "kicker": "Roles and education on one rail",
+      "title": "Journey",
+      "items": [
+        { "year": "2018", "title": "B.Tech, JIIT Noida", "note": "Where the engineering habit came from." },
+        { "year": "2020", "title": "IPBA, IIM Indore", "note": "Business analytics, taken alongside the first analyst role." },
+        { "year": "2020–22", "title": "Business Analyst, Codewalla", "note": "Market and competitor analysis feeding the backlog; release cycles 50% faster." },
+        { "year": "2022–24", "title": "Senior Associate, WNS", "note": "Requirements, roadmap and the KPI reporting leadership now runs on." },
+        { "year": "2025–27", "title": "PGCM, Great Lakes", "note": "Strategy Club; second runner-up at the institute's AI mini hackathon." }
+      ]
+    },
+    {
+      "id": "experience",
+      "type": "experience",
+      "enabled": true,
+      "kicker": "Four and a half years, two companies",
+      "title": "Work experience",
+      "items": [
+        {
+          "org": "WNS",
+          "orgNote": "(part of Capgemini)",
+          "role": "Senior Associate, Analytics",
+          "period": "Feb 2022 – Dec 2024 · Gurugram",
+          "summary": "Product ownership for an internal delivery tool, plus the KPI layer leadership reads. Also coordinated the internal Agile training programme in 2024.",
+          "bullets": [
+            "Translated stakeholder needs and business challenges into actionable product requirements, delivering an application that improved task allocation and visibility and achieved 95% employee adoption.",
+            "Developed product roadmap and prioritized backlog with clearly defined user stories, collaborating with development teams to translate requirements into actionable deliverables and reducing rework by 20%.",
+            "Developed KPI and reporting dashboards for leadership, automating 80% of manual analysis and enabling data-driven insights for operational decision-making."
+          ]
+        },
+        {
+          "org": "Codewalla Software",
+          "orgNote": "",
+          "role": "Business Analyst",
+          "period": "May 2020 – Jan 2022",
+          "summary": "First analyst role: discovery, competitor reads and the usage analysis behind what got built next.",
+          "bullets": [
+            "Conducted market and competitor analysis to identify industry trends and customer needs, informing product enhancements that accelerated release cycles by 50%.",
+            "Analyzed user behavior metrics and usage patterns to identify customer needs, supporting data-driven feature prioritization and increasing user engagement by 15%."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "work",
+      "type": "projects",
+      "enabled": true,
+      "kicker": "Selected work",
+      "title": "Three I would defend in an interview"
+    },
+    {
+      "id": "practice",
+      "type": "practice",
+      "enabled": true,
+      "kicker": "How I work",
+      "title": "Agree on it before you build it",
+      "body": "Every project I have run starts the same way: the problem in a sentence, whose problem it is, what we are not doing, and the one number that will tell us we were right. It is unglamorous and it is most of the job. When a team is arguing in week six, it is usually because nobody wrote that down in week one.",
+      "items": [
+        { "title": "Ask the people doing the workaround", "note": "Ops leads and analysts already know where the process leaks. Requirements written from the real routine, not the documented one, survive contact with delivery." },
+        { "title": "Let the story carry its acceptance criteria", "note": "Most rework I have seen came from a story that read clearly and meant three different things. Rework fell 20% once each one had to say how it would be checked." },
+        { "title": "Settle the definitions, then the dashboard", "note": "Agreeing what a KPI counts is the argument worth having. Build the chart first and you have automated a disagreement." }
+      ]
+    },
+    {
+      "id": "education",
+      "type": "education",
+      "enabled": true,
+      "kicker": "Qualifications, most recent first",
+      "title": "Education",
+      "items": [
+        { "year": "2027", "degree": "PGCM", "institute": "Great Lakes Institute of Management, Gurgaon", "note": "Pursuing · Strategy Club; second runner-up, AI mini hackathon" },
+        { "year": "2020", "degree": "IPBA", "institute": "Indian Institute of Management, Indore", "note": "Business analytics, taken alongside the first analyst role" },
+        { "year": "2018", "degree": "B.Tech", "institute": "Jaypee Institute of Information Technology, Noida", "note": "Cultural fest coordinator; quiz competition runner-up, 2017" },
+        { "year": "2013", "degree": "Class XII", "institute": "JVM Shyamali, Ranchi", "note": "Science stream" },
+        { "year": "2011", "degree": "Class X", "institute": "JVM Shyamali, Ranchi", "note": "CBSE" }
+      ]
+    },
+    {
+      "id": "skills",
+      "type": "skills",
+      "enabled": true,
+      "kicker": "What I am relied on for",
+      "title": "Skills",
+      "items": [
+        { "title": "Project management", "note": "Roadmaps, backlogs and Agile delivery — including the internal Agile training programme at WNS." },
+        { "title": "Requirements and stakeholder management", "note": "Discovery with the people doing the work, written up so a developer and a director read the same thing." },
+        { "title": "Data visualization", "note": "KPI definition and dashboards built around the decision they serve. Advanced Excel; reporting automation." },
+        { "title": "Business storytelling", "note": "Turning an analysis into the two sentences a leadership meeting can act on." },
+        { "title": "Client relationship management", "note": "Holding the scope conversation early, while it is still cheap." },
+        { "title": "Languages", "note": "English and Hindi." }
+      ]
+    },
+    {
+      "id": "certifications",
+      "type": "certifications",
+      "enabled": true,
+      "kicker": "On the record",
+      "title": "Certifications and recognition",
+      "items": [
+        { "title": "Advanced Excel", "meta": "TATA Steel Capability Development · 2020 · 2 weeks" },
+        { "title": "Second runner-up, AI mini hackathon", "meta": "Great Lakes Institute of Management, Gurugram · 2026" },
+        { "title": "Runner-up, quiz competition", "meta": "Jaypee Institute of Information Technology, Noida · 2017" },
+        { "title": "Internal Agile training coordinator", "meta": "WNS, Gurugram · 2024" },
+        { "title": "Member, Strategy Club", "meta": "Great Lakes Institute of Management, Gurugram · 2026" },
+        { "title": "Volunteer, WNS Care Foundation", "meta": "2023–24" }
+      ]
+    },
+    {
+      "id": "contact",
+      "type": "contact",
+      "enabled": true,
+      "kicker": "Contact",
+      "title": "If you are hiring someone to ask the awkward question early, write to me."
+    }
+  ],
+  "projects": [
+    {
+      "slug": "allocation-app",
+      "num": "01",
+      "title": "The allocation app nobody had to be told to use",
+      "org": "WNS (part of Capgemini)",
+      "period": "2022–2024",
+      "role": "Product ownership",
+      "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
+      "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
+      "cover": "",
+      "stats": [
+        { "value": "95%", "label": "adoption" },
+        { "value": "20%", "label": "less rework" },
+        { "value": "5", "label": "teams onboarded" }
+      ],
+      "objective": "Give every team one trustworthy view of who holds what, so that allocation stops being reconstructed by hand each morning. The brief asked for a manager's tracker; the objective I wrote instead was shared visibility, because a tool only managers opened would have become a sixth version of the truth.",
+      "did": [
+        "Sat on both sides of the handoff for a week and wrote the requirements against what people actually did — including the workarounds nobody had documented.",
+        "Held the product roadmap and a prioritised backlog with the development team, every user story carrying its own acceptance criteria. Where a story could be read two ways it was split, not clarified in a comment.",
+        "Rolled out team by team rather than all at once, so each group's objections arrived while there was still room to act on them."
+      ],
+      "resultText": "Adoption held without a mandate, which is the number I am actually proud of. Rework fell once acceptance criteria travelled with the story instead of living in a conversation.",
+      "conclusion": "The build was never the hard part. What made it stick was refusing the brief's framing early enough that it cost a conversation rather than a quarter. If I ran it again I would fix the success metric in the same document as the scope.",
+      "slides": [],
+      "downloads": [
+        { "label": "Requirements document", "note": "PDF", "url": "" },
+        { "label": "Walkthrough deck", "note": "PPTX", "url": "" }
+      ],
+      "code": { "label": "Repository", "note": "GitHub", "url": "" }
+    },
+    {
+      "slug": "kpi-reporting",
+      "num": "02",
+      "title": "Retiring the Monday-morning spreadsheet",
+      "org": "WNS (part of Capgemini)",
+      "period": "2023",
+      "role": "Analytics",
+      "summary": "KPI definitions settled first, then dashboards built around the decisions they serve. 80% of the manual analysis automated.",
+      "intro": "A KPI and reporting layer for leadership, built after the definitions were settled rather than before — which is why the fortnightly argument about whose number was right did not come back.",
+      "cover": "",
+      "stats": [
+        { "value": "80%", "label": "analysis automated" },
+        { "value": "6", "label": "KPIs defined" },
+        { "value": "Live", "label": "reporting cadence" }
+      ],
+      "objective": "Give leadership numbers they can act on the day they are produced. The brief was to automate the weekly report; the objective I wrote was to make the reporting trustworthy first, because two teams were reporting the same KPI with different definitions and both were defensible.",
+      "did": [
+        "Ran the definitions to ground first: one page per KPI stating what it counts, what it excludes, and which decision it exists to support. Anything no decision needed was cut from the report.",
+        "Built the dashboards around those decisions rather than around the data we happened to hold, and automated the collection so no analyst assembled a figure by hand.",
+        "Left the drill-downs open so operations could interrogate a number without routing the question through me."
+      ],
+      "resultText": "Leadership stopped reading last week's numbers, and the recurring dispute over whose figure was correct disappeared with the definitions document.",
+      "conclusion": "Automation was the easy half. Agreeing what a number means is what decides whether anyone trusts the chart. I did build more views than were needed — two of six went unopened after the first month — and would now ship three and wait to be asked.",
+      "slides": [],
+      "downloads": [
+        { "label": "KPI definitions", "note": "PDF · one page per metric", "url": "" },
+        { "label": "Walkthrough deck", "note": "PPTX", "url": "" }
+      ],
+      "code": { "label": "Repository", "note": "GitHub", "url": "" }
+    },
+    {
+      "slug": "gaming-arena",
+      "num": "03",
+      "title": "Gaming Arena: pricing a venture in three days",
+      "org": "Great Lakes Institute of Management",
+      "period": "2026",
+      "role": "Economics simulation",
+      "summary": "Pricing experiments and hourly competitor reads mapped demand instead of guessing at it. Sustained profitability within three days.",
+      "intro": "A live economics simulation run as a real venture: pricing experiments and hourly competitor reads instead of matching whatever the neighbouring stall charged.",
+      "cover": "",
+      "stats": [
+        { "value": "3", "label": "days to profitability" },
+        { "value": "9", "label": "price points tested" },
+        { "value": "4", "label": "competing ventures" }
+      ],
+      "objective": "Reach sustained profitability inside a three-day simulation without knowing the demand curve in advance — and come out of it able to point at what customers would actually pay, rather than at a hunch that happened to work.",
+      "did": [
+        "Treated day one as measurement rather than trading: deliberate price moves at both ends of the range to find where demand bent.",
+        "Tracked competitor pricing hourly and held our position when they undercut, on the read that their volume would not cover the cut.",
+        "Reset the price once a day at most, so each move could be attributed to something rather than lost in noise."
+      ],
+      "resultText": "Profitability held for the rest of the simulation, and we finished with a demand curve I could show rather than describe.",
+      "conclusion": "Spending the first day learning instead of earning felt expensive and was not. The one real failure was record-keeping: the experiments were logged unevenly, so part of what we learned stayed in memory.",
+      "slides": [],
+      "downloads": [
+        { "label": "Pricing log", "note": "XLSX · experiments and outcomes", "url": "" }
+      ],
+      "code": { "label": "Repository", "note": "GitHub", "url": "" }
+    }
+  ],
+  "extras": [
+    { "title": "Market and competitor analysis, Codewalla", "note": "Industry trends and customer needs read into product enhancements; release cycles 50% faster. Usage analysis fed prioritisation and lifted engagement 15%." },
+    { "title": "Internal Agile training, WNS", "note": "Coordinated the internal Agile programme in 2024 — largely an exercise in teaching people to write a story that survives a sprint review." }
+  ]
+}
