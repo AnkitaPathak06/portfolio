@@ -275,11 +275,11 @@
     }
   ],
   "theme": {
-    "preset": "sage",
-    "colorA": "#BFCBC0",
-    "colorB": "#E4E1D6",
-    "contactColor": "#CDBFD8",
-    "footerColor": "#9FB0A1",
-    "accent": "#3F6152"
+    "preset": "rose",
+    "colorA": "#E2C6CE",
+    "colorB": "#E8E2DA",
+    "contactColor": "#CDB6BC",
+    "footerColor": "#C79AA6",
+    "accent": "#7E4457"
   }
 }
