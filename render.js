@@ -273,7 +273,7 @@ function slidesEmbed(url) {
   if (g) {
     const pub = /\/presentation\/d\/e\//.test(url);
     return "https://docs.google.com/presentation/d/" + (pub ? "e/" : "") + g[1] +
-      "/embed?start=false&loop=false&delayms=60000&rm=minimal";
+      "/embed?start=false&loop=false&delayms=60000";
   }
   if (/\.pptx?($|\?)/i.test(url)) {
     let abs;
@@ -314,8 +314,8 @@ function deckBlock(p) {
         <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
         <div class="deck-nav"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a></div>
       </div>
-      <div class="deck embed"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
-      <p class="note deck-foot-note">Use the arrows inside the deck to move between slides.${isPpt ? " If it does not load, the file may still be publishing — give it a minute." : ""}</p>
+      <div class="deck embed${p.deckRatio === "4:3" ? " r43" : ""}"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
+      <p class="note deck-foot-note">Click the slide, then use the arrow keys — or the controls at the bottom of the deck. “Open full screen” shows it larger.</p>
     </div></section>`;
   }
   if (!p.slides || !p.slides.length) return "";

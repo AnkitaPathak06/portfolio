@@ -288,6 +288,19 @@ function projects() {
       'Paste a Google Slides link (Share \u2192 Anyone with the link \u2192 Viewer) and the deck shows on the page. ' +
       'Leave it empty to use uploaded slide images instead.</p>');
     b.appendChild(field("Google Slides link", p.slidesUrl, v => { p.slidesUrl = v.trim(); save(); }, "url"));
+    const shape = document.createElement("div");
+    shape.innerHTML = '<label>Slide shape</label>';
+    const sel = document.createElement("select");
+    [["16:9", "Widescreen 16:9"], ["4:3", "Standard 4:3"]].forEach(([v, t]) => {
+      const o = document.createElement("option");
+      o.value = v; o.textContent = t;
+      if ((p.deckRatio || "16:9") === v) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.onchange = () => { p.deckRatio = sel.value; save(); };
+    shape.appendChild(sel);
+    shape.insertAdjacentHTML("beforeend", '<p class="hint" style="margin-top:5px">Pick the shape of your slides so there are no black bars around them.</p>');
+    b.appendChild(shape);
     imageField(b, "Cover image", p.cover, v => { p.cover = v; save(); projects(); }, "cover-" + p.slug);
     slideField(b, p);
 
