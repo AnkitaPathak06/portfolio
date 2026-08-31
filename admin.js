@@ -534,12 +534,7 @@ function repoPath(name) { return (cfg.path ? cfg.path + "/" : "") + name; }
 async function ghGet(path) {
   const r = await fetch(api(path) + "?ref=" + encodeURIComponent(cfg.branch) + "&ts=" + Date.now(), {
     cache: "no-store",
-    headers: {
-      Authorization: "Bearer " + cfg.token,
-      Accept: "application/vnd.github+json",
-      "If-None-Match": "",
-      "Cache-Control": "no-cache"
-    }
+    headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" }
   });
   if (r.status === 404) return null;
   if (!r.ok) throw new Error("GitHub GET " + r.status + " — " + (await r.text()).slice(0, 200));
@@ -605,9 +600,13 @@ async function publish() {
     setStatus("published");
     localStorage.removeItem(LS.draft);
   } catch (e) {
+    const net = /failed to fetch|networkerror|load failed/i.test(e.message);
+    const msg = net
+      ? "Could not reach the GitHub API.\n\nCheck: you are online, the token has not expired, and no ad-blocker or VPN is blocking api.github.com. Your draft is safe — press Publish again, or use Download content.json."
+      : e.message;
     logLine("ERROR " + e.message);
     setStatus("publish failed");
-    alert("Publish failed:\n" + e.message);
+    alert("Publish failed:\n" + msg);
   }
 }
 
