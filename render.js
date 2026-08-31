@@ -326,7 +326,7 @@ function deckBlock(p) {
         <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
         ${aside ? "" : `<div class="deck-nav"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a></div>`}
       </div>
-      <div class="deck embed${(p.deckRatio || (isPpt ? "4:3" : "16:9")) === "4:3" ? " r43" : ""}"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
+      <div class="deck embed${(p.deckRatio || "4:3") === "4:3" ? " r43" : ""}"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
       <p class="note deck-foot-note">Click the slide, then use the arrow keys — or the controls at the bottom of the deck. “Open full screen” shows it larger.</p>
       ${aside}
     </div></div></section>`;

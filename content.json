@@ -1,6 +1,6 @@
 {
   "theme": {
-    "band": "#5c4a7a",
+    "band": "#2f5d57",
     "accent": "#b68235",
     "bg": "#f7f4ee",
     "ink": "#201f1d",
@@ -10,7 +10,7 @@
     "animations": true,
     "sectionSpacing": 88,
     "showPhoto": true,
-    "brandColor": "#f7f4ee"
+    "brandColor": "#e1ad66"
   },
   "meta": {
     "name": "Ankita Pathak",
@@ -220,15 +220,6 @@
       "navShow": false
     },
     {
-      "id": "contact",
-      "type": "contact",
-      "enabled": true,
-      "kicker": "Contact",
-      "title": "If you are hiring someone to ask the awkward question early, write to me.",
-      "navShow": true,
-      "navLabel": "Contact"
-    },
-    {
       "id": "practice",
       "type": "practice",
       "enabled": true,
@@ -250,6 +241,15 @@
         }
       ],
       "navShow": false
+    },
+    {
+      "id": "contact",
+      "type": "contact",
+      "enabled": true,
+      "kicker": "Contact",
+      "title": "If you are hiring someone to ask the awkward question early, write to me.",
+      "navShow": true,
+      "navLabel": "Contact"
     }
   ],
   "projects": [
@@ -262,11 +262,19 @@
       "role": "Product ownership",
       "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
       "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
-      "cover": "assets/mthgirfi-ap.jpeg",
+      "cover": "",
       "stats": [
         {
-          "value": "Machine Learning",
-          "label": "Using Python"
+          "value": "95%",
+          "label": "adoption"
+        },
+        {
+          "value": "20%",
+          "label": "less rework"
+        },
+        {
+          "value": "5",
+          "label": "teams onboarded"
         }
       ],
       "objective": "Give every team one trustworthy view of who holds what, so that allocation stops being reconstructed by hand each morning. The brief asked for a manager's tracker; the objective I wrote instead was shared visibility, because a tool only managers opened would have become a sixth version of the truth.",
@@ -287,7 +295,7 @@
         {
           "label": "Walkthrough deck",
           "note": "PPTX",
-          "url": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true"
+          "url": ""
         }
       ],
       "code": {
@@ -295,7 +303,9 @@
         "note": "GitHub",
         "url": ""
       },
-      "slidesUrl": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true"
+      "slidesUrl": "",
+      "deckAbout": "The deck I use to walk through this one: what allocation looked like before, why the brief's manager tracker would not have fixed it, and the requirements that came out of a week sitting on both sides of the handoff.",
+      "deckRatio": "4:3"
     },
     {
       "slug": "kpi-reporting",
@@ -347,7 +357,9 @@
         "note": "GitHub",
         "url": ""
       },
-      "slidesUrl": ""
+      "slidesUrl": "",
+      "deckAbout": "The walkthrough covers the definitions work first — one page per KPI, what it counts and what it excludes — and then the dashboards that were built on top of it once the numbers were no longer in dispute.",
+      "deckRatio": "4:3"
     },
     {
       "slug": "gaming-arena",
@@ -394,7 +406,9 @@
         "note": "GitHub",
         "url": ""
       },
-      "slidesUrl": ""
+      "slidesUrl": "",
+      "deckAbout": "Three days of a simulation in a few slides: the pricing experiments on day one, what they revealed about the demand curve, and the decisions that kept profitability holding afterwards.",
+      "deckRatio": "4:3"
     }
   ],
   "extras": [

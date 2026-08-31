@@ -206,7 +206,8 @@ html[data-mode="dark"] #practice.sec { background: rgba(255,255,255,.04); }
 @media (max-width: 760px) { .deck-frame.split { grid-template-columns: 1fr; row-gap: 30px; } .deck-frame.split > .deck-aside, .deck-frame.split > .deck, .deck-frame.split > .thumbstrip, .deck-frame.split > .deck-foot-note, .deck-frame.split > .deck-head { grid-column: 1; grid-row: auto; } .deck-aside { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); padding-top: 22px; } }
 .deck-frame .deck-foot-note { text-align: center; }
 .deck.embed { border-width: 1px; background: rgba(0,0,0,.05); }
-.deck.r43, .deck.embed.r43 { aspect-ratio: 4 / 3; }
+.deck.r43 { aspect-ratio: 4 / 3; }
+.deck.embed.r43 { aspect-ratio: 400 / 318; } /* 4:3 slide + the viewer toolbar */
 .deck.embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .deck.deck-note { display: grid; place-items: center; padding: 28px; }
 .deck.deck-note p { max-width: 46ch; text-align: center; font-size: .9rem; line-height: 1.7; color: var(--ink-70); font-style: italic; }
