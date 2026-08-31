@@ -1,6 +1,6 @@
 {
   "theme": {
-    "band": "#1f1846",
+    "band": "#3b2880",
     "accent": "#9a7b4f",
     "bg": "#f6f1e7",
     "ink": "#201f1d",
@@ -18,9 +18,10 @@
     "email": "hello@example.com",
     "location": "Gurugram · English and Hindi · open to remote",
     "linkedin": "https://www.linkedin.com/",
-    "resumeUrl": "",
-    "photo": "",
-    "photoCaption": "Gurugram, 2026"
+    "resumeUrl": "assets/mthnpivg-p2622010-ankitapathak--deloitte.docx",
+    "photo": "assets/mthnpr4q-ap.jpeg",
+    "photoCaption": "Gurugram, 2026",
+    "resumeName": "P2622010_ANKITAPATHAK- Deloitte.docx"
   },
   "sections": [
     {
