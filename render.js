@@ -29,20 +29,36 @@ const projHref = slug => B() + encodeURIComponent(slug) + "/";
 
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+function currentMode() {
+  const saved = localStorage.getItem("pf_mode");
+  if (saved === "dark" || saved === "light") return saved;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 function applyTheme(t) {
   const heading = FONT_STACK[t.headingFont] || FONT_STACK["Cormorant Garamond"];
   const body = FONT_STACK[t.bodyFont] || FONT_STACK["Lora"];
+  const mode = currentMode();
+  document.documentElement.setAttribute("data-mode", mode);
+  if (mode === "dark") {
+    t = Object.assign({}, t, {
+      bg: "#15191a",
+      ink: "#ebe6dd",
+      band: darken(t.band, 0.55),
+      accent: t.accent
+    });
+  }
   const r = document.documentElement.style;
   r.setProperty("--band", t.band);
   r.setProperty("--brand", t.brandColor || t.bg);
   r.setProperty("--band-dark", darken(t.band, 0.42));
   r.setProperty("--accent", t.accent);
-  r.setProperty("--accent-soft", alpha(t.accent, 0.07));
+  r.setProperty("--accent-soft", alpha(t.accent, mode === "dark" ? 0.14 : 0.07));
   r.setProperty("--bg", t.bg);
   r.setProperty("--ink", t.ink);
   r.setProperty("--ink-60", alpha(t.ink, 0.6));
   r.setProperty("--ink-70", alpha(t.ink, 0.72));
-  r.setProperty("--rule", alpha(t.band, 0.26));
+  r.setProperty("--rule", mode === "dark" ? alpha("#ebe6dd", 0.18) : alpha(t.band, 0.26));
   r.setProperty("--paper-70", alpha(t.bg, 0.75));
   r.setProperty("--paper-16", alpha(t.bg, 0.16));
   r.setProperty("--fh", heading);
@@ -55,6 +71,12 @@ function applyTheme(t) {
 /* ---------- section renderers ---------- */
 
 const NAV_DEFAULT = { experience: "Work experience", education: "Education", projects: "Projects", contact: "Contact" };
+
+function modeToggle() {
+  const dark = currentMode() === "dark";
+  return '<button class="mode-toggle" type="button" aria-label="Switch to ' + (dark ? "light" : "dark") + ' mode" title="' +
+    (dark ? "Light mode" : "Dark mode") + '">' + (dark ? "\u2600" : "\u263D") + '</button>';
+}
 
 function navLinks(c, current) {
   return c.sections
@@ -78,6 +100,7 @@ function hero(s, c) {
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
       <span class="pill-row">${navLinks(c, "home")}</span>
+      ${modeToggle()}
     </div>
     <div class="wrap hero${t.showPhoto === false ? " nophoto" : ""}">
       <div>
@@ -166,10 +189,9 @@ function contact(s, c) {
         <p class="lede">${esc(m.location)}</p>
       </div>
       <div class="cta">
-        ${m.email ? `<a class="btn-gold" href="mailto:${esc(m.email)}">Email me</a>
-        <a class="mail-plain" href="mailto:${esc(m.email)}" data-copy="${esc(m.email)}" title="Click to copy">${esc(m.email)}</a>
-        <a class="link-quiet" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.email)}">Open in Gmail</a>` : ""}
-        ${m.resumeUrl ? `<a class="btn-outline" href="${esc(asset(m.resumeUrl))}" download="${esc(m.resumeName || "Resume.pdf")}">Resume</a>` : ""}
+        ${m.email ? `<p class="mail-hint">Write to me</p>
+        <span class="mail-plain" data-copy="${esc(m.email)}" title="Click to copy">${esc(m.email)}</span>` : ""}
+        ${m.resumeUrl ? `<a class="btn-gold" href="${esc(asset(m.resumeUrl))}" download="${esc(m.resumeName || "Resume.pdf")}">↓ &nbsp;Resume</a>` : ""}
         ${m.linkedin ? `<a class="link-quiet" href="${esc(m.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}
       </div>
     </div>
@@ -216,6 +238,7 @@ function renderProjectIndex(c, root) {
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
       <span class="pill-row">${navLinks(c, "projects")}</span>
+      ${modeToggle()}
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">${c.projects.length} projects, one page each</p>
@@ -243,6 +266,63 @@ function renderProjectIndex(c, root) {
   wireReveals(c.theme);
 }
 
+function slidesEmbed(url) {
+  if (!url) return "";
+  const g = /docs\.google\.com\/presentation\/d\/(?:e\/)?([a-zA-Z0-9_-]+)/.exec(url);
+  if (g) {
+    const pub = /\/presentation\/d\/e\//.test(url);
+    return "https://docs.google.com/presentation/d/" + (pub ? "e/" : "") + g[1] +
+      "/embed?start=false&loop=false&delayms=60000&rm=minimal";
+  }
+  if (/\.pptx?($|\?)/i.test(url)) {
+    const abs = /^https?:/i.test(url) ? url : location.origin + location.pathname.replace(/[^/]*$/, "") + url;
+    return "https://view.officeapps.live.com/op/embed.aspx?src=" + encodeURIComponent(abs);
+  }
+  return url;
+}
+
+function statsBand(p) {
+  const st = (p.stats || []).filter(s => s.value);
+  if (!st.length) return "";
+  return `<section class="sec norule"><div class="wrap">
+    <div class="figures reveal">${st.map(s => `<div><p class="fv">${esc(s.value)}</p><p class="fl">${esc(s.label)}</p></div>`).join("")}</div>
+  </div></section>`;
+}
+
+function deckSource(p) {
+  if (p.slidesUrl) return p.slidesUrl;
+  const dk = (p.downloads || []).find(d => d.url && /\.pptx?($|\?)/i.test(d.url));
+  return dk ? dk.url : "";
+}
+
+function deckBlock(p) {
+  const embed = slidesEmbed(deckSource(p));
+  if (embed) {
+    return `<section class="sec norule"><div class="wrap">
+      <div class="deck-head">
+        <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
+        <div class="deck-nav"><a class="btn-ghost" href="${esc(asset(deckSource(p)))}" target="_blank" rel="noopener">Open full screen ↗</a></div>
+      </div>
+      <div class="deck embed"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
+      <p class="note deck-foot-note">Use the arrows inside the deck to move between slides.</p>
+    </div></section>`;
+  }
+  if (!p.slides || !p.slides.length) return "";
+  return `<section class="sec norule"><div class="wrap">
+    <div class="deck-head">
+      <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
+      <div class="deck-nav"><span class="deck-count" id="slideLabel"></span><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
+    </div>
+    <div class="deck" id="deck">
+      ${p.slides.map((src, i) => `<img src="${esc(asset(src))}" alt="Slide ${i + 1}" class="slide${i ? "" : " on"}">`).join("")}
+      <button class="edge left" id="edgeL" aria-label="Previous slide"><span>←</span></button>
+      <button class="edge right" id="edgeR" aria-label="Next slide"><span>→</span></button>
+    </div>
+    <div class="thumbstrip" id="thumbs"></div>
+    <p class="note deck-foot-note">Click the left or right half of the slide, use the arrow keys, or pick a thumbnail.</p>
+  </div></section>`;
+}
+
 function renderProject(c, root) {
   applyTheme(c.theme);
   const slug = window.PF_SLUG || new URLSearchParams(location.search).get("p");
@@ -255,35 +335,22 @@ function renderProject(c, root) {
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(c.meta.name)}</a>
       <span class="pill-row">${navLinks(c, "project")}</span>
+      ${modeToggle()}
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">Project ${esc(p.num)} · ${esc(p.org)} · ${esc(p.period)}</p>
       <h1>${esc(p.title)}</h1>
       <div class="rule-in"></div>
       <p class="lede">${esc(p.intro)}</p>
-      <div class="stats">${(p.stats || []).map(s => `<div><p class="sv">${esc(s.value)}</p><p class="sl">${esc(s.label)}</p></div>`).join("")}</div>
     </div>
   </header>
-  ${(p.slides && p.slides.length) ? `<section class="sec norule"><div class="wrap">
-    <div class="deck-head">
-      <div><p class="kicker">The deck</p><h2>Walkthrough, <span id="slideLabel"></span></h2></div>
-      <div class="deck-nav"><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
-    </div>
-    <div class="deck" id="deck">
-      ${p.slides.map((src, i) => `<img src="${esc(asset(src))}" alt="Slide ${i + 1}" class="slide${i ? "" : " on"}">`).join("")}
-      <button class="edge left" id="edgeL" aria-label="Previous slide"></button>
-      <button class="edge right" id="edgeR" aria-label="Next slide"></button>
-    </div>
-    <div class="deck-foot"><p class="note">Click the left or right edge of the slide, or use the arrow keys.</p><div class="dots" id="dots"></div></div>
-  </div></section>` : ""}
+  ${deckBlock(p)}
+  ${statsBand(p)}
   <section class="sec"><div class="wrap">
     <div class="detail">
       <h3 class="dl reveal">Objective</h3><p class="dt reveal">${esc(p.objective)}</p>
       <h3 class="dl reveal">What I did</h3><div class="dt reveal">${(p.did || []).map(d => `<p>${esc(d)}</p>`).join("")}</div>
-      <h3 class="dl reveal">Result</h3><div class="dt reveal">
-        <div class="res">${(p.stats || []).slice(0, 2).map(s => `<div><p class="rv">${esc(s.value)}</p><p class="note">${esc(s.label)}</p></div>`).join("")}</div>
-        <p>${esc(p.resultText)}</p>
-      </div>
+      <h3 class="dl reveal">Result</h3><div class="dt reveal"><p>${esc(p.resultText)}</p></div>
       <h3 class="dl reveal">Conclusion</h3><p class="dt reveal">${esc(p.conclusion)}</p>
     </div>
   </div></section>
@@ -303,84 +370,44 @@ function renderProject(c, root) {
     </div>
   </section>`;
   wireReveals(c.theme);
-  if (p.slides && p.slides.length) wireDeck(p.slides.length);
+  if (!deckSource(p) && p.slides && p.slides.length) wireDeck(p.slides.length);
 }
 
 function wireDeck(n) {
   let i = 0;
   const slides = [...document.querySelectorAll(".slide")];
-  const dots = document.getElementById("dots");
+  const strip = document.getElementById("thumbs");
   const label = document.getElementById("slideLabel");
-  dots.innerHTML = slides.map((_, k) => `<button data-k="${k}" aria-label="Slide ${k + 1}"></button>`).join("");
+  if (!slides.length) return;
+  strip.innerHTML = slides.map((s, k) =>
+    `<button data-k="${k}" aria-label="Slide ${k + 1}"><img src="${s.getAttribute("src")}" alt=""></button>`).join("");
   const paint = () => {
     slides.forEach((s, k) => s.classList.toggle("on", k === i));
-    [...dots.children].forEach((d, k) => d.classList.toggle("on", k === i));
-    label.textContent = `slide ${i + 1} of ${n}`;
+    [...strip.children].forEach((d, k) => d.classList.toggle("on", k === i));
+    if (label) label.textContent = (i + 1) + " / " + n;
+    const cur = strip.children[i];
+    if (cur) strip.scrollTo({ left: cur.offsetLeft - strip.clientWidth / 2 + cur.clientWidth / 2, behavior: "smooth" });
   };
   const move = d => { i = (i + d + n) % n; paint(); };
   document.getElementById("prev").onclick = () => move(-1);
   document.getElementById("next").onclick = () => move(1);
   document.getElementById("edgeL").onclick = () => move(-1);
   document.getElementById("edgeR").onclick = () => move(1);
-  dots.onclick = e => { const k = e.target.dataset.k; if (k != null) { i = +k; paint(); } };
+  strip.onclick = e => { const b = e.target.closest("[data-k]"); if (b) { i = +b.dataset.k; paint(); } };
   window.addEventListener("keydown", e => {
     if (e.key === "ArrowRight") move(1);
     if (e.key === "ArrowLeft") move(-1);
   });
+  const deck = document.getElementById("deck");
+  let x0 = null;
+  deck.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
+  deck.addEventListener("touchend", e => {
+    if (x0 == null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) move(dx < 0 ? 1 : -1);
+    x0 = null;
+  }, { passive: true });
   paint();
-}
-
-function wireJourney(animate) {
-  document.querySelectorAll(".rail").forEach(rail => {
-    const dots = [...rail.querySelectorAll(".rail-item .dot")];
-    if (dots.length < 2) return;
-    const line = rail.querySelector(".rail-line");
-    if (!line) return;
-    let marker = rail.querySelector(".rail-marker");
-    if (!marker) {
-      marker = document.createElement("span");
-      marker.className = "rail-marker";
-      rail.appendChild(marker);
-    }
-    const place = () => {
-      if (getComputedStyle(line).display === "none") { marker.style.display = "none"; return; }
-      marker.style.display = "";
-      const off = el => {
-        let x = 0, y = 0, n = el;
-        while (n && n !== rail) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
-        return { x, y, w: el.offsetWidth, h: el.offsetHeight };
-      };
-      const a0 = off(dots[0]), a1 = off(dots[dots.length - 1]);
-      const start = a0.x + a0.w / 2;
-      const end = a1.x + a1.w / 2;
-      const top = a0.y + a0.h / 2;
-      marker.style.top = top + "px";
-      line.style.setProperty("--travel", (end - start) + "px");
-      line.style.setProperty("--start", start + "px");
-      marker.style.setProperty("--start", start + "px");
-      marker.style.setProperty("--travel", (end - start) + "px");
-      if (!animate) { marker.style.left = end + "px"; marker.classList.add("parked"); return; }
-      marker.style.left = start + "px";
-      requestAnimationFrame(() => {
-        marker.classList.add("run");
-        setTimeout(() => {
-          marker.style.left = end + "px";
-          dots.forEach((d, k) => setTimeout(() => d.classList.add("passed"), (k / (dots.length - 1)) * 2200));
-          setTimeout(() => marker.classList.add("parked"), 2500);
-        }, 60);
-      });
-    };
-    place();
-    const item = rail.querySelector(".rail-item");
-    if (item) item.addEventListener("transitionend", place, { once: true });
-    setTimeout(place, 950);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
-    let t;
-    window.addEventListener("resize", () => {
-      clearTimeout(t);
-      t = setTimeout(() => { marker.classList.remove("run"); marker.classList.remove("parked"); place(); }, 120);
-    });
-  });
 }
 
 function wireReveals(theme) {
@@ -396,7 +423,6 @@ function wireReveals(theme) {
   if (theme && theme.animations === false) {
     document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
     document.querySelectorAll(".sec").forEach(el => el.classList.add("lit"));
-    wireJourney(false);
     return;
   }
   const io = new IntersectionObserver(es => {
@@ -412,14 +438,13 @@ function wireReveals(theme) {
     es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("lit"); lit.unobserve(e.target); } });
   }, { threshold: 0.15 });
   document.querySelectorAll(".sec").forEach(el => lit.observe(el));
-  const jr = document.querySelector("#journey .rail, .rail");
-  if (jr) {
-    const jo = new IntersectionObserver(es => {
-      es.forEach(e => { if (e.isIntersecting) { wireJourney(true); jo.unobserve(e.target); } });
-    }, { threshold: 0.35 });
-    jo.observe(jr);
-  }
   document.addEventListener("click", e => {
+    const mt = e.target.closest(".mode-toggle");
+    if (mt) {
+      localStorage.setItem("pf_mode", currentMode() === "dark" ? "light" : "dark");
+      location.reload();
+      return;
+    }
     const t = e.target.closest("[data-copy]");
     if (!t || !navigator.clipboard) return;
     e.preventDefault();

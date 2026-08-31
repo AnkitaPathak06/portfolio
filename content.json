@@ -18,10 +18,9 @@
     "email": "hello@example.com",
     "location": "Gurugram · English and Hindi · open to remote",
     "linkedin": "https://www.linkedin.com/",
-    "resumeUrl": "assets/mthdxfiu-p2622010-ankitapathak---accenture.docx",
+    "resumeUrl": "",
     "photo": "",
-    "photoCaption": "Gurugram, 2026",
-    "resumeName": "P2622010_ANKITAPATHAK - Accenture.docx"
+    "photoCaption": "Gurugram, 2026"
   },
   "sections": [
     {
@@ -110,29 +109,6 @@
       "title": "Three I would defend in an interview",
       "navShow": true,
       "navLabel": "Projects"
-    },
-    {
-      "id": "practice",
-      "type": "practice",
-      "enabled": true,
-      "kicker": "How I work",
-      "title": "Agree on it before you build it",
-      "body": "Every project I have run starts the same way: the problem in a sentence, whose problem it is, what we are not doing, and the one number that will tell us we were right. It is unglamorous and it is most of the job. When a team is arguing in week six, it is usually because nobody wrote that down in week one.",
-      "items": [
-        {
-          "title": "Ask the people doing the workaround",
-          "note": "Ops leads and analysts already know where the process leaks. Requirements written from the real routine, not the documented one, survive contact with delivery."
-        },
-        {
-          "title": "Let the story carry its acceptance criteria",
-          "note": "Most rework I have seen came from a story that read clearly and meant three different things. Rework fell 20% once each one had to say how it would be checked."
-        },
-        {
-          "title": "Settle the definitions, then the dashboard",
-          "note": "Agreeing what a KPI counts is the argument worth having. Build the chart first and you have automated a disagreement."
-        }
-      ],
-      "navShow": false
     },
     {
       "id": "education",
@@ -244,6 +220,29 @@
       "navShow": false
     },
     {
+      "id": "practice",
+      "type": "practice",
+      "enabled": true,
+      "kicker": "How I work",
+      "title": "Agree on it before you build it",
+      "body": "Every project I have run starts the same way: the problem in a sentence, whose problem it is, what we are not doing, and the one number that will tell us we were right. It is unglamorous and it is most of the job. When a team is arguing in week six, it is usually because nobody wrote that down in week one.",
+      "items": [
+        {
+          "title": "Ask the people doing the workaround",
+          "note": "Ops leads and analysts already know where the process leaks. Requirements written from the real routine, not the documented one, survive contact with delivery."
+        },
+        {
+          "title": "Let the story carry its acceptance criteria",
+          "note": "Most rework I have seen came from a story that read clearly and meant three different things. Rework fell 20% once each one had to say how it would be checked."
+        },
+        {
+          "title": "Settle the definitions, then the dashboard",
+          "note": "Agreeing what a KPI counts is the argument worth having. Build the chart first and you have automated a disagreement."
+        }
+      ],
+      "navShow": false
+    },
+    {
       "id": "contact",
       "type": "contact",
       "enabled": true,
@@ -263,7 +262,7 @@
       "role": "Product ownership",
       "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
       "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
-      "cover": "assets/mthe4y5a-ap.jpeg",
+      "cover": "",
       "stats": [
         {
           "value": "95%",
@@ -291,19 +290,20 @@
         {
           "label": "Requirements document",
           "note": "PDF",
-          "url": "https://drive.google.com/file/d/1geiINHBQJ0vITqDXPgSlWPUstwJnoPIa/view?usp=sharing"
+          "url": ""
         },
         {
           "label": "Walkthrough deck",
           "note": "PPTX",
-          "url": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true"
+          "url": ""
         }
       ],
       "code": {
         "label": "Repository",
         "note": "GitHub",
-        "url": "https://github.com/AnkitaPathak06/ankitapathak"
-      }
+        "url": ""
+      },
+      "slidesUrl": ""
     },
     {
       "slug": "kpi-reporting",
@@ -354,7 +354,8 @@
         "label": "Repository",
         "note": "GitHub",
         "url": ""
-      }
+      },
+      "slidesUrl": ""
     },
     {
       "slug": "gaming-arena",
@@ -400,7 +401,8 @@
         "label": "Repository",
         "note": "GitHub",
         "url": ""
-      }
+      },
+      "slidesUrl": ""
     }
   ],
   "extras": [

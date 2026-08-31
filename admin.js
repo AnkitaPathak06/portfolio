@@ -284,6 +284,10 @@ function projects() {
     addStat.onclick = () => { p.stats.push({ value: "", label: "" }); save(); projects(); };
     b.appendChild(addStat);
 
+    b.insertAdjacentHTML("beforeend", '<label>Deck</label><p class="hint" style="margin-bottom:6px">' +
+      'Paste a Google Slides link (Share \u2192 Anyone with the link \u2192 Viewer) and the deck shows on the page. ' +
+      'Leave it empty to use uploaded slide images instead.</p>');
+    b.appendChild(field("Google Slides link", p.slidesUrl, v => { p.slidesUrl = v.trim(); save(); }, "url"));
     imageField(b, "Cover image", p.cover, v => { p.cover = v; save(); projects(); }, "cover-" + p.slug);
     slideField(b, p);
 

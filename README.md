@@ -98,6 +98,16 @@ a fallback.
 **Share / QR** tab in the admin panel. It shows your live URL as a QR code in two sizes —
 one for slides, one for print — with a download button for each. Any phone camera reads it.
 
+## Publishing an update (the short version)
+
+1. Open your `portfolio` repo on GitHub.
+2. **Add file → Upload files**, drag in the whole unzipped folder, **Commit changes**.
+   Uploading a file that already exists replaces it.
+3. Wait ~1 minute for Pages to rebuild, then reload your site. The CSS and JS carry a
+   version stamp, so you do not need to clear any cache.
+4. Open `admin.html` → **Publish** tab → **Discard local draft** once, so the panel
+   picks up the new `content.json` (section order changed). Your token stays saved.
+
 ## Honest limits
 
 - **The passcode is a speed bump, not security.** Anyone can read `admin.js` in a
