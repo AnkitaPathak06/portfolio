@@ -262,7 +262,7 @@
       "role": "Product ownership",
       "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
       "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
-      "cover": "assets/mthg74sy-ap.jpeg",
+      "cover": "",
       "stats": [
         {
           "value": "95%",
@@ -290,18 +290,18 @@
         {
           "label": "Requirements document",
           "note": "PDF",
-          "url": "https://drive.google.com/file/d/1geiINHBQJ0vITqDXPgSlWPUstwJnoPIa/view?usp=sharing"
+          "url": ""
         },
         {
           "label": "Walkthrough deck",
           "note": "PPTX",
-          "url": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true"
+          "url": ""
         }
       ],
       "code": {
         "label": "Repository",
         "note": "GitHub",
-        "url": "https://github.com/AnkitaPathak06/portfolio"
+        "url": ""
       },
       "slidesUrl": ""
     },

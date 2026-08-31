@@ -52,6 +52,7 @@ function applyTheme(t) {
   r.setProperty("--band", t.band);
   const onBand = "#f7f4ee";
   r.setProperty("--on-band", onBand);
+  r.setProperty("--accent-on-band", "#e1ad66");
   r.setProperty("--brand", t.brandColor || onBand);
   r.setProperty("--band-dark", darken(t.band, 0.42));
   r.setProperty("--accent", t.accent);
@@ -101,8 +102,7 @@ function hero(s, c) {
   return `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
-      <span class="pill-row">${navLinks(c, "home")}</span>
-      ${modeToggle()}
+      <span class="pill-row">${navLinks(c, "home")}${modeToggle()}</span>
     </div>
     <div class="wrap hero${t.showPhoto === false ? " nophoto" : ""}">
       <div>
@@ -192,7 +192,7 @@ function contact(s, c) {
       </div>
       <div class="cta">
         ${m.email ? `<p class="mail-hint">Write to me</p>
-        <span class="mail-plain" data-copy="${esc(m.email)}" title="Click to copy">${esc(m.email)}</span>` : ""}
+        <span class="mail-plain" data-copy="${esc(m.email)}">${esc(m.email)}</span>` : ""}
         ${m.resumeUrl ? `<a class="btn-gold" href="${esc(asset(m.resumeUrl))}" download="${esc(m.resumeName || "Resume.pdf")}">↓ &nbsp;Resume</a>` : ""}
         ${m.linkedin ? `<a class="link-quiet" href="${esc(m.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}
       </div>
@@ -239,8 +239,7 @@ function renderProjectIndex(c, root) {
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
-      <span class="pill-row">${navLinks(c, "projects")}</span>
-      ${modeToggle()}
+      <span class="pill-row">${navLinks(c, "projects")}${modeToggle()}</span>
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">${c.projects.length} projects, one page each</p>
@@ -277,7 +276,8 @@ function slidesEmbed(url) {
       "/embed?start=false&loop=false&delayms=60000&rm=minimal";
   }
   if (/\.pptx?($|\?)/i.test(url)) {
-    const abs = /^https?:/i.test(url) ? url : location.origin + location.pathname.replace(/[^/]*$/, "") + url;
+    let abs;
+    try { abs = new URL(asset(url), location.href).href; } catch (e) { abs = url; }
     return "https://view.officeapps.live.com/op/embed.aspx?src=" + encodeURIComponent(abs);
   }
   return url;
@@ -298,15 +298,24 @@ function deckSource(p) {
 }
 
 function deckBlock(p) {
-  const embed = slidesEmbed(deckSource(p));
+  const src = deckSource(p);
+  const isPpt = /\.pptx?($|\?)/i.test(src || "");
+  const local = /^(localhost|127\.|0\.0\.0\.0|\[?::1)/i.test(location.hostname) || location.protocol === "file:";
+  if (isPpt && local) {
+    return `<section class="sec norule"><div class="wrap">
+      <div class="deck-head"><div><p class="kicker">The deck</p><h2>Walkthrough</h2></div></div>
+      <div class="deck embed deck-note"><p>The PowerPoint viewer needs the published site to fetch the file, so the deck appears once this is live on GitHub Pages — not in local preview.</p></div>
+    </div></section>`;
+  }
+  const embed = slidesEmbed(src);
   if (embed) {
     return `<section class="sec norule"><div class="wrap">
       <div class="deck-head">
         <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
-        <div class="deck-nav"><a class="btn-ghost" href="${esc(asset(deckSource(p)))}" target="_blank" rel="noopener">Open full screen ↗</a></div>
+        <div class="deck-nav"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a></div>
       </div>
       <div class="deck embed"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
-      <p class="note deck-foot-note">Use the arrows inside the deck to move between slides.</p>
+      <p class="note deck-foot-note">Use the arrows inside the deck to move between slides.${isPpt ? " If it does not load, the file may still be publishing — give it a minute." : ""}</p>
     </div></section>`;
   }
   if (!p.slides || !p.slides.length) return "";
@@ -336,8 +345,7 @@ function renderProject(c, root) {
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(c.meta.name)}</a>
-      <span class="pill-row">${navLinks(c, "project")}</span>
-      ${modeToggle()}
+      <span class="pill-row">${navLinks(c, "project")}${modeToggle()}</span>
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">Project ${esc(p.num)} · ${esc(p.org)} · ${esc(p.period)}</p>
