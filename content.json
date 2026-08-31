@@ -303,9 +303,10 @@
         "note": "GitHub",
         "url": ""
       },
-      "slidesUrl": "",
+      "slidesUrl": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true",
       "deckAbout": "The deck I use to walk through this one: what allocation looked like before, why the brief's manager tracker would not have fixed it, and the requirements that came out of a week sitting on both sides of the handoff.",
-      "deckRatio": "4:3"
+      "deckRatio": "4:3",
+      "deckAboutTitle": "lalalalalalla"
     },
     {
       "slug": "kpi-reporting",
