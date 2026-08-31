@@ -297,6 +297,17 @@ function deckSource(p) {
   return dk ? dk.url : "";
 }
 
+function deckAside(p, src) {
+  if (!p.deckAbout && !(p.deckFacts && p.deckFacts.length)) return "";
+  const facts = (p.deckFacts || []).filter(f => f.label && f.value);
+  return `<aside class="deck-aside">
+    <p class="kicker">About the deck</p>
+    ${p.deckAbout ? `<p class="deck-about">${esc(p.deckAbout)}</p>` : ""}
+    ${facts.length ? `<dl class="deck-facts">${facts.map(f => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join("")}</dl>` : ""}
+    ${src ? `<div class="deck-aside-acts"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a><a class="link-quiet" href="${esc(asset(src))}" download>Download the deck</a></div>` : ""}
+  </aside>`;
+}
+
 function deckBlock(p) {
   const src = deckSource(p);
   const isPpt = /\.pptx?($|\?)/i.test(src || "");
@@ -309,29 +320,33 @@ function deckBlock(p) {
   }
   const embed = slidesEmbed(src);
   if (embed) {
-    return `<section class="sec norule"><div class="wrap">
+    const aside = deckAside(p, src);
+    return `<section class="sec norule"><div class="wrap"><div class="deck-frame${aside ? " split" : ""}">
       <div class="deck-head">
         <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
-        <div class="deck-nav"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a></div>
+        ${aside ? "" : `<div class="deck-nav"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a></div>`}
       </div>
-      <div class="deck embed${p.deckRatio === "4:3" ? " r43" : ""}"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
+      <div class="deck embed${(p.deckRatio || (isPpt ? "4:3" : "16:9")) === "4:3" ? " r43" : ""}"><iframe src="${esc(embed)}" title="Project deck" allowfullscreen loading="lazy" frameborder="0"></iframe></div>
       <p class="note deck-foot-note">Click the slide, then use the arrow keys — or the controls at the bottom of the deck. “Open full screen” shows it larger.</p>
-    </div></section>`;
+      ${aside}
+    </div></div></section>`;
   }
   if (!p.slides || !p.slides.length) return "";
-  return `<section class="sec norule"><div class="wrap">
+  const aside2 = deckAside(p, src);
+  return `<section class="sec norule"><div class="wrap"><div class="deck-frame${aside2 ? " split" : ""}">
     <div class="deck-head">
       <div><p class="kicker">The deck</p><h2>Walkthrough</h2></div>
       <div class="deck-nav"><span class="deck-count" id="slideLabel"></span><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
     </div>
-    <div class="deck" id="deck">
+    <div class="deck${(p.deckRatio || "16:9") === "4:3" ? " r43" : ""}" id="deck">
       ${p.slides.map((src, i) => `<img src="${esc(asset(src))}" alt="Slide ${i + 1}" class="slide${i ? "" : " on"}">`).join("")}
       <button class="edge left" id="edgeL" aria-label="Previous slide"><span>←</span></button>
       <button class="edge right" id="edgeR" aria-label="Next slide"><span>→</span></button>
     </div>
     <div class="thumbstrip" id="thumbs"></div>
     <p class="note deck-foot-note">Click the left or right half of the slide, use the arrow keys, or pick a thumbnail.</p>
-  </div></section>`;
+    ${aside2}
+  </div></div></section>`;
 }
 
 function renderProject(c, root) {
