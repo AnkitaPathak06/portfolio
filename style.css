@@ -1,5 +1,6 @@
 :root {
   --brand: #e1ad66;
+  --on-band: #f7f4ee;
   --tint: #ece7dc;
   --band: #2f5d57;
   --band-dark: #142823;
@@ -31,7 +32,7 @@ a { color: var(--accent); text-underline-offset: 3px; transition: color .22s eas
 .wrap { max-width: 1360px; margin: 0 auto; padding: 0 72px; }
 
 /* bands */
-.band { background: var(--band); color: var(--bg); }
+.band { background: var(--band); color: var(--on-band); }
 .band .nav { display: flex; align-items: baseline; gap: 14px; padding: 22px 72px; border-bottom: 1px solid var(--paper-16); flex-wrap: wrap; }
 .band .nav .brand { font-family: var(--fh); font-weight: 600; font-size: 1.25rem; margin-right: auto; color: var(--brand); text-decoration: none; }
 .band .nav a { font-size: .81rem; color: var(--paper-70); text-decoration: none; position: relative; }
@@ -40,13 +41,13 @@ a { color: var(--accent); text-underline-offset: 3px; transition: color .22s eas
 .band .nav a:hover::after { transform: scaleX(1); }
 .band .nav a.here { color: var(--accent); }
 .band .nav .pill-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.mode-toggle { width: 32px; height: 32px; border-radius: 999px; border: 1px solid var(--paper-16); background: rgba(0,0,0,.14); color: var(--bg); font-size: 1rem; line-height: 1; cursor: pointer; transition: background .25s ease, border-color .25s ease, transform .25s ease; }
+.mode-toggle { width: 32px; height: 32px; border-radius: 999px; border: 1px solid var(--paper-16); background: rgba(0,0,0,.14); color: var(--on-band); font-size: 1rem; line-height: 1; cursor: pointer; transition: background .25s ease, border-color .25s ease, transform .25s ease; }
 .mode-toggle:hover { background: var(--accent); border-color: var(--accent); color: var(--band-dark); transform: rotate(-12deg); }
 html[data-mode="dark"] body { background: #15191a; }
 html[data-mode="dark"] .plate-empty, html[data-mode="dark"] .card .cover, html[data-mode="dark"] .deck { background: rgba(255,255,255,.05); }
 html[data-mode="dark"] .card { border-color: var(--rule); }
 html[data-mode="dark"] .item, html[data-mode="dark"] .file { background: rgba(255,255,255,.03); }
-.band .nav a.pill { white-space: nowrap; padding: 7px 15px; border-radius: 999px; border: 1px solid var(--paper-16); background: rgba(0,0,0,.14); color: var(--bg); letter-spacing: .03em; transition: background .25s ease, border-color .25s ease, transform .25s ease, color .25s ease; }
+.band .nav a.pill { white-space: nowrap; padding: 7px 15px; border-radius: 999px; border: 1px solid var(--paper-16); background: rgba(0,0,0,.14); color: var(--on-band); letter-spacing: .03em; transition: background .25s ease, border-color .25s ease, transform .25s ease, color .25s ease; }
 .band .nav a.pill::after { display: none; }
 .band .nav a.pill:hover { background: var(--accent); border-color: var(--accent); color: var(--band-dark); transform: translateY(-1px); }
 .band .nav a.pill.here { background: var(--accent); border-color: var(--accent); color: var(--band-dark); }
@@ -133,8 +134,8 @@ html[data-mode="dark"] .item, html[data-mode="dark"] .file { background: rgba(25
 .row .period, .card .period { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-60); margin: 0 0 10px; font-feature-settings: 'tnum'; }
 .row .arrow { font-family: var(--fh); font-size: 1.35rem; color: var(--accent); padding-top: 8px; transition: transform .26s ease; }
 .row:hover .arrow { transform: translateX(6px); }
-.btn-band { display: inline-block; margin-top: 26px; font-family: var(--fh); font-weight: 600; font-size: .88rem; color: var(--bg); background: var(--band); border: 1px solid var(--band); border-radius: 4px; padding: 11px 20px; text-decoration: none; transition: transform .25s ease, opacity .25s ease; }
-.btn-band:hover { transform: translateY(-2px); color: var(--bg); opacity: .9; }
+.btn-band { display: inline-block; margin-top: 26px; font-family: var(--fh); font-weight: 600; font-size: .88rem; color: var(--on-band); background: var(--band); border: 1px solid var(--band); border-radius: 4px; padding: 11px 20px; text-decoration: none; transition: transform .25s ease, opacity .25s ease; }
+.btn-band:hover { transform: translateY(-2px); color: var(--on-band); opacity: .9; }
 
 /* practice — the one tinted, full-bleed section */
 #practice.sec { max-width: none; margin-left: 0; margin-right: 0; padding: 0; background: var(--tint); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }

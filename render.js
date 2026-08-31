@@ -50,7 +50,9 @@ function applyTheme(t) {
   }
   const r = document.documentElement.style;
   r.setProperty("--band", t.band);
-  r.setProperty("--brand", t.brandColor || t.bg);
+  const onBand = "#f7f4ee";
+  r.setProperty("--on-band", onBand);
+  r.setProperty("--brand", t.brandColor || onBand);
   r.setProperty("--band-dark", darken(t.band, 0.42));
   r.setProperty("--accent", t.accent);
   r.setProperty("--accent-soft", alpha(t.accent, mode === "dark" ? 0.14 : 0.07));
@@ -59,8 +61,8 @@ function applyTheme(t) {
   r.setProperty("--ink-60", alpha(t.ink, 0.6));
   r.setProperty("--ink-70", alpha(t.ink, 0.72));
   r.setProperty("--rule", mode === "dark" ? alpha("#ebe6dd", 0.18) : alpha(t.band, 0.26));
-  r.setProperty("--paper-70", alpha(t.bg, 0.75));
-  r.setProperty("--paper-16", alpha(t.bg, 0.16));
+  r.setProperty("--paper-70", alpha(onBand, 0.75));
+  r.setProperty("--paper-16", alpha(onBand, 0.16));
   r.setProperty("--fh", heading);
   r.setProperty("--fb", body);
   r.setProperty("--base", (t.baseSize || 16) + "px");
