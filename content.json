@@ -1,6 +1,6 @@
 {
   "theme": {
-    "band": "#2f5d57",
+    "band": "#5c4a7a",
     "accent": "#b68235",
     "bg": "#f7f4ee",
     "ink": "#201f1d",
@@ -10,7 +10,7 @@
     "animations": true,
     "sectionSpacing": 88,
     "showPhoto": true,
-    "brandColor": "#e1ad66"
+    "brandColor": "#f7f4ee"
   },
   "meta": {
     "name": "Ankita Pathak",
@@ -220,6 +220,15 @@
       "navShow": false
     },
     {
+      "id": "contact",
+      "type": "contact",
+      "enabled": true,
+      "kicker": "Contact",
+      "title": "If you are hiring someone to ask the awkward question early, write to me.",
+      "navShow": true,
+      "navLabel": "Contact"
+    },
+    {
       "id": "practice",
       "type": "practice",
       "enabled": true,
@@ -241,15 +250,6 @@
         }
       ],
       "navShow": false
-    },
-    {
-      "id": "contact",
-      "type": "contact",
-      "enabled": true,
-      "kicker": "Contact",
-      "title": "If you are hiring someone to ask the awkward question early, write to me.",
-      "navShow": true,
-      "navLabel": "Contact"
     }
   ],
   "projects": [
