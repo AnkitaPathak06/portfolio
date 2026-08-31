@@ -83,6 +83,21 @@ before the content that points at them.
 
 ---
 
+## URLs
+
+- Home: `https://ankitapathak06.github.io/portfolio/` — no `index.html` needed, GitHub serves it automatically.
+- Projects list: `.../portfolio/projects.html`
+- A project: `.../portfolio/allocation-app/` — one folder per project, named after its slug.
+
+The admin panel writes those project folders for you every time you publish, so a new
+project or a renamed slug gets its own clean URL. `project.html?p=slug` still works as
+a fallback.
+
+## QR code for recruiters
+
+**Share / QR** tab in the admin panel. It shows your live URL as a QR code in two sizes —
+one for slides, one for print — with a download button for each. Any phone camera reads it.
+
 ## Honest limits
 
 - **The passcode is a speed bump, not security.** Anyone can read `admin.js` in a

@@ -37,7 +37,7 @@ function save() {
   localStorage.setItem(LS.draft, JSON.stringify(C));
   setStatus("saved locally — not published yet");
 }
-function renderAll() { sections(); projects(); appearance(); details(); publishPanel(); }
+function renderAll() { sections(); projects(); appearance(); details(); publishPanel(); share(); }
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 /* ---------- generic field helpers ---------- */
@@ -296,7 +296,7 @@ function projects() {
       const holder = document.createElement("div");
       holder.appendChild(field("URL or uploaded file", d.url, v => d.url = v));
       const up2 = document.createElement("button"); up2.className = "btn small"; up2.textContent = "Upload file";
-      up2.onclick = () => pickFile(f => uploadAsset(f).then(url => { d.url = url; save(); projects(); }));
+      up2.onclick = () => pickFile(f => uploadAsset(f).then(url => { d.url = url; d.fileName = f.name; save(); projects(); }));
       const x = document.createElement("button"); x.className = "btn small danger"; x.textContent = "Remove";
       x.onclick = () => { p.downloads.splice(k, 1); save(); projects(); };
       holder.appendChild(up2); holder.appendChild(x);
@@ -459,17 +459,22 @@ function details() {
   const m = C.meta;
   root.appendChild(field("Name", m.name, v => m.name = v));
   root.appendChild(field("Tagline", m.tagline, v => m.tagline = v));
+  if (!m.email || /example\.com$/i.test(m.email)) {
+    root.insertAdjacentHTML("beforeend", '<p class="warn" style="margin-top:12px;border-left-color:#8a3b2f">' +
+      'Your email is still the placeholder <code>' + esc(m.email || "(empty)") + '</code>, so the <strong>Email me</strong> button goes nowhere. Put your real address in the field below and publish.</p>');
+  }
   const r = rowDiv("c2");
-  r.appendChild(field("Email", m.email, v => m.email = v, "email"));
+  r.appendChild(field("Email (the Email me button uses this)", m.email, v => m.email = v, "email"));
   r.appendChild(field("LinkedIn URL", m.linkedin, v => m.linkedin = v, "url"));
   root.appendChild(r);
   root.appendChild(field("Location line", m.location, v => m.location = v));
   const rr = rowDiv("c2");
-  rr.appendChild(field("Résumé file URL", m.resumeUrl, v => m.resumeUrl = v));
+  rr.appendChild(field("Resume file URL", m.resumeUrl, v => m.resumeUrl = v));
+  rr.appendChild(field("Downloaded filename", m.resumeName, v => m.resumeName = v));
   const up = document.createElement("div");
   up.innerHTML = `<label>Upload résumé</label>`;
   const b = document.createElement("button"); b.className = "btn small"; b.textContent = "Choose file";
-  b.onclick = () => pickFile(f => uploadAsset(f).then(url => { m.resumeUrl = url; save(); details(); }));
+  b.onclick = () => pickFile(f => uploadAsset(f).then(url => { m.resumeUrl = url; m.resumeName = f.name; save(); details(); }));
   up.appendChild(b); rr.appendChild(up);
   root.appendChild(rr);
   imageField(root, "Photograph", m.photo, v => { m.photo = v; save(); details(); }, "photo");
@@ -498,9 +503,17 @@ function publishPanel() {
   r.appendChild(field("GitHub username / owner", cfg.owner, v => { cfg.owner = v.trim(); saveCfg(); }));
   r.appendChild(field("Repository name", cfg.repo, v => { cfg.repo = v.trim(); saveCfg(); }));
   r.appendChild(field("Branch", cfg.branch, v => { cfg.branch = v.trim() || "main"; saveCfg(); }));
-  r.appendChild(field("Folder in repo (blank = repo root)", cfg.path, v => { cfg.path = v.replace(/^\/|\/$/g, ""); saveCfg(); }));
+  r.appendChild(field("Folder in repo (blank = repo root)", cfg.path, v => { cfg.path = v.replace(/^\/|\/$/g, ""); saveCfg(); publishPanel(); }));
   root.appendChild(r);
   root.appendChild(field("Personal access token", cfg.token, v => { cfg.token = v.trim(); saveCfg(); }, "password"));
+  if (cfg.path && cfg.repo && cfg.path.toLowerCase() === cfg.repo.toLowerCase()) {
+    root.insertAdjacentHTML("beforeend",
+      '<p class="warn" style="margin-top:14px;border-left-color:#8a3b2f">' +
+      'The folder is set to <strong>' + esc(cfg.path) + '</strong>, which is your repository name, not a folder inside it. ' +
+      'If your files sit at the top level of the repo, clear this field.</p>');
+  }
+  root.insertAdjacentHTML("beforeend", '<p class="hint" style="margin-top:14px">Path the panel will write to: <code>' +
+    esc(repoPath("content.json")) + '</code></p>');
 
   const bar = document.createElement("div");
   bar.className = "toolbar";
@@ -512,9 +525,11 @@ function publishPanel() {
     a.href = URL.createObjectURL(new Blob([JSON.stringify(C, null, 2)], { type: "application/json" }));
     a.download = "content.json"; a.click();
   };
+  const test = document.createElement("button"); test.className = "btn"; test.textContent = "Test connection";
+  test.onclick = testConnection;
   const rev = document.createElement("button"); rev.className = "btn danger"; rev.textContent = "Discard local draft";
   rev.onclick = () => { if (confirm("Throw away unpublished changes?")) { localStorage.removeItem(LS.draft); location.reload(); } };
-  [pub, dl, rev].forEach(b => bar.appendChild(b));
+  [pub, test, dl, rev].forEach(b => bar.appendChild(b));
   root.appendChild(bar);
   const log = document.createElement("div");
   log.className = "log"; log.id = "log"; log.textContent = "Ready.";
@@ -560,7 +575,9 @@ async function ghPut(path, base64, message, attempt) {
 }
 const b64 = str => btoa(unescape(encodeURIComponent(str)));
 
+let lastUploadName = "";
 async function uploadAsset(file) {
+  lastUploadName = file.name;
   if (!cfg.token || !cfg.owner || !cfg.repo) {
     // no token yet — keep it local so the panel still previews
     return await new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(file); });
@@ -594,6 +611,11 @@ async function publish() {
     }
     logLine("committing content.json…");
     await ghPut(repoPath("content.json"), b64(JSON.stringify(C, null, 2)), "admin: update content");
+    for (const p of C.projects) {
+      if (!p.slug) continue;
+      logLine("writing " + p.slug + "/index.html …");
+      await ghPut(repoPath(p.slug + "/index.html"), b64(projectStub(p)), "admin: page for " + p.slug);
+    }
     const after = await ghGet(repoPath("content.json"));
     loadedSha = after && after.sha;
     logLine("done — GitHub Pages usually rebuilds within a minute.");
@@ -608,6 +630,124 @@ async function publish() {
     setStatus("publish failed");
     alert("Publish failed:\n" + msg);
   }
+}
+
+async function testConnection() {
+  const l = document.getElementById("log");
+  if (l) l.textContent = "Running checks…";
+  const step = async (name, fn) => {
+    try { const out = await fn(); logLine("OK   " + name + (out ? " — " + out : "")); return true; }
+    catch (e) { logLine("FAIL " + name + " — " + e.message); return false; }
+  };
+
+  if (!await step("reach api.github.com", async () => {
+    const r = await fetch("https://api.github.com/rate_limit", { cache: "no-store" });
+    if (!r.ok) throw new Error("status " + r.status);
+    return "reachable";
+  })) {
+    logLine("");
+    logLine("The browser could not reach GitHub at all. Almost always one of:");
+    logLine("  · an ad-blocker, privacy extension or VPN blocking api.github.com");
+    logLine("  · a corporate or campus network blocking it");
+    logLine("  · you are offline");
+    logLine("Try an incognito window with extensions disabled, or a different network.");
+    logLine("Meanwhile: use Download content.json and upload that file to GitHub by hand.");
+    return;
+  }
+
+  if (!cfg.token) { logLine("FAIL token — the field is empty"); return; }
+  if (!await step("token is valid", async () => {
+    const r = await fetch("https://api.github.com/user", {
+      cache: "no-store",
+      headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" }
+    });
+    if (r.status === 401) throw new Error("401 — token is wrong, revoked or expired");
+    if (!r.ok) throw new Error("status " + r.status);
+    const j = await r.json();
+    return "signed in as " + j.login;
+  })) return;
+
+  if (!await step("repository is reachable with this token", async () => {
+    const r = await fetch("https://api.github.com/repos/" + cfg.owner + "/" + cfg.repo, {
+      cache: "no-store",
+      headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" }
+    });
+    if (r.status === 404) throw new Error("404 — check owner and repository spelling, and that the token grants access to this repo");
+    if (!r.ok) throw new Error("status " + r.status);
+    const j = await r.json();
+    return j.full_name + " (default branch: " + j.default_branch + ")";
+  })) return;
+
+  await step("write permission", async () => {
+    const r = await fetch("https://api.github.com/repos/" + cfg.owner + "/" + cfg.repo, {
+      cache: "no-store",
+      headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" }
+    });
+    const j = await r.json();
+    if (!j.permissions || !j.permissions.push) throw new Error("token lacks Contents: read and write on this repo");
+    return "can write";
+  });
+
+  await step("find " + repoPath("content.json"), async () => {
+    const f = await ghGet(repoPath("content.json"));
+    if (!f) throw new Error("not found on branch " + cfg.branch + " — publishing would create it here. If that is not where your site reads it from, fix the Folder field.");
+    return "found, " + Math.round(f.size / 1024) + " KB";
+  });
+  logLine("");
+  logLine("Checks complete.");
+}
+
+/* ---------- SHARE / QR ---------- */
+function siteUrl() {
+  if (cfg.siteUrl) return cfg.siteUrl.replace(/\/index\.html$/i, "").replace(/\/$/, "") + "/";
+  return location.href.replace(/admin\.html.*$/i, "");
+}
+function share() {
+  const root = document.getElementById("p-share");
+  if (!root) return;
+  root.innerHTML = '<p class="hint">A recruiter scans this with their phone camera and lands on your portfolio. Print it on a business card, put it on the last slide of a deck, or keep it on your phone to show in person.</p>';
+  root.appendChild(field("Portfolio URL", cfg.siteUrl || siteUrl(), v => { cfg.siteUrl = v.trim(); saveCfg(); share(); }, "url"));
+
+  const url = siteUrl();
+  const block = document.createElement("div");
+  block.className = "qr-block";
+  block.style.cssText = "display:flex;gap:24px;align-items:flex-start;margin-top:18px;flex-wrap:wrap";
+  const sizes = [{ px: 320, label: "Screen / slide" }, { px: 900, label: "Print (business card, poster)" }];
+  const src = px => "https://api.qrserver.com/v1/create-qr-code/?size=" + px + "x" + px + "&margin=12&ecc=M&data=" + encodeURIComponent(url);
+  sizes.forEach(s => {
+    const w = document.createElement("div");
+    w.style.cssText = "text-align:center";
+    w.innerHTML = '<img src="' + src(s.px) + '" alt="QR code" style="width:190px;height:190px;background:#fff;border:1px solid rgba(47,93,87,.3);border-radius:4px;padding:8px">' +
+      '<p class="hint" style="margin-top:6px">' + esc(s.label) + '<br>' + s.px + '×' + s.px + '</p>';
+    const dl = document.createElement("a");
+    dl.className = "btn small"; dl.textContent = "Download PNG";
+    dl.href = src(s.px); dl.target = "_blank"; dl.rel = "noopener";
+    dl.style.display = "inline-block"; dl.style.marginTop = "6px";
+    w.appendChild(dl);
+    block.appendChild(w);
+  });
+  root.appendChild(block);
+  root.insertAdjacentHTML("beforeend", '<p class="hint" style="margin-top:16px">Pointing at: <code>' + esc(url) + '</code></p>' +
+    '<p class="warn" style="margin-top:12px">The QR images come from a free QR service, so you need to be online to see or download them. Once downloaded, the PNG works forever — the code is just your URL.</p>');
+  const test = document.createElement("a");
+  test.className = "btn small"; test.textContent = "Open the URL to check it";
+  test.href = url; test.target = "_blank"; test.rel = "noopener";
+  root.appendChild(test);
+}
+
+function projectStub(p) {
+  const t = (p.title || "Project") + " — " + (C.meta.name || "");
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+    '<title>' + esc(t) + '</title>\n' +
+    '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">\n' +
+    '<link rel="stylesheet" href="../style.css">\n</head>\n<body>\n<div class="progress"></div>\n<div id="root"></div>\n' +
+    '<script>window.PF_BASE="../";window.PF_SLUG=' + JSON.stringify(p.slug) + ';<\/script>\n' +
+    '<script src="../render.js"><\/script>\n<script>\n' +
+    'Portfolio.loadContent().then(c => Portfolio.renderProject(c, document.getElementById("root")))\n' +
+    '  .catch(e => { document.getElementById("root").innerHTML = "<p style=\'padding:40px\'>" + e.message + "</p>"; });\n' +
+    '<\/script>\n</body>\n</html>\n';
 }
 
 function preview() {

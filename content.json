@@ -1,6 +1,6 @@
 {
   "theme": {
-    "band": "#5c4a7a",
+    "band": "#2f5d57",
     "accent": "#b68235",
     "bg": "#f7f4ee",
     "ink": "#201f1d",
@@ -10,16 +10,16 @@
     "animations": true,
     "sectionSpacing": 88,
     "showPhoto": true,
-    "brandColor": "#e8d9b8"
+    "brandColor": "#e1ad66"
   },
   "meta": {
     "name": "Ankita Pathak",
     "tagline": "Project management · Business analysis · PGCM 2027",
-    "email": "pathak.ankita06@gmail.com",
+    "email": "hello@example.com",
     "location": "Gurugram · English and Hindi · open to remote",
     "linkedin": "https://www.linkedin.com/",
-    "resumeUrl": "assets/mthbt6mc-p2622010-ankitapathak--deloitte.docx",
-    "photo": "assets/mthbyy17-ap.jpeg",
+    "resumeUrl": "",
+    "photo": "",
     "photoCaption": "Gurugram, 2026"
   },
   "sections": [
@@ -30,8 +30,7 @@
       "kicker": "Project management · Business analysis · PGCM 2027",
       "headline": "Most delivery problems are definition problems.",
       "body": "Four and a half years turning stakeholder noise into requirements, roadmaps and dashboards people actually use — as a business analyst at Codewalla, then Senior Associate in analytics at WNS. Now reading for a PGCM at Great Lakes, still chasing the same thing: the problem underneath the problem.",
-      "navShow": true,
-      "navLabel": "alpha"
+      "navShow": false
     },
     {
       "id": "journey",

@@ -23,6 +23,10 @@ function alpha(hex, a) {
   const n = parseInt(m[1], 16);
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
 }
+const B = () => (window.PF_BASE || "");
+const asset = u => (!u || /^(https?:|data:|mailto:|\/)/i.test(u)) ? u : B() + u;
+const projHref = slug => B() + encodeURIComponent(slug) + "/";
+
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 function applyTheme(t) {
@@ -58,7 +62,7 @@ function navLinks(c, current) {
     .map(s => {
       const label = s.navLabel || NAV_DEFAULT[s.type] || s.title || s.id;
       const onProjects = current === "projects" && s.type === "projects";
-      const href = s.type === "projects" ? "projects.html" : (current === "home" ? "#" + s.id : "index.html#" + s.id);
+      const href = s.type === "projects" ? B() + "projects.html" : (current === "home" ? "#" + s.id : B() + "index.html#" + s.id);
       return "<a class=\"pill" + (onProjects ? " here" : "") + "\" href=\"" + esc(href) + "\">" + esc(label) + "</a>";
     }).join("");
 }
@@ -67,12 +71,12 @@ function hero(s, c) {
   const t = c.theme, m = c.meta;
   const photo = t.showPhoto !== false
     ? `<figure class="hero-plate">
-         ${m.photo ? `<img src="${esc(m.photo)}" alt="${esc(m.name)}">` : `<div class="plate-empty">Add a photograph in the admin panel</div>`}
+         ${m.photo ? `<img src="${esc(asset(m.photo))}" alt="${esc(m.name)}">` : `<div class="plate-empty">Add a photograph in the admin panel</div>`}
          <figcaption>${esc(m.photoCaption || "")}</figcaption>
        </figure>` : "";
   return `<header id="top" class="band">
     <div class="wrap nav">
-      <a class="brand" href="index.html">${esc(m.name)}</a>
+      <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
       ${navLinks(c, "home")}
     </div>
     <div class="wrap hero${t.showPhoto === false ? " nophoto" : ""}">
@@ -112,7 +116,7 @@ function experience(s) {
 }
 
 function projectRows(s, c) {
-  return sectionShell(s, `<div class="rows">${c.projects.map(p => `<a class="row reveal" href="project.html?p=${encodeURIComponent(p.slug)}">
+  return sectionShell(s, `<div class="rows">${c.projects.map(p => `<a class="row reveal" href="${projHref(p.slug)}">
     <span class="num">${esc(p.num)}</span>
     <div>
       <h3>${esc(p.title)}</h3>
@@ -121,7 +125,7 @@ function projectRows(s, c) {
     </div>
     <span class="arrow">→</span>
   </a>`).join("")}</div>
-  <a class="btn-band" href="projects.html">All projects with full detail →</a>`);
+  <a class="btn-band" href="${B()}projects.html">All projects with full detail →</a>`);
 }
 
 function practice(s) {
@@ -162,8 +166,8 @@ function contact(s, c) {
         <p class="lede">${esc(m.location)}</p>
       </div>
       <div class="cta">
-        <a class="btn-gold" href="mailto:${esc(m.email)}">Email me</a>
-        ${m.resumeUrl ? `<a class="btn-outline" href="${esc(m.resumeUrl)}" download>Résumé, one page</a>` : ""}
+        ${m.email ? `<a class="btn-gold" href="mailto:${esc(m.email)}?subject=${encodeURIComponent("Portfolio enquiry")}">Email me</a>` : ""}
+        ${m.resumeUrl ? `<a class="btn-outline" href="${esc(asset(m.resumeUrl))}" download="${esc(m.resumeName || "Resume.pdf")}">Resume</a>` : ""}
         ${m.linkedin ? `<a class="link-quiet" href="${esc(m.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}
       </div>
     </div>
@@ -191,7 +195,7 @@ async function loadContent() {
     const p = localStorage.getItem("pf_preview");
     if (p) return JSON.parse(p);
   }
-  const res = await fetch("content.json?ts=" + Date.now());
+  const res = await fetch(B() + "content.json?ts=" + Date.now(), { cache: "no-store" });
   if (!res.ok) throw new Error("content.json not found");
   return res.json();
 }
@@ -208,7 +212,7 @@ function renderProjectIndex(c, root) {
   const m = c.meta;
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
-      <a class="brand" href="index.html">${esc(m.name)}</a>
+      <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
       ${navLinks(c, "projects")}
     </div>
     <div class="wrap page-head">
@@ -219,14 +223,14 @@ function renderProjectIndex(c, root) {
     </div>
   </header>
   <section class="sec norule"><div class="wrap"><div class="cards">
-    ${c.projects.map(p => `<a class="card reveal" href="project.html?p=${encodeURIComponent(p.slug)}">
+    ${c.projects.map(p => `<a class="card reveal" href="${projHref(p.slug)}">
       <span class="num">${esc(p.num)}</span>
       <div>
         <h2>${esc(p.title)}</h2>
         <p class="period">${esc(p.org)} · ${esc(p.period)} · ${esc(p.role)}</p>
         <p class="note">${esc(p.summary)}</p>
       </div>
-      <div class="cover">${p.cover ? `<img src="${esc(p.cover)}" alt="">` : `<div class="plate-empty small">Cover image</div>`}</div>
+      <div class="cover">${p.cover ? `<img src="${esc(asset(p.cover))}" alt="">` : `<div class="plate-empty small">Cover image</div>`}</div>
     </a>`).join("")}
   </div></div></section>
   ${c.extras && c.extras.length ? `<section class="sec"><div class="wrap">
@@ -239,7 +243,7 @@ function renderProjectIndex(c, root) {
 
 function renderProject(c, root) {
   applyTheme(c.theme);
-  const slug = new URLSearchParams(location.search).get("p");
+  const slug = window.PF_SLUG || new URLSearchParams(location.search).get("p");
   const p = c.projects.find(x => x.slug === slug) || c.projects[0];
   if (!p) { root.innerHTML = "<p style='padding:40px'>No projects yet.</p>"; return; }
   const idx = c.projects.indexOf(p);
@@ -247,7 +251,7 @@ function renderProject(c, root) {
   document.title = p.title + " — " + c.meta.name;
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
-      <a class="brand" href="index.html">${esc(c.meta.name)}</a>
+      <a class="brand" href="${B()}index.html">${esc(c.meta.name)}</a>
       ${navLinks(c, "project")}
     </div>
     <div class="wrap page-head">
@@ -264,7 +268,7 @@ function renderProject(c, root) {
       <div class="deck-nav"><button id="prev" aria-label="Previous slide">←</button><button id="next" aria-label="Next slide">→</button></div>
     </div>
     <div class="deck" id="deck">
-      ${p.slides.map((src, i) => `<img src="${esc(src)}" alt="Slide ${i + 1}" class="slide${i ? "" : " on"}">`).join("")}
+      ${p.slides.map((src, i) => `<img src="${esc(asset(src))}" alt="Slide ${i + 1}" class="slide${i ? "" : " on"}">`).join("")}
       <button class="edge left" id="edgeL" aria-label="Previous slide"></button>
       <button class="edge right" id="edgeR" aria-label="Next slide"></button>
     </div>
@@ -282,7 +286,7 @@ function renderProject(c, root) {
     </div>
   </div></section>
   <section class="sec"><div class="wrap"><div class="files">
-    ${(p.downloads || []).filter(d => d.label).map(d => `<a class="file reveal" href="${esc(d.url || "#")}"${d.url ? " download" : ""}>
+    ${(p.downloads || []).filter(d => d.label).map(d => `<a class="file reveal" href="${esc(asset(d.url) || "#")}"${d.url ? ` download="${esc(d.fileName || d.label || "download")}"` : ""}>
       <span class="kicker">Download</span><span class="ft">${esc(d.label)}</span><span class="note">${esc(d.note)}${d.url ? "" : " · add the file in the admin panel"}</span></a>`).join("")}
     ${p.code && p.code.url ? `<a class="file reveal" href="${esc(p.code.url)}" target="_blank" rel="noopener">
       <span class="kicker">View code</span><span class="ft">${esc(p.code.label || "Repository")}</span><span class="note">${esc(p.code.note || "GitHub")}</span></a>` : ""}
@@ -291,8 +295,8 @@ function renderProject(c, root) {
     <div class="wrap">
       <h2>${next ? "Next: " + esc(next.title) + "." : "Happy to talk through any of it."}</h2>
       <div class="cta row-cta">
-        <a class="btn-gold" href="${next ? "project.html?p=" + encodeURIComponent(next.slug) : "mailto:" + esc(c.meta.email)}">${next ? "Project " + esc(next.num) + " →" : "Get in touch"}</a>
-        <a class="btn-outline" href="projects.html">All projects</a>
+        <a class="btn-gold" href="${next ? projHref(next.slug) : "mailto:" + esc(c.meta.email) + "?subject=" + encodeURIComponent("Portfolio enquiry")}">${next ? "Project " + esc(next.num) + " →" : "Get in touch"}</a>
+        <a class="btn-outline" href="${B()}projects.html">All projects</a>
       </div>
     </div>
   </section>`;
