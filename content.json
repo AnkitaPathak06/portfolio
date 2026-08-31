@@ -263,7 +263,12 @@
       "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
       "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
       "cover": "assets/mthgirfi-ap.jpeg",
-      "stats": [],
+      "stats": [
+        {
+          "value": "Machine Learning",
+          "label": "Using Python"
+        }
+      ],
       "objective": "Give every team one trustworthy view of who holds what, so that allocation stops being reconstructed by hand each morning. The brief asked for a manager's tracker; the objective I wrote instead was shared visibility, because a tool only managers opened would have become a sixth version of the truth.",
       "did": [
         "Sat on both sides of the handoff for a week and wrote the requirements against what people actually did — including the workarounds nobody had documented.",
