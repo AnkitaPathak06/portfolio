@@ -1,4 +1,5 @@
 :root {
+  --brand: #e1ad66;
   --band: #2f5d57;
   --band-dark: #142823;
   --accent: #b68235;
@@ -31,12 +32,16 @@ a { color: var(--accent); text-underline-offset: 3px; transition: color .22s eas
 /* bands */
 .band { background: var(--band); color: var(--bg); }
 .band .nav { display: flex; align-items: baseline; gap: 26px; padding: 26px 40px; border-bottom: 1px solid var(--paper-16); flex-wrap: wrap; }
-.band .nav .brand { font-family: var(--fh); font-weight: 600; font-size: 1.19rem; margin-right: auto; color: var(--bg); text-decoration: none; }
+.band .nav .brand { font-family: var(--fh); font-weight: 600; font-size: 1.19rem; margin-right: auto; color: var(--brand); text-decoration: none; }
 .band .nav a { font-size: .81rem; color: var(--paper-70); text-decoration: none; position: relative; }
 .band .nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .28s ease; }
 .band .nav a:hover { color: var(--accent); }
 .band .nav a:hover::after { transform: scaleX(1); }
 .band .nav a.here { color: var(--accent); }
+.band .nav a.pill { white-space: nowrap; padding: 7px 15px; border-radius: 999px; border: 1px solid var(--paper-16); background: rgba(0,0,0,.14); color: var(--bg); letter-spacing: .03em; transition: background .25s ease, border-color .25s ease, transform .25s ease, color .25s ease; }
+.band .nav a.pill::after { display: none; }
+.band .nav a.pill:hover { background: var(--accent); border-color: var(--accent); color: var(--band-dark); transform: translateY(-1px); }
+.band .nav a.pill.here { background: var(--accent); border-color: var(--accent); color: var(--band-dark); }
 
 .hero { display: grid; grid-template-columns: 1.5fr .85fr; gap: 54px; align-items: center; padding: 84px 40px 80px; }
 .hero.nophoto { grid-template-columns: 1fr; }

@@ -30,6 +30,7 @@ function applyTheme(t) {
   const body = FONT_STACK[t.bodyFont] || FONT_STACK["Lora"];
   const r = document.documentElement.style;
   r.setProperty("--band", t.band);
+  r.setProperty("--brand", t.brandColor || t.bg);
   r.setProperty("--band-dark", darken(t.band, 0.42));
   r.setProperty("--accent", t.accent);
   r.setProperty("--accent-soft", alpha(t.accent, 0.07));
@@ -49,6 +50,19 @@ function applyTheme(t) {
 
 /* ---------- section renderers ---------- */
 
+const NAV_DEFAULT = { experience: "Work experience", education: "Education", projects: "Projects", contact: "Contact" };
+
+function navLinks(c, current) {
+  return c.sections
+    .filter(s => s.enabled !== false && (s.navShow != null ? s.navShow : NAV_DEFAULT[s.type] != null))
+    .map(s => {
+      const label = s.navLabel || NAV_DEFAULT[s.type] || s.title || s.id;
+      const onProjects = current === "projects" && s.type === "projects";
+      const href = s.type === "projects" ? "projects.html" : (current === "home" ? "#" + s.id : "index.html#" + s.id);
+      return "<a class=\"pill" + (onProjects ? " here" : "") + "\" href=\"" + esc(href) + "\">" + esc(label) + "</a>";
+    }).join("");
+}
+
 function hero(s, c) {
   const t = c.theme, m = c.meta;
   const photo = t.showPhoto !== false
@@ -59,9 +73,7 @@ function hero(s, c) {
   return `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="index.html">${esc(m.name)}</a>
-      ${c.sections.filter(x => x.enabled && x.type !== "hero" && x.type !== "contact").map(x => `<a href="#${esc(x.id)}">${esc(x.navLabel || x.title || x.id)}</a>`).join("")}
-      <a href="projects.html">Projects</a>
-      <a href="#contact">Contact</a>
+      ${navLinks(c, "home")}
     </div>
     <div class="wrap hero${t.showPhoto === false ? " nophoto" : ""}">
       <div>
@@ -197,10 +209,7 @@ function renderProjectIndex(c, root) {
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="index.html">${esc(m.name)}</a>
-      <a href="index.html#journey">Journey</a>
-      <a href="index.html#experience">Experience</a>
-      <a class="here" href="projects.html">Projects</a>
-      <a href="index.html#contact">Contact</a>
+      ${navLinks(c, "projects")}
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">${c.projects.length} projects, one page each</p>
@@ -239,8 +248,7 @@ function renderProject(c, root) {
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="index.html">${esc(c.meta.name)}</a>
-      <a href="projects.html">All projects</a>
-      <a href="index.html#contact">Contact</a>
+      ${navLinks(c, "project")}
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">Project ${esc(p.num)} · ${esc(p.org)} · ${esc(p.period)}</p>

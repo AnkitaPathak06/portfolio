@@ -5,6 +5,7 @@ const PASSCODE = "portfolio";           // change this
 const LS = { draft: "pf_draft", cfg: "pf_cfg" };
 let C = null;                            // working content
 let cfg = { owner: "", repo: "", branch: "main", path: "", token: "" };
+let loadedSha = null;                    // sha of content.json when the panel loaded it
 
 /* ---------- gate ---------- */
 function tryGate() {
@@ -21,7 +22,7 @@ async function boot() {
   const draft = localStorage.getItem(LS.draft);
   if (draft) { C = JSON.parse(draft); setStatus("loaded unpublished draft"); }
   else {
-    const r = await fetch("content.json?ts=" + Date.now());
+    const r = await fetch("content.json?ts=" + Date.now(), { cache: "no-store" });
     C = await r.json();
     setStatus("loaded content.json");
   }
@@ -115,6 +116,19 @@ function sections() {
 
     const body = document.createElement("div");
     body.className = "body";
+    const NAV_DEFAULT = { experience: "Work experience", education: "Education", projects: "Projects", contact: "Contact" };
+    const inMenu = s.navShow != null ? s.navShow : NAV_DEFAULT[s.type] != null;
+    const menuWrap = document.createElement("div");
+    const menuTog = document.createElement("label");
+    menuTog.className = "toggle";
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = inMenu;
+    cb.onchange = () => { s.navShow = cb.checked; save(); sections(); };
+    menuTog.appendChild(cb);
+    menuTog.appendChild(document.createTextNode("Show in the top menu"));
+    menuWrap.appendChild(menuTog);
+    if (inMenu) menuWrap.appendChild(field("Menu label (keep it short)", s.navLabel || NAV_DEFAULT[s.type] || "", v => s.navLabel = v));
+    body.appendChild(menuWrap);
     body.appendChild(field("Kicker (small line above the heading)", s.kicker, v => s.kicker = v));
     if (s.type !== "hero") body.appendChild(field("Heading", s.title, v => s.title = v));
     if (s.type === "hero") {
@@ -370,12 +384,14 @@ function pickFile(cb, accept, multiple) {
 const PALETTES = {
   band: ["#2f5d57", "#3a5a7a", "#7a4a3c", "#5c4a7a", "#4a6b3f", "#1e2b26"],
   accent: ["#b68235", "#9a7b4f", "#a8563c", "#4f7d6a", "#8a6b9a"],
-  bg: ["#f7f4ee", "#f3f2f2", "#f6f1e7", "#eef1ec", "#eff1f4"]
+  bg: ["#f7f4ee", "#f3f2f2", "#f6f1e7", "#eef1ec", "#eff1f4"],
+  brand: ["#f7f4ee", "#e1ad66", "#b68235", "#e8d9b8", "#ffffff"]
 };
 function appearance() {
   const root = document.getElementById("p-appearance");
   const t = C.theme;
   root.innerHTML = `<p class="hint">Changes apply to every page. Preview before publishing.</p>`;
+  if (!t.brandColor) t.brandColor = t.bg;
   const mk = (label, key, list) => {
     const w = document.createElement("div");
     w.innerHTML = `<label>${label}</label>`;
@@ -397,6 +413,7 @@ function appearance() {
   mk("Band colour (hero, contact)", "band", PALETTES.band);
   mk("Accent colour", "accent", PALETTES.accent);
   mk("Page background", "bg", PALETTES.bg);
+  mk("Your name, top left", "brandColor", PALETTES.brand);
 
   const fonts = ["Cormorant Garamond", "Playfair Display", "EB Garamond", "Libre Baskerville", "Source Serif 4", "Lora"];
   const sel = (label, key) => {
@@ -515,20 +532,34 @@ function api(path) {
 function repoPath(name) { return (cfg.path ? cfg.path + "/" : "") + name; }
 
 async function ghGet(path) {
-  const r = await fetch(api(path) + "?ref=" + encodeURIComponent(cfg.branch), {
-    headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" }
+  const r = await fetch(api(path) + "?ref=" + encodeURIComponent(cfg.branch) + "&ts=" + Date.now(), {
+    cache: "no-store",
+    headers: {
+      Authorization: "Bearer " + cfg.token,
+      Accept: "application/vnd.github+json",
+      "If-None-Match": "",
+      "Cache-Control": "no-cache"
+    }
   });
   if (r.status === 404) return null;
   if (!r.ok) throw new Error("GitHub GET " + r.status + " — " + (await r.text()).slice(0, 200));
   return r.json();
 }
-async function ghPut(path, base64, message) {
+async function ghPut(path, base64, message, attempt) {
+  attempt = attempt || 1;
   const existing = await ghGet(path);
   const r = await fetch(api(path), {
     method: "PUT",
+    cache: "no-store",
     headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
     body: JSON.stringify({ message, content: base64, branch: cfg.branch, sha: existing ? existing.sha : undefined })
   });
+  if (r.status === 409 && attempt < 4) {
+    // the file moved under us (or GitHub served a stale sha) — re-read and retry
+    logLine("sha conflict, re-reading and retrying (" + attempt + ")…");
+    await new Promise(res => setTimeout(res, 700 * attempt));
+    return ghPut(path, base64, message, attempt + 1);
+  }
   if (!r.ok) throw new Error("GitHub PUT " + r.status + " — " + (await r.text()).slice(0, 300));
   return r.json();
 }
@@ -559,8 +590,17 @@ async function publish() {
   }
   try {
     setStatus("publishing…");
+    logLine("checking the copy on GitHub…");
+    const remote = await ghGet(repoPath("content.json"));
+    if (remote && remote.sha && loadedSha && remote.sha !== loadedSha) {
+      if (!confirm("content.json on GitHub has changed since this panel loaded it.\n\nPublishing will overwrite that version with your local draft. Continue?")) {
+        setStatus("publish cancelled"); logLine("cancelled by user."); return;
+      }
+    }
     logLine("committing content.json…");
     await ghPut(repoPath("content.json"), b64(JSON.stringify(C, null, 2)), "admin: update content");
+    const after = await ghGet(repoPath("content.json"));
+    loadedSha = after && after.sha;
     logLine("done — GitHub Pages usually rebuilds within a minute.");
     setStatus("published");
     localStorage.removeItem(LS.draft);
