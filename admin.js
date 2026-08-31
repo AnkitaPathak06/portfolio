@@ -742,9 +742,9 @@ function projectStub(p) {
     '<title>' + esc(t) + '</title>\n' +
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">\n' +
-    '<link rel="stylesheet" href="../style.css">\n</head>\n<body>\n<div class="progress"></div>\n<div id="root"></div>\n' +
+    '<link rel="stylesheet" href="../style.css?v=' + Date.now().toString(36) + '">\n</head>\n<body>\n<div class="progress"></div>\n<div id="root"></div>\n' +
     '<script>window.PF_BASE="../";window.PF_SLUG=' + JSON.stringify(p.slug) + ';<\/script>\n' +
-    '<script src="../render.js"><\/script>\n<script>\n' +
+    '<script src="../render.js?v=' + Date.now().toString(36) + '"><\/script>\n<script>\n' +
     'Portfolio.loadContent().then(c => Portfolio.renderProject(c, document.getElementById("root")))\n' +
     '  .catch(e => { document.getElementById("root").innerHTML = "<p style=\'padding:40px\'>" + e.message + "</p>"; });\n' +
     '<\/script>\n</body>\n</html>\n';

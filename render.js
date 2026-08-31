@@ -77,7 +77,7 @@ function hero(s, c) {
   return `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
-      ${navLinks(c, "home")}
+      <span class="pill-row">${navLinks(c, "home")}</span>
     </div>
     <div class="wrap hero${t.showPhoto === false ? " nophoto" : ""}">
       <div>
@@ -166,7 +166,9 @@ function contact(s, c) {
         <p class="lede">${esc(m.location)}</p>
       </div>
       <div class="cta">
-        ${m.email ? `<a class="btn-gold" href="mailto:${esc(m.email)}?subject=${encodeURIComponent("Portfolio enquiry")}">Email me</a>` : ""}
+        ${m.email ? `<a class="btn-gold" href="mailto:${esc(m.email)}">Email me</a>
+        <a class="mail-plain" href="mailto:${esc(m.email)}" data-copy="${esc(m.email)}" title="Click to copy">${esc(m.email)}</a>
+        <a class="link-quiet" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(m.email)}">Open in Gmail</a>` : ""}
         ${m.resumeUrl ? `<a class="btn-outline" href="${esc(asset(m.resumeUrl))}" download="${esc(m.resumeName || "Resume.pdf")}">Resume</a>` : ""}
         ${m.linkedin ? `<a class="link-quiet" href="${esc(m.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}
       </div>
@@ -213,7 +215,7 @@ function renderProjectIndex(c, root) {
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(m.name)}</a>
-      ${navLinks(c, "projects")}
+      <span class="pill-row">${navLinks(c, "projects")}</span>
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">${c.projects.length} projects, one page each</p>
@@ -252,7 +254,7 @@ function renderProject(c, root) {
   root.innerHTML = `<header id="top" class="band">
     <div class="wrap nav">
       <a class="brand" href="${B()}index.html">${esc(c.meta.name)}</a>
-      ${navLinks(c, "project")}
+      <span class="pill-row">${navLinks(c, "project")}</span>
     </div>
     <div class="wrap page-head">
       <p class="kicker on-band">Project ${esc(p.num)} · ${esc(p.org)} · ${esc(p.period)}</p>
@@ -328,6 +330,59 @@ function wireDeck(n) {
   paint();
 }
 
+function wireJourney(animate) {
+  document.querySelectorAll(".rail").forEach(rail => {
+    const dots = [...rail.querySelectorAll(".rail-item .dot")];
+    if (dots.length < 2) return;
+    const line = rail.querySelector(".rail-line");
+    if (!line) return;
+    let marker = rail.querySelector(".rail-marker");
+    if (!marker) {
+      marker = document.createElement("span");
+      marker.className = "rail-marker";
+      rail.appendChild(marker);
+    }
+    const place = () => {
+      if (getComputedStyle(line).display === "none") { marker.style.display = "none"; return; }
+      marker.style.display = "";
+      const off = el => {
+        let x = 0, y = 0, n = el;
+        while (n && n !== rail) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+        return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+      };
+      const a0 = off(dots[0]), a1 = off(dots[dots.length - 1]);
+      const start = a0.x + a0.w / 2;
+      const end = a1.x + a1.w / 2;
+      const top = a0.y + a0.h / 2;
+      marker.style.top = top + "px";
+      line.style.setProperty("--travel", (end - start) + "px");
+      line.style.setProperty("--start", start + "px");
+      marker.style.setProperty("--start", start + "px");
+      marker.style.setProperty("--travel", (end - start) + "px");
+      if (!animate) { marker.style.left = end + "px"; marker.classList.add("parked"); return; }
+      marker.style.left = start + "px";
+      requestAnimationFrame(() => {
+        marker.classList.add("run");
+        setTimeout(() => {
+          marker.style.left = end + "px";
+          dots.forEach((d, k) => setTimeout(() => d.classList.add("passed"), (k / (dots.length - 1)) * 2200));
+          setTimeout(() => marker.classList.add("parked"), 2500);
+        }, 60);
+      });
+    };
+    place();
+    const item = rail.querySelector(".rail-item");
+    if (item) item.addEventListener("transitionend", place, { once: true });
+    setTimeout(place, 950);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    let t;
+    window.addEventListener("resize", () => {
+      clearTimeout(t);
+      t = setTimeout(() => { marker.classList.remove("run"); marker.classList.remove("parked"); place(); }, 120);
+    });
+  });
+}
+
 function wireReveals(theme) {
   const bar = document.querySelector(".progress");
   if (bar) {
@@ -341,6 +396,7 @@ function wireReveals(theme) {
   if (theme && theme.animations === false) {
     document.querySelectorAll(".reveal").forEach(el => el.classList.add("in"));
     document.querySelectorAll(".sec").forEach(el => el.classList.add("lit"));
+    wireJourney(false);
     return;
   }
   const io = new IntersectionObserver(es => {
@@ -356,6 +412,23 @@ function wireReveals(theme) {
     es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("lit"); lit.unobserve(e.target); } });
   }, { threshold: 0.15 });
   document.querySelectorAll(".sec").forEach(el => lit.observe(el));
+  const jr = document.querySelector("#journey .rail, .rail");
+  if (jr) {
+    const jo = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting) { wireJourney(true); jo.unobserve(e.target); } });
+    }, { threshold: 0.35 });
+    jo.observe(jr);
+  }
+  document.addEventListener("click", e => {
+    const t = e.target.closest("[data-copy]");
+    if (!t || !navigator.clipboard) return;
+    e.preventDefault();
+    navigator.clipboard.writeText(t.dataset.copy).then(() => {
+      const old = t.textContent;
+      t.textContent = "copied — " + old;
+      setTimeout(() => t.textContent = old, 1600);
+    });
+  });
 }
 
 window.Portfolio = { loadContent, renderHome, renderProjectIndex, renderProject, applyTheme, FONT_STACK };
