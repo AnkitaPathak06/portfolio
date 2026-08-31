@@ -262,7 +262,7 @@
       "role": "Product ownership",
       "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
       "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
-      "cover": "",
+      "cover": "assets/mthgirfi-ap.jpeg",
       "stats": [
         {
           "value": "95%",
@@ -295,7 +295,7 @@
         {
           "label": "Walkthrough deck",
           "note": "PPTX",
-          "url": ""
+          "url": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true"
         }
       ],
       "code": {
@@ -303,7 +303,7 @@
         "note": "GitHub",
         "url": ""
       },
-      "slidesUrl": ""
+      "slidesUrl": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true"
     },
     {
       "slug": "kpi-reporting",
