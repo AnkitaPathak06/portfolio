@@ -288,6 +288,7 @@ function projects() {
       'Paste a Google Slides link (Share \u2192 Anyone with the link \u2192 Viewer) and the deck shows on the page. ' +
       'Leave it empty to use uploaded slide images instead.</p>');
     b.appendChild(field("Google Slides link", p.slidesUrl, v => { p.slidesUrl = v.trim(); save(); }, "url"));
+    b.appendChild(field("Side panel heading", p.deckAboutTitle, v => { p.deckAboutTitle = v; save(); }));
     b.appendChild(field("About the deck (shows beside it)", p.deckAbout, v => { p.deckAbout = v; save(); }, "area"));
     const shape = document.createElement("div");
     shape.innerHTML = '<label>Slide shape</label>';

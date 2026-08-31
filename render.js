@@ -298,10 +298,10 @@ function deckSource(p) {
 }
 
 function deckAside(p, src) {
-  if (!p.deckAbout && !(p.deckFacts && p.deckFacts.length)) return "";
+  if (!p.deckAbout && !src) return "";
   const facts = (p.deckFacts || []).filter(f => f.label && f.value);
   return `<aside class="deck-aside">
-    <p class="kicker">About the deck</p>
+    <p class="kicker">${esc(p.deckAboutTitle || "About the deck")}</p>
     ${p.deckAbout ? `<p class="deck-about">${esc(p.deckAbout)}</p>` : ""}
     ${facts.length ? `<dl class="deck-facts">${facts.map(f => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join("")}</dl>` : ""}
     ${src ? `<div class="deck-aside-acts"><a class="btn-ghost" href="${esc(asset(src))}" target="_blank" rel="noopener">Open full screen ↗</a><a class="link-quiet" href="${esc(asset(src))}" download>Download the deck</a></div>` : ""}

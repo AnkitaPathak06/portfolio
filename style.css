@@ -207,7 +207,7 @@ html[data-mode="dark"] #practice.sec { background: rgba(255,255,255,.04); }
 .deck-frame .deck-foot-note { text-align: center; }
 .deck.embed { border-width: 1px; background: rgba(0,0,0,.05); }
 .deck.r43 { aspect-ratio: 4 / 3; }
-.deck.embed.r43 { aspect-ratio: 400 / 318; } /* 4:3 slide + the viewer toolbar */
+.deck.embed.r43 { box-sizing: content-box; aspect-ratio: 4 / 3; height: auto; padding-bottom: 56px; } /* 4:3 media area, plus the viewer toolbar */
 .deck.embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .deck.deck-note { display: grid; place-items: center; padding: 28px; }
 .deck.deck-note p { max-width: 46ch; text-align: center; font-size: .9rem; line-height: 1.7; color: var(--ink-70); font-style: italic; }
