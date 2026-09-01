@@ -192,31 +192,39 @@
       "type": "certifications",
       "enabled": true,
       "kicker": "On the record",
-      "title": "Certifications and recognition",
+      "title": "Certifications, tools and recognition",
       "items": [
         {
+          "title": "Certified Scrum Master",
+          "meta": "Scrum Alliance - Agile delivery, sprint planning and backlog management with development teams."
+        },
+        {
+          "title": "Google Analytics",
+          "meta": "Google - User behaviour tracking, funnel analysis and reporting on product usage."
+        },
+        {
           "title": "Advanced Excel",
-          "meta": "TATA Steel Capability Development · 2020 · 2 weeks"
+          "meta": "TATA Steel Capability Development - Pivots and reporting automation."
         },
         {
-          "title": "Second runner-up, AI mini hackathon",
-          "meta": "Great Lakes Institute of Management, Gurugram · 2026"
-        },
-        {
-          "title": "Runner-up, quiz competition",
-          "meta": "Jaypee Institute of Information Technology, Noida · 2017"
-        },
-        {
-          "title": "Internal Agile training coordinator",
-          "meta": "WNS, Gurugram · 2024"
-        },
-        {
-          "title": "Member, Strategy Club",
-          "meta": "Great Lakes Institute of Management, Gurugram · 2026"
+          "title": "Jira and Confluence",
+          "meta": "Backlogs, sprint boards and requirement documentation."
         },
         {
           "title": "Volunteer, WNS Care Foundation",
-          "meta": "2023–24"
+          "meta": "Community outreach programmes alongside my role at WNS"
+        },
+        {
+          "title": "Member, Strategy Club",
+          "meta": "GLIM - Case competitions and strategy discussions alongside the PGCM."
+        },
+        {
+          "title": "Power BI ",
+          "meta": "KPI dashboards and automated reporting"
+        },
+        {
+          "title": "PowerPoint",
+          "meta": "Client-facing decks and walkthroughs"
         }
       ],
       "navShow": false
