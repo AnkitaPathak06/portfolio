@@ -162,27 +162,27 @@
       "items": [
         {
           "title": "Project management",
-          "note": "Roadmaps, backlogs and Agile delivery — including the internal Agile training programme at WNS."
+          "note": "Planning the work, sequencing it, and keeping delivery on timeline."
         },
         {
-          "title": "Requirements and stakeholder management",
-          "note": "Discovery with the people doing the work, written up so a developer and a director read the same thing."
+          "title": "Problem structuring",
+          "note": "Breaking an unclear business problem into the questions that decide it."
         },
         {
-          "title": "Data visualization",
-          "note": "KPI definition and dashboards built around the decision they serve. Advanced Excel; reporting automation."
+          "title": "Stakeholder management ",
+          "note": "Keeping clients, users and delivery teams aligned on scope and expectations."
+        },
+        {
+          "title": "Requirements definition",
+          "note": "Defining KPIs and building the Power BI dashboards and Excel models that track them."
+        },
+        {
+          "title": "Data analysis and reporting",
+          "note": "Defining KPIs and building the Power BI dashboards and Excel models that track them."
         },
         {
           "title": "Business storytelling",
-          "note": "Turning an analysis into the two sentences a leadership meeting can act on."
-        },
-        {
-          "title": "Client relationship management",
-          "note": "Holding the scope conversation early, while it is still cheap."
-        },
-        {
-          "title": "Languages",
-          "note": "English and Hindi."
+          "note": "Presenting an analysis as a clear recommendation leadership can act on."
         }
       ],
       "navShow": false
