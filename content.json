@@ -120,7 +120,7 @@
       "type": "projects",
       "enabled": true,
       "kicker": "Selected work",
-      "title": "Three I would defend in an interview",
+      "title": "Projects, from brief to outcome",
       "navShow": true,
       "navLabel": "Projects"
     },
@@ -133,9 +133,9 @@
       "items": [
         {
           "year": "2027",
-          "degree": "PGCM",
+          "degree": "PGPM",
           "institute": "Great Lakes Institute of Management, Gurgaon",
-          "note": "Pursuing · Strategy Club; second runner-up, AI mini hackathon"
+          "note": "Pursuing · Member of Strategy Club, Second runner-up at AI Hackathon"
         },
         {
           "year": "2020",
@@ -147,7 +147,7 @@
           "year": "2018",
           "degree": "B.Tech",
           "institute": "Jaypee Institute of Information Technology, Noida",
-          "note": "Cultural fest coordinator; quiz competition runner-up, 2017"
+          "note": "Cultural fest coordinator, Quiz competition runner-up"
         }
       ],
       "navShow": true,
