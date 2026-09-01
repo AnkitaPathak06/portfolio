@@ -72,19 +72,31 @@
       "id": "experience",
       "type": "experience",
       "enabled": true,
-      "kicker": "Four and a half years, two companies",
+      "kicker": "Five years across product and analytics",
       "title": "Work experience",
       "items": [
+        {
+          "org": "Brihat Infotech",
+          "orgNote": "",
+          "role": "Freelance Product Consultant",
+          "period": "Jan 2025 - Dec 2025",
+          "summary": "Product definition and roadmap for an accounting product aimed at MSMEs.",
+          "bullets": [
+            "Core member of the product team shaping the vision and future roadmap for their flagship accounting product for MSMEs",
+            "Led initial stakeholder discussions to understand immediate enhancements suggested by their marquee client, existing technology constraints, and potential areas for system optimization and automation",
+            "Drafted product requirement documents (PRDs) and high-level user stories, focusing on aligning delivery scope with business priorities and early-stage feasibility with stakeholders; prioritized with RICE; sprint planning in Jira/Confluence; plan releases & managed RAID."
+          ]
+        },
         {
           "org": "WNS",
           "orgNote": "(part of Capgemini)",
           "role": "Senior Associate, Research and Analytics",
           "period": "Feb 2022 – Dec 2024",
-          "summary": "Owned a clinical data application end to end, from discovery to reporting.",
+          "summary": "Spearheaded an in-house application development for clinical data solution for a leading healthcare client, focusing on structured data collection and organization to enhance reporting accuracy and reduce data logging errors",
           "bullets": [
-            "Translated stakeholder needs and business challenges into actionable product requirements, delivering an application that improved task allocation and visibility and achieved 95% employee adoption.",
-            "Developed product roadmap and prioritized backlog with clearly defined user stories, collaborating with development teams to translate requirements into actionable deliverables and reducing rework by 20%.",
-            "Developed KPI and reporting dashboards for leadership, automating 80% of manual analysis and enabling data-driven insights for operational decision-making."
+            "Conducted 20+ client interviews to define the product vision, gather requirements, understand existing user behaviour, and create user personas along with workflows",
+            "Crafted user stories and technical product specifications, such as PRDs on Jira and Confluence. Conducted daily scrum calls with development team to streamline development, address issues and identify risks",
+            "Developed visualization dashboards for client leadership leveraging Power BI to monitor clinical trial KPIs like budget vs. expense reporting, reducing reliance on manual tracking and enabling near real-time reporting"
           ]
         },
         {
@@ -96,18 +108,6 @@
           "bullets": [
             "Conducted market and competitor analysis to identify industry trends and customer needs, informing product enhancements that accelerated release cycles by 50%.",
             "Analyzed user behavior metrics and usage patterns to identify customer needs, supporting data-driven feature prioritization and increasing user engagement by 15%."
-          ]
-        },
-        {
-          "org": "Brihat Infotech",
-          "orgNote": "",
-          "role": "Freelance Product Consultant",
-          "period": "Jan 2025 - Dec 2025",
-          "summary": "Product definition and roadmap for an accounting product aimed at MSMEs.",
-          "bullets": [
-            "Core member of the product team shaping the vision and future roadmap for their flagship accounting product for MSMEs",
-            "Led initial stakeholder discussions to understand immediate enhancements suggested by their marquee client, existing technology constraints, and potential areas for system optimization and automation",
-            "Drafted product requirement documents (PRDs) and high-level user stories, focusing on aligning delivery scope with business priorities and early-stage feasibility with stakeholders; prioritized with RICE; sprint planning in Jira/Confluence; plan releases & managed RAID."
           ]
         }
       ],
