@@ -92,8 +92,9 @@
           "orgNote": "(part of Capgemini)",
           "role": "Senior Associate, Research and Analytics",
           "period": "Feb 2022 – Dec 2024",
-          "summary": "Spearheaded an in-house application development for clinical data solution for a leading healthcare client, focusing on structured data collection and organization to enhance reporting accuracy and reduce data logging errors",
+          "summary": "Owned a clinical data application end to end, from discovery to reporting",
           "bullets": [
+            "Spearheaded an in-house application development for clinical data solution for a leading healthcare client, focusing on structured data collection and organization to enhance reporting accuracy and reduce data logging errors",
             "Conducted 20+ client interviews to define the product vision, gather requirements, understand existing user behaviour, and create user personas along with workflows",
             "Crafted user stories and technical product specifications, such as PRDs on Jira and Confluence. Conducted daily scrum calls with development team to streamline development, address issues and identify risks",
             "Developed visualization dashboards for client leadership leveraging Power BI to monitor clinical trial KPIs like budget vs. expense reporting, reducing reliance on manual tracking and enabling near real-time reporting"
