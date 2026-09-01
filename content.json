@@ -235,19 +235,19 @@
       "enabled": true,
       "kicker": "How I work",
       "title": "Agree on it before you build it",
-      "body": "Every project I have run starts the same way: the problem in a sentence, whose problem it is, what we are not doing, and the one number that will tell us we were right. It is unglamorous and it is most of the job. When a team is arguing in week six, it is usually because nobody wrote that down in week one.",
+      "body": "I start every project by writing down four things: the problem in a sentence, whose problem it is, what is out of scope, and the one number that will tell us it worked. Most of the disagreements that surface in week six come from something nobody wrote down in week one",
       "items": [
         {
-          "title": "Ask the people doing the workaround",
-          "note": "Ops leads and analysts already know where the process leaks. Requirements written from the real routine, not the documented one, survive contact with delivery."
+          "title": "Talk to the people doing the workaround ",
+          "note": "Ops leads and analysts know where the process leaks. Requirements written from the real routine, not the documented one, survive contact with delivery."
         },
         {
-          "title": "Let the story carry its acceptance criteria",
-          "note": "Most rework I have seen came from a story that read clearly and meant three different things. Rework fell 20% once each one had to say how it would be checked."
+          "title": "Put acceptance criteria in the story",
+          "note": "A story that reads clearly can still mean three different things. At WNS, rework fell 20% once each story had to state how it would be checked."
         },
         {
-          "title": "Settle the definitions, then the dashboard",
-          "note": "Agreeing what a KPI counts is the argument worth having. Build the chart first and you have automated a disagreement."
+          "title": "Settle the definitions before the dashboard",
+          "note": "Agreeing what a KPI counts is worth the argument. Build the chart first and you have only automated the disagreement"
         }
       ],
       "navShow": false
