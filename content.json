@@ -264,115 +264,6 @@
   ],
   "projects": [
     {
-      "slug": "allocation-app",
-      "num": "01",
-      "title": "The allocation app nobody had to be told to use",
-      "org": "WNS (part of Capgemini)",
-      "period": "2022–2024",
-      "role": "Product ownership",
-      "summary": "Chat-and-spreadsheet allocation replaced by one shared view, specced from the real handoff. 95% adoption, rework down 20%.",
-      "intro": "An internal product that replaced chat-and-spreadsheet task allocation with one shared view — specced from the real handoff rather than the documented process, and adopted without a mandate.",
-      "cover": "",
-      "stats": [
-        {
-          "value": "95%",
-          "label": "adoption"
-        },
-        {
-          "value": "20%",
-          "label": "less rework"
-        },
-        {
-          "value": "5",
-          "label": "teams onboarded"
-        }
-      ],
-      "objective": "Give every team one trustworthy view of who holds what, so that allocation stops being reconstructed by hand each morning. The brief asked for a manager's tracker; the objective I wrote instead was shared visibility, because a tool only managers opened would have become a sixth version of the truth.",
-      "did": [
-        "Sat on both sides of the handoff for a week and wrote the requirements against what people actually did — including the workarounds nobody had documented.",
-        "Held the product roadmap and a prioritised backlog with the development team, every user story carrying its own acceptance criteria. Where a story could be read two ways it was split, not clarified in a comment.",
-        "Rolled out team by team rather than all at once, so each group's objections arrived while there was still room to act on them."
-      ],
-      "resultText": "Adoption held without a mandate, which is the number I am actually proud of. Rework fell once acceptance criteria travelled with the story instead of living in a conversation.",
-      "conclusion": "The build was never the hard part. What made it stick was refusing the brief's framing early enough that it cost a conversation rather than a quarter. If I ran it again I would fix the success metric in the same document as the scope.",
-      "slides": [],
-      "downloads": [
-        {
-          "label": "Requirements document",
-          "note": "PDF",
-          "url": ""
-        },
-        {
-          "label": "Walkthrough deck",
-          "note": "PPTX",
-          "url": ""
-        }
-      ],
-      "code": {
-        "label": "Repository",
-        "note": "GitHub",
-        "url": ""
-      },
-      "slidesUrl": "https://docs.google.com/presentation/d/11-Xx5IVd5f6SCu3yL-f3hU4n8pl7g3li/edit?usp=sharing&ouid=103495566658536127585&rtpof=true&sd=true",
-      "deckAbout": "The deck I use to walk through this one: what allocation looked like before, why the brief's manager tracker would not have fixed it, and the requirements that came out of a week sitting on both sides of the handoff.",
-      "deckRatio": "4:3",
-      "deckAboutTitle": "lalalalalalla"
-    },
-    {
-      "slug": "kpi-reporting",
-      "num": "02",
-      "title": "Retiring the Monday-morning spreadsheet",
-      "org": "WNS (part of Capgemini)",
-      "period": "2023",
-      "role": "Analytics",
-      "summary": "KPI definitions settled first, then dashboards built around the decisions they serve. 80% of the manual analysis automated.",
-      "intro": "A KPI and reporting layer for leadership, built after the definitions were settled rather than before — which is why the fortnightly argument about whose number was right did not come back.",
-      "cover": "",
-      "stats": [
-        {
-          "value": "80%",
-          "label": "analysis automated"
-        },
-        {
-          "value": "6",
-          "label": "KPIs defined"
-        },
-        {
-          "value": "Live",
-          "label": "reporting cadence"
-        }
-      ],
-      "objective": "Give leadership numbers they can act on the day they are produced. The brief was to automate the weekly report; the objective I wrote was to make the reporting trustworthy first, because two teams were reporting the same KPI with different definitions and both were defensible.",
-      "did": [
-        "Ran the definitions to ground first: one page per KPI stating what it counts, what it excludes, and which decision it exists to support. Anything no decision needed was cut from the report.",
-        "Built the dashboards around those decisions rather than around the data we happened to hold, and automated the collection so no analyst assembled a figure by hand.",
-        "Left the drill-downs open so operations could interrogate a number without routing the question through me."
-      ],
-      "resultText": "Leadership stopped reading last week's numbers, and the recurring dispute over whose figure was correct disappeared with the definitions document.",
-      "conclusion": "Automation was the easy half. Agreeing what a number means is what decides whether anyone trusts the chart. I did build more views than were needed — two of six went unopened after the first month — and would now ship three and wait to be asked.",
-      "slides": [],
-      "downloads": [
-        {
-          "label": "KPI definitions",
-          "note": "PDF · one page per metric",
-          "url": ""
-        },
-        {
-          "label": "Walkthrough deck",
-          "note": "PPTX",
-          "url": ""
-        }
-      ],
-      "code": {
-        "label": "Repository",
-        "note": "GitHub",
-        "url": ""
-      },
-      "slidesUrl": "",
-      "deckAbout": "The walkthrough covers the definitions work first — one page per KPI, what it counts and what it excludes — and then the dashboards that were built on top of it once the numbers were no longer in dispute.",
-      "deckRatio": "4:3"
-    },
-    {
       "slug": "gaming-arena",
       "num": "03",
       "title": "Gaming Arena: pricing a venture in three days",
@@ -420,6 +311,29 @@
       "slidesUrl": "",
       "deckAbout": "Three days of a simulation in a few slides: the pricing experiments on day one, what they revealed about the demand curve, and the decisions that kept profitability holding afterwards.",
       "deckRatio": "4:3"
+    },
+    {
+      "slug": "https://ankitapathak06.github.io/pidip/",
+      "num": "02",
+      "title": "New project",
+      "org": "",
+      "period": "",
+      "role": "",
+      "summary": "",
+      "intro": "",
+      "cover": "",
+      "stats": [],
+      "objective": "",
+      "did": [],
+      "resultText": "",
+      "conclusion": "",
+      "slides": [],
+      "downloads": [],
+      "code": {
+        "label": "Repository",
+        "note": "GitHub",
+        "url": ""
+      }
     }
   ],
   "extras": [
