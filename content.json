@@ -314,11 +314,11 @@
     },
     {
       "slug": "https-ankitapathak06-github-io-pidip",
-      "num": "02",
+      "num": "",
       "title": "New project",
       "org": "",
       "period": "a",
-      "role": "a",
+      "role": "Operations",
       "summary": "aaa",
       "intro": "a",
       "cover": "",
@@ -334,6 +334,30 @@
         "note": "GitHub",
         "url": ""
       }
+    },
+    {
+      "slug": "market-penetration-strategy",
+      "num": "",
+      "title": "Institutional Growth & Market Penetration Strategy",
+      "org": "Skilled Sapients",
+      "period": "2026",
+      "role": "Live Project ",
+      "summary": "",
+      "intro": "",
+      "cover": "",
+      "stats": [],
+      "objective": "",
+      "did": [],
+      "resultText": "",
+      "conclusion": "",
+      "slides": [],
+      "downloads": [],
+      "code": {
+        "label": "Repository",
+        "note": "GitHub",
+        "url": ""
+      },
+      "slidesUrl": "https://docs.google.com/presentation/d/1YqFiMMK8ag4r_sK6vE4qGjmqNc8EbDZJEaPrGJ8lgnI/edit?usp=sharing"
     }
   ],
   "extras": [
