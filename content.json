@@ -379,7 +379,8 @@
         "url": "https://colab.research.google.com/drive/1mZxpPF3_tzzc-mu8QtBkcfgwM16-yg8-"
       },
       "deckAbout": "Read this for the trade-off rather than the score. The threshold table, the feature importances, and the three things the data cannot tell you are all set out in full.",
-      "slidesUrl": "https://docs.google.com/presentation/d/1utiVQkO7ovw_jPcXsWufVFDD2cgZ5enfsuTfCQI-G1k/edit?usp=sharing"
+      "slidesUrl": "https://docs.google.com/presentation/d/1utiVQkO7ovw_jPcXsWufVFDD2cgZ5enfsuTfCQI-G1k/edit?usp=sharing",
+      "deckRatio": "4:3"
     },
     {
       "slug": "market-penetration-strategy",
