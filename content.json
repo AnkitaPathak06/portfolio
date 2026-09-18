@@ -265,7 +265,7 @@
   "projects": [
     {
       "slug": "gaming-arena",
-      "num": "03",
+      "num": "",
       "title": "Gaming Arena: pricing a venture in three days",
       "org": "Great Lakes Institute of Management",
       "period": "2026",
@@ -287,7 +287,7 @@
           "label": "competing ventures"
         }
       ],
-      "objective": "Reach sustained profitability inside a three-day simulation without knowing the demand curve in advance — and come out of it able to point at what customers would actually pay, rather than at a hunch that happened to work.",
+      "objective": "Reach sustained profitability inside a three-day simulation without knowing the demand curve in advance and come out of it able to point at what customers would actually pay, rather than at a hunch that happened to work.",
       "did": [
         "Treated day one as measurement rather than trading: deliberate price moves at both ends of the range to find where demand bent.",
         "Tracked competitor pricing hourly and held our position when they undercut, on the read that their volume would not cover the cut.",
@@ -308,7 +308,7 @@
         "note": "GitHub",
         "url": ""
       },
-      "slidesUrl": "",
+      "slidesUrl": "https://docs.google.com/presentation/d/1A3iulSGHwtt9cCq7Ekun8hagSwV1fOM6lm-pe3BPYWo/edit?usp=sharing",
       "deckAbout": "Three days of a simulation in a few slides: the pricing experiments on day one, what they revealed about the demand curve, and the decisions that kept profitability holding afterwards.",
       "deckRatio": "4:3"
     },
