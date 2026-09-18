@@ -264,27 +264,31 @@
   ],
   "projects": [
     {
-      "slug": "https-ankitapathak06-github-io-pidip",
+      "slug": "pidip",
       "num": "",
-      "title": "New project",
-      "org": "",
-      "period": "a",
+      "title": "Procurement & Inventory Decision Intelligence Platform",
+      "org": "GLIM",
+      "period": "2026",
       "role": "Operations",
-      "summary": "aaa",
-      "intro": "a",
+      "summary": "A live decision-support dashboard that turns a Google Sheet into a fully interactive inventory, procurement and supplier intelligence platform — no backend required.",
+      "intro": "PIDIP consolidates inventory health, procurement recommendations, supplier evaluation, and demand forecasting for a pharmaceutical manufacturer into a single live view. Every number on screen is calculated in the browser from data pulled straight out of a Google Sheet — no server, database, or API keys anywhere in the stack.",
       "cover": "",
       "stats": [],
-      "objective": "a",
-      "did": [],
-      "resultText": "a",
-      "conclusion": "a",
+      "objective": "Manufacturers often track inventory, consumption, suppliers, and procurement status across disconnected spreadsheets, making it hard to catch a shortage or expiry before it becomes urgent. The goal was to bring all four signals together into one consolidated, always-current decision view — without requiring any backend infrastructure to run it.",
+      "did": [
+        "Built a client-side decision engine in vanilla JavaScript that reads live data from a 7-tab Google Sheet and computes safety stock status, reorder-point alerts, a weighted multi-criteria supplier score, and a linear-regression demand forecast — entirely in the browser.\nDesigned a full admin-style Data Console with create/edit/delete access across every table, protected by a session-local editing model: visitor edits are layered on top of live data in the browser's own storage, so the real dataset is never at risk.\nIdentified and fixed real edge-case bugs during development — including a data-integrity issue where three tables lacked a truly unique row key, a timezone bug in date handling, and a search filter matching against internal IDs — then re-validated the fixes against real data."
+      ],
+      "resultText": "A fully functional, zero-cost platform hosted free on GitHub Pages: six live decision-support views plus a Data Console, all computing in real time from a Google Sheet. Supplier scoring was independently validated by reproducing exact rankings — reliability, lead time, and MOQ — against the full 92-row supplier catalog.",
+      "conclusion": "PIDIP demonstrates that a genuinely functional, data-driven operations tool doesn't need a traditional backend — a static site, a spreadsheet, and a well-designed client-side engine can deliver real decision support safely and for free.",
       "slides": [],
       "downloads": [],
       "code": {
-        "label": "Repository",
-        "note": "GitHub",
-        "url": ""
-      }
+        "label": "Prototype",
+        "note": "",
+        "url": "https://ankitapathak06.github.io/PIDIP/"
+      },
+      "slidesUrl": "https://docs.google.com/presentation/d/1VEIFdei0hJFUiBGUO5d5w3WjQlqWNjWOc91Yv0hJIps/edit?usp=sharing",
+      "deckAbout": "A quick visual walkthrough of PIDIP's architecture, live decision engine, and the engineering work behind it — including real screenshots and the exact formulas driving each recommendation."
     },
     {
       "slug": "gaming-arena",
