@@ -264,6 +264,29 @@
   ],
   "projects": [
     {
+      "slug": "https-ankitapathak06-github-io-pidip",
+      "num": "",
+      "title": "New project",
+      "org": "",
+      "period": "a",
+      "role": "Operations",
+      "summary": "aaa",
+      "intro": "a",
+      "cover": "",
+      "stats": [],
+      "objective": "a",
+      "did": [],
+      "resultText": "a",
+      "conclusion": "a",
+      "slides": [],
+      "downloads": [],
+      "code": {
+        "label": "Repository",
+        "note": "GitHub",
+        "url": ""
+      }
+    },
+    {
       "slug": "gaming-arena",
       "num": "",
       "title": "Gaming Arena: pricing a venture in three days",
@@ -313,27 +336,46 @@
       "deckRatio": "16:9"
     },
     {
-      "slug": "https-ankitapathak06-github-io-pidip",
+      "slug": "fraud-detection",
       "num": "",
-      "title": "New project",
-      "org": "",
-      "period": "a",
-      "role": "Operations",
-      "summary": "aaa",
-      "intro": "a",
-      "cover": "",
-      "stats": [],
-      "objective": "a",
-      "did": [],
-      "resultText": "a",
-      "conclusion": "a",
+      "title": " Insurance claim fraud detection",
+      "org": "IIM Indore",
+      "period": "2020",
+      "role": "Machine Learning",
+      "summary": "Six models on 20,100 health insurance claims, and the question they all come down to: how many false alarms is one caught fraud worth?",
+      "intro": "A quarter of these 20,100 health insurance claims are fraudulent, which means a model that flags nothing is already 75% accurate. Six models, one held-out test set, and a threshold table that hands the real decision back to the business.",
+      "cover": "assets/mu7h5hm0-ml.png",
+      "stats": [
+        {
+          "value": "20,100 ",
+          "label": "Claims"
+        },
+        {
+          "value": "24.9%",
+          "label": " Fraudulent"
+        }
+      ],
+      "objective": "A quarter of the claims in the dataset are fraudulent, which means a model that flags nothing is already 75% accurate. Accuracy was therefore the wrong thing to optimise. The aim was a ranked review queue an investigator could work through, and a defensible answer to where the threshold should sit.",
+      "did": [
+        "Explored before modelling. Fraud rate by category showed Specialist Office providers at 50% against roughly 16% elsewhere, Cardiology and Orthopedics at 46%, and elective admissions above emergency ones. Quartiling the numeric fields showed fraud rising with procedure count and provider distance, and flat across patient age. Claim amount peaked in the second quartile rather than the fourth, which is the opposite of where a value-sorted manual queue would look.\n\nBuilt three features the raw data did not have: days from service to claim, days to policy expiry, and cost per procedure. Dropped the identifiers, since a model can memorise them but they mean nothing for an unseen claim. Oversampled the fraud rows inside the training set only, leaving the test set at its real 25% rate.\n\nCompared six models on one held-out set. Random Forest and XGBoost tied at 0.865 AUC and behaved completely differently: Random Forest is right 89% of the time it flags but misses nearly half the fraud, XGBoost catches more and is wrong more often."
+      ],
+      "resultText": "Cost per procedure, the feature that did not exist in the source data, ranked first in importance, ahead of both fields it was built from. The deliverable was a cut-off table rather than a model: at the default 0.5 threshold the model misses 589 of 1,246 frauds, and dropping to 0.3 catches 994 at the cost of reviewing 1,595 claims instead of 748. Which row is right depends on what an investigation costs against the average payout, so the threshold is the business's decision, not the modeller's.",
+      "conclusion": "Fraud_Detection (1).ipynb\nTen slides, built on your Classical system. Everything is from the notebook; nothing invented.\n\nWebsite content for this project\n\nTitle: Insurance claim fraud detection\n\nSummary: Six models on 20,100 health insurance claims, and the question they all come down to: how many false alarms is one caught fraud worth?\n\nObjective\n\nA quarter of the claims in the dataset are fraudulent, which means a model that flags nothing is already 75% accurate. Accuracy was therefore the wrong thing to optimise. The aim was a ranked review queue an investigator could work through, and a defensible answer to where the threshold should sit.\n\nWhat I did\n\nExplored before modelling. Fraud rate by category showed Specialist Office providers at 50% against roughly 16% elsewhere, Cardiology and Orthopedics at 46%, and elective admissions above emergency ones. Quartiling the numeric fields showed fraud rising with procedure count and provider distance, and flat across patient age. Claim amount peaked in the second quartile rather than the fourth, which is the opposite of where a value-sorted manual queue would look.\n\nBuilt three features the raw data did not have: days from service to claim, days to policy expiry, and cost per procedure. Dropped the identifiers, since a model can memorise them but they mean nothing for an unseen claim. Oversampled the fraud rows inside the training set only, leaving the test set at its real 25% rate.\n\nCompared six models on one held-out set. Random Forest and XGBoost tied at 0.865 AUC and behaved completely differently: Random Forest is right 89% of the time it flags but misses nearly half the fraud, XGBoost catches more and is wrong more often.\n\nResult\n\nCost per procedure, the feature that did not exist in the source data, ranked first in importance, ahead of both fields it was built from. The deliverable was a cut-off table rather than a model: at the default 0.5 threshold the model misses 589 of 1,246 frauds, and dropping to 0.3 catches 994 at the cost of reviewing 1,595 claims instead of 748. Which row is right depends on what an investigation costs against the average payout, so the threshold is the business's decision, not the modeller's.\n\nWhat I would change\n\nThe train-test split is random, not chronological. A production model always predicts forward, so the honest test is to train on earlier claims and score later ones. I would also drop the model entirely if the previous-claims field were populated, and start again with repeat-behaviour features, which is where real fraud detection earns most of its lift.\n\nAbout the deck\n\nRead this for the trade-off rather than the score. The threshold table, the feature importances, and the three things the data cannot tell you are all set out in full.\n\nFound issues — fixing…\nOverflow fixed on all four slides; every section now measures zero clipping. The website copy is in my previous message, ready to paste into the admin panel.\n\nEdited Fraud Detection Deck.dc.html\nGive me fugures too, Intro (project page hero) , and conclusion\nIntro (project page hero)\n\nA quarter of these 20,100 health insurance claims are fraudulent, which means a model that flags nothing is already 75% accurate. Six models, one held-out test set, and a threshold table that hands the real decision back to the business.\n\nTwo shorter alternatives:\n\nB. Six models on 20,100 health insurance claims, and the question they all come down to: how many false alarms is one caught fraud worth?\n\nC. Finding the fraudulent quarter of a claims book, and deciding how hard to look.\n\nFigures (the numbers worth pulling out on the page)\n\n20,100 claims, 30 fields, 24.9% fraudulent\n117 features after encoding, 3 of them built from the raw data\n0.865 AUC, matched by Random Forest and XGBoost\n89% precision at the default threshold, against 53% of fraud caught\n80% caught at a 0.30 cut-off, at 62% precision\nSpecialist Office providers: 50% fraud rate against 16% elsewhere\nConclusion\n\nThe model is the easy part. Six of them land between 0.65 and 0.87 AUC in an afternoon, and two tie at the top while behaving nothing alike: one is right nearly every time it speaks and stays quiet through half the fraud, the other catches more and cries wolf more often.\n\nWhat the work produced is not a prediction but a threshold table. Reviewing 748 claims catches 657 frauds. Reviewing 1,595 catches 994. Choosing between those rows needs two numbers no dataset contains, the cost of an investigation and the size of an average payout, so the last decision belongs to the business and the analysis should stop short of making it.",
       "slides": [],
-      "downloads": [],
+      "downloads": [
+        {
+          "label": "",
+          "note": "",
+          "url": ""
+        }
+      ],
       "code": {
         "label": "Repository",
-        "note": "GitHub",
-        "url": ""
-      }
+        "note": "Google colab",
+        "url": "https://colab.research.google.com/drive/1mZxpPF3_tzzc-mu8QtBkcfgwM16-yg8-"
+      },
+      "deckAbout": "Read this for the trade-off rather than the score. The threshold table, the feature importances, and the three things the data cannot tell you are all set out in full.",
+      "slidesUrl": "https://docs.google.com/presentation/d/1utiVQkO7ovw_jPcXsWufVFDD2cgZ5enfsuTfCQI-G1k/edit?usp=sharing"
     },
     {
       "slug": "market-penetration-strategy",
