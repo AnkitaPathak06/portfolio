@@ -272,7 +272,7 @@
       "role": "Operations",
       "summary": "A live decision-support dashboard that turns a Google Sheet into a fully interactive inventory, procurement and supplier intelligence platform — no backend required.",
       "intro": "PIDIP consolidates inventory health, procurement recommendations, supplier evaluation, and demand forecasting for a pharmaceutical manufacturer into a single live view. Every number on screen is calculated in the browser from data pulled straight out of a Google Sheet — no server, database, or API keys anywhere in the stack.",
-      "cover": "",
+      "cover": "assets/mu7ja3y6-intelligent-operations-modelben92am6k730oijwgdxiuyeiskxdaaowh0em5nqs.webp",
       "stats": [],
       "objective": "Manufacturers often track inventory, consumption, suppliers, and procurement status across disconnected spreadsheets, making it hard to catch a shortage or expiry before it becomes urgent. The goal was to bring all four signals together into one consolidated, always-current decision view — without requiring any backend infrastructure to run it.",
       "did": [
