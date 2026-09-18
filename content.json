@@ -272,7 +272,7 @@
       "role": "Economics simulation",
       "summary": "Pricing experiments and hourly competitor reads mapped demand instead of guessing at it. Sustained profitability within three days.",
       "intro": "A live economics simulation run as a real venture: pricing experiments and hourly competitor reads instead of matching whatever the neighbouring stall charged.",
-      "cover": "",
+      "cover": "assets/mu7gen8a-economics-project.png",
       "stats": [
         {
           "value": "3",
@@ -355,11 +355,12 @@
       "slides": [],
       "downloads": [],
       "code": {
-        "label": "Repository",
-        "note": "GitHub",
+        "label": "",
+        "note": "",
         "url": ""
       },
-      "slidesUrl": "https://docs.google.com/presentation/d/1YqFiMMK8ag4r_sK6vE4qGjmqNc8EbDZJEaPrGJ8lgnI/edit?usp=sharing"
+      "slidesUrl": "https://docs.google.com/presentation/d/1YqFiMMK8ag4r_sK6vE4qGjmqNc8EbDZJEaPrGJ8lgnI/edit?usp=sharing",
+      "deckRatio": "4:3"
     }
   ],
   "extras": [
