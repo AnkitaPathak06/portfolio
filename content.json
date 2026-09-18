@@ -18,10 +18,10 @@
     "email": "pathak.ankita06@gmail.com",
     "location": "Gurugram · English and Hindi ",
     "linkedin": "https://www.linkedin.com/in/ankita-pathak06/",
-    "resumeUrl": "assets/mthnpivg-p2622010-ankitapathak--deloitte.docx",
+    "resumeUrl": "assets/mu7jcpvh-p2622010.pdf",
     "photo": "assets/mthnpr4q-ap.jpeg",
     "photoCaption": "Gurugram, 2026",
-    "resumeName": "P2622010_ANKITAPATHAK- Deloitte.docx"
+    "resumeName": "P2622010.pdf"
   },
   "sections": [
     {
@@ -415,14 +415,5 @@
       "deckAbout": "The deck carries the evidence this page summarises: the segment scoring, the website contradictions found in the audit, the four-tier commercial model, and the month-by-month roadmap."
     }
   ],
-  "extras": [
-    {
-      "title": "Market and competitor analysis, Codewalla",
-      "note": "Industry trends and customer needs read into product enhancements; release cycles 50% faster. Usage analysis fed prioritisation and lifted engagement 15%."
-    },
-    {
-      "title": "Internal Agile training, WNS",
-      "note": "Coordinated the internal Agile programme in 2024 — largely an exercise in teaching people to write a story that survives a sprint review."
-    }
-  ]
+  "extras": []
 }
