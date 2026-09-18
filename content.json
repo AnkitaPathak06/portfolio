@@ -353,6 +353,10 @@
         {
           "value": "24.9%",
           "label": " Fraudulent"
+        },
+        {
+          "value": "117",
+          "label": "Features after encoding"
         }
       ],
       "objective": "A quarter of the claims in the dataset are fraudulent, which means a model that flags nothing is already 75% accurate. Accuracy was therefore the wrong thing to optimise. The aim was a ranked review queue an investigator could work through, and a defensible answer to where the threshold should sit.",
