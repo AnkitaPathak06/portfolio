@@ -298,14 +298,14 @@
       "slides": [],
       "downloads": [
         {
-          "label": "Pricing log",
-          "note": "XLSX · experiments and outcomes",
+          "label": "",
+          "note": "",
           "url": ""
         }
       ],
       "code": {
-        "label": "Repository",
-        "note": "GitHub",
+        "label": "",
+        "note": "",
         "url": ""
       },
       "slidesUrl": "https://docs.google.com/presentation/d/1A3iulSGHwtt9cCq7Ekun8hagSwV1fOM6lm-pe3BPYWo/edit?usp=sharing",
@@ -313,7 +313,7 @@
       "deckRatio": "4:3"
     },
     {
-      "slug": "https://ankitapathak06.github.io/pidip/",
+      "slug": "https-ankitapathak06-github-io-pidip",
       "num": "02",
       "title": "New project",
       "org": "",
